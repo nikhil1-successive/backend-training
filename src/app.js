@@ -13,7 +13,7 @@ app.get('/data', (req, res) => {
 })
 
 app.use('/api', userRoutes)
-const port = 8200
+const port = 5930
 app.listen(port, () => {
     console.log(`http://localhost:${port}`);
 });
