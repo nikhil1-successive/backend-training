@@ -27,9 +27,9 @@ else {
 }
 
 if (operationFeasible) {
-    if (fs.existsSync("OperationResultData.csv")) {
+    if (fs.existsSync("OperationResultData.xlsx")) {
         fs.appendFile(
-            "OperationResultData.csv",
+            "OperationResultData.xlsx",
             `${operation},${num1},${num2},${result}\n`,
             (err) => {
                 if (err) {
@@ -41,7 +41,7 @@ if (operationFeasible) {
         );
     } else {
         fs.appendFile(
-            "OperationResultData.csv",
+            "OperationResultData.xlsx",
             `Operation,Num1,Num2,Result\n${operation},${num1},${num2},${result}\n`,
             (err) => {
                 if (err) {
