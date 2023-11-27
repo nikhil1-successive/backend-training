@@ -11,26 +11,31 @@ const multiplyNumbers = mul(num1, num2);
 const divideNumbers = div(num1, num2);
 let result = 0;
 let operationFeasible = true
+let userOperation = ""
 
 if (operation === "+") {
     result += sumNumbers;
+    userOperation = "Addition"
 } else if (operation === "-") {
     result += subtractNumbers;
-} else if (operation === "*") {
+    userOperation = "Subtraction"
+} else if (operation === "X") {
     result += multiplyNumbers;
+    userOperation = "Multiplication"
 } else if (operation === "/") {
     result += divideNumbers;
+    userOperation = "Divison"
 }
 else {
     operationFeasible = false
-    console.log("Please perform mentioned operations only.")
+    console.log("Please perform mentioned Operation only.")
 }
 
 if (operationFeasible) {
-    if (fs.existsSync("OperationResultData.xlsx")) {
+    if (fs.existsSync("Maths Operation Result.xlsx")) {
         fs.appendFile(
-            "OperationResultData.xlsx",
-            `${operation},${num1},${num2},${result}\n`,
+            "Maths Operation Result.xlsx",
+            `${userOperation},${num1},${num2},${result}\n`,
             (err) => {
                 if (err) {
                     console.error(err);
@@ -41,8 +46,8 @@ if (operationFeasible) {
         );
     } else {
         fs.appendFile(
-            "OperationResultData.xlsx",
-            `Operation,Num1,Num2,Result\n${operation},${num1},${num2},${result}\n`,
+            "Maths Operation Result.xlsx",
+            `Operation,Num1,Num2,Result\n${userOperation},${num1},${num2},${result}\n`,
             (err) => {
                 if (err) {
                     console.error(err);
