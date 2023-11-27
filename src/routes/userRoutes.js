@@ -1,7 +1,7 @@
 import express from 'express'
 import users from '../utils/mockData.js'
 import jwt from 'jsonwebtoken'
-
+import customMiddleware from "../middleware/customMiddleware.js"
 const router = express.Router()
 const secretKey = 'my-secret-key'
 
@@ -47,6 +47,9 @@ const tokenVerificationMiddleware = (req, res, next) => {
 
 router.get('/authorized', tokenVerificationMiddleware, (req, res) => {
   res.json({ message: 'Welcome To Authorized Content.', user: req.user })
+})
+router.get('/console', customMiddleware, (req, res) => {
+  res.send("User Details")
 })
 
 export default router
