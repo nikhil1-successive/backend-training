@@ -1,27 +1,25 @@
 import express from 'express'
 import jwt from 'jsonwebtoken'
 import customMiddleware from "../middleware/customMiddleware.js"
-import myHeader from "../middleware/customheaderMiddleware.js"
 import tokenVerificationMiddleware from '../middleware/tokenVerificationMiddleware.js'
-// import errorhandlingMiddleware from "../middleware/errorHandlingMiddleware.js"
+import { errorHandlerMiddleware } from "../middleware/errorHandlingMiddleware.js"
 import limiter from '../middleware/limiterMiddleware.js'
 import { middleware1, middleware2 } from '../middleware/middlewareFunctions.js'
 import foodData from '../utils/dataseeding.js'
 import nameData from '../utils/mockData.js'
 
 const router = express.Router()
-const secretKey = 'my-secret-key'
-
+const secretKey = 'Nikhil'
 router.use(limiter)
 router.use(express.json())
 router.post('/register', (req, res) => {
-  users.push(req.body)
-  res.json(users)
+  nameData.push(req.body.name)
+  res.json(nameData)
 })
 
 router.get('/login', (req, res) => {
   const { name } = req.body
-  const user = users.find((user) => user.name === name)
+  const user = nameData.find((user) => user.name === name)
   if (user) {
     const token = jwt.sign(
       { name: user.name },
@@ -34,18 +32,15 @@ router.get('/login', (req, res) => {
   }
 })
 
-
 router.get('/authorized', tokenVerificationMiddleware, (req, res) => {
   res.json({ message: 'Welcome To Authorized Content.', user: req.user })
 })
 router.get('/console', customMiddleware, (req, res) => {
   res.send("User Details")
 })
-// router.get('/header', myHeader, (req, res) => {
-//   res.send("User Details")
-// })
+
 router.get('/middleware', middleware1, middleware2, (req, res) => {
-  res.send("Request")
+  res.send("Middleware Called")
 })
 
 router.get('/getName', (req, res) => {
@@ -55,7 +50,7 @@ router.get('/getName', (req, res) => {
 router.get('/getFood', (req, res) => {
   res.send(foodData)
 })
-router.get('/error', (req, res) => {
-  throw new Error('404 Not Found')
+router.get('/error', errorHandlerMiddleware, (req, res) => {
+  res.send("404 Not Found")
 })
 export default router

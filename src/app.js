@@ -5,8 +5,9 @@ const app = express()
 app.get('/', (req, res) => {
     res.send('Welcome To Home Page.')
 })
-app.use('/api', userRoutes)
-const port = 4527
+app.use('/routes', userRoutes)
+const port = 6362
+
 app.listen(port, () => {
     console.log(`http://localhost:${port}`);
 });

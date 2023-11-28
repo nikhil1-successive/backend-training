@@ -9,7 +9,6 @@ const myInit = {
 };
 
 const myRequest = new Request("https://expressjs.com/images/express-facebook-share.png", myInit);
-
 const myContentType = myRequest.headers.get("Content-Type");
-console.log(myContentType)
+console.log( myContentType)
 export default myHeaders
