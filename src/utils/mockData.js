@@ -1,3 +1,3 @@
-const mockData=["Nikhil","Somil","Sanskr"]
-export default mockData
+const nameData=["Nikhil","Somil","Sanskr"]
+export default nameData
 
