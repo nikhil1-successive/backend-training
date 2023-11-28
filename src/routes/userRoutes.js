@@ -1,24 +1,28 @@
 import express from 'express'
-import users from '../utils/mockData.js'
 import jwt from 'jsonwebtoken'
-import { validate, ValidationError, Joi } from 'express-validation'
+import customMiddleware from "../middleware/customMiddleware.js"
+import tokenVerificationMiddleware from '../middleware/tokenVerificationMiddleware.js'
+import { errorHandlerMiddleware } from "../middleware/errorHandlingMiddleware.js"
+import limiter from '../middleware/limiterMiddleware.js'
+import { middleware1, middleware2 } from '../middleware/middlewareFunctions.js'
+import foodData from '../utils/dataseeding.js'
+import nameData from '../utils/mockData.js'
+import bodyParser from "body-parser"
+import { validate, ValidationError } from 'express-validation'
 
 const router = express.Router()
-const secretKey = '786'
-
-router.get('/', (req, res) => {
-  res.json(users)
-})
-
+const secretKey = 'Nikhil'
+router.use(limiter)
 router.use(express.json())
-router.post('/', (req, res) => {
-  users.push(req.body)
-  res.json(users)
+router.use(bodyParser.json())
+router.post('/register', (req, res) => {
+  nameData.push(req.body.name)
+  res.json(nameData)
 })
 
 router.get('/login', (req, res) => {
   const { name } = req.body
-  const user = users.find((user) => user.name === name)
+  const user = nameData.find((user) => user.name === name)
   if (user) {
     const token = jwt.sign(
       { name: user.name },
@@ -31,37 +35,28 @@ router.get('/login', (req, res) => {
   }
 })
 
-const tokenVerificationMiddleware = (req, res, next) => {
-  const token = req.headers['authorization']
-
-  if (token === null) {
-    return res.status(403).json({ message: 'Token Missing.' })
-  }
-  jwt.verify(token, secretKey, (err, decodeUser) => {
-    if (err) {
-      return res.status(401).json({ message: 'Token Invalid.' })
-    }
-    req.user = decodeUser
-    next()
-  })
-}
-
 router.get('/authorized', tokenVerificationMiddleware, (req, res) => {
   res.json({ message: 'Welcome To Authorized Content.', user: req.user })
 })
+router.get('/console', customMiddleware, (req, res) => {
+  res.send("User Details")
+})
 
-const loginValidation = {
-  body: Joi.object({
-    email: Joi.string()
-      .email()
-      .required(),
-    password: Joi.string()
-      .regex(/[a-zA-Z0-9]{3,30}/)
-      .required(),
-  }),
-}
+router.get('/middleware', middleware1, middleware2, (req, res) => {
+  res.send("Middleware Called")
+})
 
-router.post('/validation', validate(loginValidation, {}, {}), (req, res) => {
+router.get('/getName', (req, res) => {
+  res.send(nameData)
+})
+
+router.get('/getFood', (req, res) => {
+  res.send(foodData)
+})
+router.get('/error', errorHandlerMiddleware, (req, res) => {
+  res.send("404 Not Found")
+})
+router.post('/login', validate(loginValidation, {}, {}), (req, res) => {
   res.json("You are successfully verified.")
 })
 
