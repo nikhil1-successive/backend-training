@@ -1,7 +1,8 @@
 import express from 'express'
 import users from '../utils/mockData.js'
 import auth from '../middleware/auth.js'
-import {asyncHandler,asyncFunc} from "./asynchronousRoutes.js"
+import { asyncHandler, asyncFunc } from "./asynchronousRoutes.js"
+import validateParameters from './parameterRoute.js'
 import {
   AddUserController,
   LoginController,
@@ -24,8 +25,13 @@ router.get('/protected', auth, (req, res) => {
 })
 
 router.get('/async', asyncHandler(async (req, res) => {
-  const result1 = await asyncFunc( Error(401))
+  const result1 = await asyncFunc(Error(401))
   const result = `${result1}`
   return res.send(result)
 }))
+
+router.post('/params', validateParameters, (req, res) => {
+  res.json({ message: 'Success' });
+});
+
 export default router
