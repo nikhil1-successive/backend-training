@@ -2,15 +2,17 @@ import express from 'express'
 import jwt from 'jsonwebtoken'
 import customMiddleware from "../middleware/customMiddleware.js"
 import tokenVerificationMiddleware from '../middleware/tokenVerificationMiddleware.js'
-import { errorHandlerMiddleware } from "../middleware/errorHandlingMiddleware.js"
+import  errorHandlerMiddleware from "../middleware/errorHandlingMiddleware.js"
 import limiter from '../middleware/limiterMiddleware.js'
 import { middleware1, middleware2 } from '../middleware/middlewareFunctions.js'
 import foodData from '../utils/dataseeding.js'
 import nameData from '../utils/mockData.js'
+import customHeaderMiddleware from '../middleware/customheaderMiddleware.js'
 
 const router = express.Router()
 const secretKey = 'Nikhil'
 router.use(limiter)
+router.use(customHeaderMiddleware)
 router.use(express.json())
 router.post('/register', (req, res) => {
   nameData.push(req.body.name)
@@ -50,7 +52,9 @@ router.get('/getName', (req, res) => {
 router.get('/getFood', (req, res) => {
   res.send(foodData)
 })
-router.get('/error', errorHandlerMiddleware, (req, res) => {
-  res.send("404 Not Found")
-})
+router.get('/error', (req, res) => {
+  throw new Error('Error!');
+});
+router.use(errorHandlerMiddleware);
+
 export default router

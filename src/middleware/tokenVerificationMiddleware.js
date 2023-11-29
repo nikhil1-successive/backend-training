@@ -1,3 +1,4 @@
+import jwt from "jsonwebtoken"
 const tokenVerificationMiddleware = (req, res, next) => {
     const token = req.headers['authorization']
   

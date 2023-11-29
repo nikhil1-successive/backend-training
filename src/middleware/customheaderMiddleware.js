@@ -1,14 +1,9 @@
-const myHeaders = new Headers();
-myHeaders.append("Content-Type", "images/png");
-
-const myInit = {
-    method: "GET",
-    headers: myHeaders,
-    mode: "cors",
-    cache: "default",
+const addCustomHeader = (header, headerVal) => {
+  return (req, res, next) => {
+    res.setHeader(header, headerVal);
+    next();
+  };
 };
 
-const myRequest = new Request("https://expressjs.com/images/express-facebook-share.png", myInit);
-const myContentType = myRequest.headers.get("Content-Type");
-console.log( myContentType)
-export default myHeaders
+const customHeaderMiddleware = addCustomHeader('MyHeader', 'Header1');
+export default customHeaderMiddleware
