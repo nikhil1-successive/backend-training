@@ -10,6 +10,7 @@ import nameData from '../utils/mockData.js'
 import bodyParser from "body-parser"
 import { validate, ValidationError } from 'express-validation'
 import validateRegistrationInput from '../utils/registrationValidation.js'
+import queryValidation from '../middleware/queryMiddleware.js'
 const router = express.Router()
 const secretKey = 'Nikhil'
 router.use(limiter)
@@ -51,7 +52,7 @@ router.get('/getName', (req, res) => {
 })
 router.post('/registeruser', validateRegistrationInput, (req, res) => {
   const { email, password } = req.body;
-  res.json({ success: true, message: 'User registered successfully', data: { email } });
+  res.json({ success: true, message: 'User registered successfully', data: { email, password } });
 });
 
 
@@ -61,8 +62,11 @@ router.get('/getFood', (req, res) => {
 router.get('/error', errorHandlerMiddleware, (req, res) => {
   res.send("404 Not Found")
 })
-router.post('/login', validate(loginValidation, {}, {}), (req, res) => {
+router.post('/login', validate(validateRegistrationInput, {}, {}), (req, res) => {
   res.json("You are successfully verified.")
+})
+router.get('/query', queryValidation, (req, res) => {
+  res.json("Query.")
 })
 
 router.use(function (err, res) {
