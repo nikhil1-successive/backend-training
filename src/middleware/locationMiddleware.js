@@ -1,19 +1,24 @@
-import axios from 'axios';
+import axios from "axios"
 
-const validateLocation = async (req, res, next) => {
-  try {
-    const expectedRegion = "India"
-    const clientIP = req.ip; 
-    const apiKey = "2401:4900:81fa:6d6c:4cb9:e944:9d2a:57a9";
-    const res = await axios.get(`http://api.ipstack.com/${clientIP}?access_key=${apiKey}`);
-    const userRegion = res.data.country_name;
+const locationMiddleware = async () => {
+  return async (req, res, next) => {
+    try {
+      const clientIP = req.ip
+      const response = await axios.get(`https://ipinfo.io/${clientIP}/json`);
+      const { country } = response.data;
 
-    if (userRegion === expectedRegion) {
+      if (country!=="India") {
+        return res.status(403).json({
+          error: 'Access denied.',
+        });
+      }
       next();
-    } 
-  } catch (error) {
-    next(new Error('Some Error Occured.', 500));
-  }
+    } catch (error) {
+      return res.status(500).json({
+        error: 'Error',
+      });
+    }
+  };
 };
 
-export default validateLocation;
+export default locationMiddleware;

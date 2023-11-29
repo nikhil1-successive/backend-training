@@ -1,4 +1,4 @@
-import { validate, ValidationError, Joi } from 'express-validation';
+import Joi from 'express-validation';
 
 const registrationValidationSchema = {
   body: Joi.object({
