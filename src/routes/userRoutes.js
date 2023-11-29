@@ -1,6 +1,7 @@
 import express from 'express'
 import users from '../utils/mockData.js'
 import auth from '../middleware/auth.js'
+import {asyncHandler,asyncFunc} from "./asynchronousRoutes.js"
 import {
   AddUserController,
   LoginController,
@@ -22,4 +23,9 @@ router.get('/protected', auth, (req, res) => {
   res.json({ message: 'This is a protected resource', user: req.user })
 })
 
+router.get('/async', asyncHandler(async (req, res) => {
+  const result1 = await asyncFunc( Error(401))
+  const result = `${result1}`
+  return res.send(result)
+}))
 export default router
