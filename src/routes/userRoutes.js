@@ -9,7 +9,7 @@ import foodData from '../utils/dataseeding.js'
 import nameData from '../utils/mockData.js'
 import bodyParser from "body-parser"
 import { validate, ValidationError } from 'express-validation'
-
+import validateRegistrationInput from '../utils/registrationValidation.js'
 const router = express.Router()
 const secretKey = 'Nikhil'
 router.use(limiter)
@@ -49,6 +49,11 @@ router.get('/middleware', middleware1, middleware2, (req, res) => {
 router.get('/getName', (req, res) => {
   res.send(nameData)
 })
+router.post('/registeruser', validateRegistrationInput, (req, res) => {
+  const { email, password } = req.body;
+  res.json({ success: true, message: 'User registered successfully', data: { email } });
+});
+
 
 router.get('/getFood', (req, res) => {
   res.send(foodData)
