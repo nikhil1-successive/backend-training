@@ -12,14 +12,15 @@ app.get('/', function (req, res) {
 app.get('/data', (req, res) => {
     res.json(data)
 })
-app.use('/api', userRoutes)
+app.use('/route', userRoutes)
 
 app.use((req, res, next) => {
     next(createError(404, 'Not Found'))
 })
+
 app.use(errorHandlerMiddleware)
 
-const port = 2345
+const port = 8353
 
 app.listen(port, () => {
     console.log(`http://localhost:${port}`);

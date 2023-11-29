@@ -3,6 +3,7 @@ import users from '../utils/mockData.js'
 import auth from '../middleware/auth.js'
 import { asyncHandler, asyncFunc } from "./asynchronousRoutes.js"
 import validateParameters from './parameterRoute.js'
+import errorHandlerMiddleware from '../middleware/errorHandler.js'
 import {
   AddUserController,
   LoginController,
@@ -33,5 +34,8 @@ router.get('/async', asyncHandler(async (req, res) => {
 router.post('/params', validateParameters, (req, res) => {
   res.json({ message: 'Success' });
 });
+router.get('/errors',errorHandlerMiddleware, (req, res) => {
+  res.json(data)
+})
 
 export default router
