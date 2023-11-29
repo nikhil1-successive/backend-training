@@ -1,4 +1,3 @@
-import CustomError from "../utils/errorClass.js";
 import axios from 'axios';
 
 const validateLocation = async (req, res, next) => {
@@ -13,7 +12,7 @@ const validateLocation = async (req, res, next) => {
       next();
     } 
   } catch (error) {
-    next(new CustomError('Some Error Occured.', 500));
+    next(new Error('Some Error Occured.', 500));
   }
 };
 

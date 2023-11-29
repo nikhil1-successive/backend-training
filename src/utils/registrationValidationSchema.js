@@ -1,5 +1,4 @@
-
-import Joi from 'joi';
+import { validate, ValidationError, Joi } from 'express-validation';
 
 const registrationValidationSchema = {
   body: Joi.object({
@@ -11,5 +10,4 @@ const registrationValidationSchema = {
       .required(),
   }),
 };
-
-export default registrationValidationSchema
+export default registrationValidationSchema;
