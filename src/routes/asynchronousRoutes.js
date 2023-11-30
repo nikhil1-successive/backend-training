@@ -8,5 +8,5 @@ const asyncFunc = (text) => {
     setTimeout(() => resolve(text), 1000)
   })
 }
-export {asyncHandler,asyncFunc}
+export { asyncHandler, asyncFunc }
 

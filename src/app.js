@@ -20,7 +20,7 @@ app.use((req, res, next) => {
 
 app.use(errorHandlerMiddleware)
 
-const port = 8353
+const port = 4637
 
 app.listen(port, () => {
     console.log(`http://localhost:${port}`);

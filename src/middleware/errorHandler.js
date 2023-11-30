@@ -1,6 +1,5 @@
-export default function errorHandlerMiddleware(error, req, res, next) {
-    console.log(error)
-    res
-      .status(error.status)
-      .json({ status: error.status, message: error.message })
-  }
+const errorHandlerMiddleware = (err, req, res, next) => { 
+  console.error(err.stack); 
+  res.status(500).send('Error occured.'); 
+}; 
+export default errorHandlerMiddleware
