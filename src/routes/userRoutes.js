@@ -2,7 +2,7 @@ import express from 'express'
 import jwt from 'jsonwebtoken'
 import customMiddleware from "../middleware/customMiddleware.js"
 import tokenVerificationMiddleware from '../middleware/tokenVerificationMiddleware.js'
-import  errorHandlerMiddleware from "../middleware/errorHandlingMiddleware.js"
+import errorHandlerMiddleware from "../middleware/errorHandlingMiddleware.js"
 import limiter from '../middleware/limiterMiddleware.js'
 import { middleware1, middleware2 } from '../middleware/middlewareFunctions.js'
 import foodData from '../utils/dataseeding.js'

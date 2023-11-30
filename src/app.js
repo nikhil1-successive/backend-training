@@ -6,7 +6,7 @@ app.get('/', (req, res) => {
     res.send('Welcome To Home Page.')
 })
 app.use('/routes', userRoutes)
-const port = 6362
+const port = 3946
 
 app.listen(port, () => {
     console.log(`http://localhost:${port}`);
