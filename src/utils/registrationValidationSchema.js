@@ -1,34 +1,18 @@
-import Joi from "joi"
+import Joi from 'joi'
 
-const registrationValidationSchema = Joi.object({
-  email: Joi.string().email().required(),
-  password: Joi.string().min(6).required(),
-});
+const validateRegistration = (req, res, next) => {
+  const userSchema = Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().min(8).required(),
+  });
 
-function validateUserInput(user) {
-  const result = registrationValidationSchema.validate(user, { abortEarly: false });
-  // if (result.error) {
-  //   // const errors = {};
-  //   // result.error.details.forEach((err) => {
-  //   //   errors[err.path[0]] = err.message;
-  //   // });
-  //   // return errors;
-  //   return result
-  // }
-  // return null;
-}
+  const validationResult = userSchema.validate(req.body, { abortEarly: false });
 
-const userInput = {
-  email: 'snn@gmail.com',
-  password: '123222',
+  if (validationResult.error) {
+    const errors = validationResult.error.details.map((detail) => detail.message);
+    return res.status(400).json({ errors });
+  }
+  next();
 };
 
-const validationErrors = validateUserInput(userInput);
-
-if (validationErrors) {
-  console.error('Validation errors:', validationErrors);
-} else {
-  console.log('User input is valid.');
-}
-
-export default registrationValidationSchema;
+export default validateRegistration;
