@@ -3,7 +3,7 @@ import Joi from 'joi'
 const validateRegistration = (req, res, next) => {
   const userSchema = Joi.object({
     email: Joi.string().email().required(),
-    password: Joi.string().min(8).required(),
+    password: Joi.string().min(6).required(),
   });
 
   const validationResult = userSchema.validate(req.body, { abortEarly: false });

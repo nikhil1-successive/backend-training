@@ -61,7 +61,7 @@ router.get('/error', errorHandlerMiddleware, (req, res) => {
   res.send("404 Not Found")
 })
 
-router.post('/register', validateRegistration, (req, res) => {
+router.post('/registerUser', validateRegistration, (req, res) => {
   const { email, password } = req.body;
   res.json({ message: 'Registration successful' });
 });
