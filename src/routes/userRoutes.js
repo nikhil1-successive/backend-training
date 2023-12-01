@@ -14,9 +14,11 @@ const secretKey = 'Nikhil'
 router.use(limiter)
 router.use(customHeaderMiddleware)
 router.use(express.json())
-router.post('/register', (req, res) => {
-  nameData.push(req.body.name)
-  res.json(nameData)
+router.post('/registerauth', (req, res) => {
+  if (req.body.name) {
+    nameData.push(req.body.name)
+    res.json(nameData)
+  }
 })
 
 router.get('/login', (req, res) => {
