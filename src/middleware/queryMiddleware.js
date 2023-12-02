@@ -1,13 +1,17 @@
-const queryValidation = (params) => (req, res, next) => {
-  for (const param of params) {
-    const paramVal = req.query[param];
+const queryValidation = () => (req, res, next) => {
+  const params = req.body;
 
-    if (paramVal && isNaN(Number(paramVal))) {
-      return res.json({
-        error: 'Not a numeric value',
+  for (const param of params) {
+    const paramVal = req.body[param];
+
+    if (paramVal === undefined || isNaN(Number(paramVal))) {
+      return res.status(400).json({
+        error: 'Not A Numeric Value ' + param,
       });
     }
   }
+
   next();
 };
-export default queryValidation
+
+export default queryValidation;
