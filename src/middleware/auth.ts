@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { VerifyErrors, Secret } from 'jsonwebtoken';
 import createError from 'http-errors';
 
 const secretKey = "12";
@@ -11,7 +11,7 @@ const auth = (req: Request, res: Response, next: NextFunction) => {
     return next(createError(403, 'Please provide token'));
   }
 
-  jwt.verify(token as string, secretKey, (err, decoded) => {
+  jwt.verify(token as string, secretKey, (err: VerifyErrors | null, decoded?: object) => {
     if (err) {
       return next(createError(401, 'Unauthorized'));
     }
