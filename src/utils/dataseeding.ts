@@ -1,2 +1,2 @@
-const foodData = ["Paneer", "Chola", "Chicken"];
-export default foodData
+const foodData: string[] = ["Paneer", "Chola", "Chicken"];
+export default foodData;

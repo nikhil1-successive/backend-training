@@ -1,20 +1,24 @@
-import jwt from 'jsonwebtoken'
-import createError from 'http-errors'
+import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
+import createError from 'http-errors';
 
-const secreyKey = "12"
-const auth = (req, res, next) => {
-    const token = req.headers['authorization']
+const secretKey = "12";
 
-    if (!token) {
-        next(createError(403, 'Please provide token'))
+const auth = (req: Request, res: Response, next: NextFunction) => {
+  const token = req.headers['authorization'];
+
+  if (!token) {
+    return next(createError(403, 'Please provide token'));
+  }
+
+  jwt.verify(token as string, secretKey, (err, decoded) => {
+    if (err) {
+      return next(createError(401, 'Unauthorized'));
     }
-    jwt.verify(token, secretKey, (err, decoded) => {
-        if (err) {
-            next(createError(401, 'Unauthorized'))
-        }
-        req.user = decoded
-        next()
-    })
-}
 
-export default auth
+    req.user = decoded as { [key: string]: any };
+    next();
+  });
+};
+
+export default auth;

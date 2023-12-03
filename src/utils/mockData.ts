@@ -1,2 +1,2 @@
-const nameData=["Nikhil","Somil","Sanskr"]
-export default nameData
+const nameData: string[] = ["Nikhil", "Somil", "Sanskr"];
+export default nameData;
