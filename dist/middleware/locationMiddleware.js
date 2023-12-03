@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
-const locationMiddleware = () => __awaiter(void 0, void 0, void 0, function* () {
+const locationMiddleware = () => {
     return (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const clientIP = req.ip;
@@ -32,5 +32,5 @@ const locationMiddleware = () => __awaiter(void 0, void 0, void 0, function* () 
             });
         }
     });
-});
+};
 exports.default = locationMiddleware;
