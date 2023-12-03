@@ -1,14 +1,13 @@
-import { Request, Response, NextFunction } from 'express';
-import axios from 'axios';
+import axios from "axios"
 
 const locationMiddleware = async () => {
-  return async (req: Request, res: Response, next: NextFunction) => {
+  return async (req, res, next) => {
     try {
-      const clientIP = req.ip;
+      const clientIP = req.ip
       const response = await axios.get(`https://ipinfo.io/${clientIP}/json`);
       const { country } = response.data;
 
-      if (country !== "India") {
+      if (country!=="India") {
         return res.status(403).json({
           error: 'Access denied.',
         });

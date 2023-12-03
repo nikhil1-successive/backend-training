@@ -1,7 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
-
-const queryValidation = () => (req: Request, res: Response, next: NextFunction) => {
-  const params: string[] = req.body;
+const queryValidation = () => (req, res, next) => {
+  const params = req.body;
 
   for (const param of params) {
     const paramVal = req.body[param];
