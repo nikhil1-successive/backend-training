@@ -10,7 +10,7 @@ app.get('/', function (req, res) {
     res.send('Welcome.');
 });
 app.use('/route', index_1.default);
-const port = 6262;
+const port = 6789;
 app.listen(port, () => {
     console.log(`http://localhost:${port}`);
 });
