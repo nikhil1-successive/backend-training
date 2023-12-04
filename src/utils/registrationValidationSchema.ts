@@ -1,6 +1,6 @@
 import Joi from 'joi'
 
-const validateRegistration = (req, res, next) => {
+const validateRegistration = (req:Request, res:Response, next:NextFunction) => {
   const userSchema = Joi.object({
     email: Joi.string().email().required(),
     password: Joi.string().min(6).required(),

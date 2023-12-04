@@ -3,7 +3,7 @@ import userRoutes from './routes/index.js'
 
 const app = express()
 
-app.get('/', function (req, res) {
+app.get('/', function (req:Request, res:Response):void {
     res.send('Welcome.')
 })
 app.use('/route', userRoutes)

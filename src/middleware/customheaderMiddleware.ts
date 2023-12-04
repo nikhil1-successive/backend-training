@@ -1,5 +1,5 @@
 const myHeaders: HeadersInit = new Headers();
-myHeaders.append("Content-Type", "images/png");
+myHeaders.append("Content-Type", "image/png"); 
 
 const myInit: RequestInit = {
     method: "GET",

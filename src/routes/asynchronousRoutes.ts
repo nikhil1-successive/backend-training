@@ -4,7 +4,7 @@ const asyncFunc = (text) => {
   });
 };
 
-const asyncHandler = (fun) => (req, res, next) => {
+const asyncHandler = (fun) => (req:Request, res:Response, next:NextFunction) => {
   Promise.resolve(fun(req, res, next)).catch((error) => {
     next(error);
   });

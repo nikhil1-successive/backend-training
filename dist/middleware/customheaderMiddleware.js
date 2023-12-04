@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const myHeaders = new Headers();
-myHeaders.append("Content-Type", "images/png");
+myHeaders.append("Content-Type", "image/png");
 const myInit = {
     method: "GET",
     headers: myHeaders,

@@ -1,4 +1,4 @@
-const validateParameters = (req, res, next) => {
+const validateParameters = (req:Request, res:Result, next:NextFunction) => {
   const { arg1, arg2 } = req.body;
 
   if (arg1 == null || arg2 == null) {
