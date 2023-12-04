@@ -9,7 +9,7 @@ app.get('/', function (req, res) {
 
 app.use('/route', userRoutes);
 
-const port = 4563;
+const port = 8000;
 
 app.listen(port, () => {
   console.log(`http://localhost:${port}`);
