@@ -1,14 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const myHeaders = new Headers();
-myHeaders.append("Content-Type", "images/png");
+class MyHeaders extends Headers {
+    constructor() {
+        super();
+        this.append("Content-Type", "images/png");
+    }
+}
+class MyRequest extends Request {
+    constructor(url, options) {
+        super(url, options);
+    }
+}
+const myHeaders = new MyHeaders();
 const myInit = {
     method: "GET",
     headers: myHeaders,
     mode: "cors",
     cache: "default",
 };
-const myRequest = new Request("https://expressjs.com/images/express-facebook-share.png", myInit);
+const myRequest = new MyRequest("https://expressjs.com/images/express-facebook-share.png", myInit);
 const myContentType = myRequest.headers.get("Content-Type");
 console.log(myContentType);
 exports.default = myHeaders;

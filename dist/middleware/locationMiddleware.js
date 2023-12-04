@@ -13,24 +13,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
-const locationMiddleware = () => {
-    return (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-        try {
-            const clientIP = req.ip;
-            const response = yield axios_1.default.get(`https://ipinfo.io/${clientIP}/json`);
-            const { country } = response.data;
-            if (country !== "India") {
-                return res.status(403).json({
-                    error: 'Access denied.',
+class LocationMiddleware {
+    execute(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const clientIP = req.ip;
+                const response = yield axios_1.default.get(`https://ipinfo.io/${clientIP}/json`);
+                const { country } = response.data;
+                if (country !== "India") {
+                    return res.status(403).json({
+                        error: 'Access denied.',
+                    });
+                }
+                next();
+            }
+            catch (error) {
+                return res.status(500).json({
+                    error: 'Error',
                 });
             }
-            next();
-        }
-        catch (error) {
-            return res.status(500).json({
-                error: 'Error',
-            });
-        }
-    });
-};
-exports.default = locationMiddleware;
+        });
+    }
+}
+const locationMiddlewareInstance = new LocationMiddleware();
+exports.default = locationMiddlewareInstance.execute.bind(locationMiddlewareInstance);
