@@ -1,6 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 
-const customMiddleware = (req: Request, res: Response, next: NextFunction) => {
+interface CustomRequest extends Request {
+  timestamp?: number;
+}
+
+const customMiddleware = (req: CustomRequest, res: Response, next: NextFunction) => {
   const data = [req.method, req.url, req.timestamp];
 
   const timestamp = Date.now();

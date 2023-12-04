@@ -2,6 +2,10 @@ import { Request, Response, NextFunction } from 'express';
 import jwt, { VerifyErrors, Secret } from 'jsonwebtoken';
 import createError from 'http-errors';
 
+interface DecodedToken {
+  userId: string;
+}
+
 const secretKey = "12";
 
 const auth = (req: Request, res: Response, next: NextFunction) => {
@@ -16,7 +20,8 @@ const auth = (req: Request, res: Response, next: NextFunction) => {
       return next(createError(401, 'Unauthorized'));
     }
 
-    req.user = decoded as { [key: string]: any };
+    const decodedToken = decoded as DecodedToken;
+    req.user = decodedToken;
     next();
   });
 };

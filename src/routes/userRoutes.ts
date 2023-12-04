@@ -67,18 +67,18 @@ class MyRouter {
   private registerUser(req: Request, res: Response): void {
     try {
       const newUser: UserData = req.body;
-  
+
       if (!newUser || !newUser.name) {
         throw createError(400, 'Invalid user data');
       }
-  
+
       nameData.push(newUser);
       res.json(nameData);
     } catch (error) {
       res.status(error.status || 500).json({ error: error.message });
     }
   }
-  
+
   private login(req: Request, res: Response): void {
     const { name } = req.body;
     const user = nameData.find((user) => user.name === name);

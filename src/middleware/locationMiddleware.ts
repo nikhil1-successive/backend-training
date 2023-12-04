@@ -1,8 +1,8 @@
 import axios from "axios";
 import { Request, Response, NextFunction } from "express";
 
-const locationMiddleware = () => {
-  return async (req: Request, res: Response, next: NextFunction) => {
+class LocationMiddleware {
+  async execute(req: Request, res: Response, next: NextFunction) {
     try {
       const clientIP = req.ip;
       const response = await axios.get(`https://ipinfo.io/${clientIP}/json`);
@@ -19,7 +19,9 @@ const locationMiddleware = () => {
         error: 'Error',
       });
     }
-  };
-};
+  }
+}
 
-export default locationMiddleware;
+const locationMiddlewareInstance = new LocationMiddleware();
+
+export default locationMiddlewareInstance.execute.bind(locationMiddlewareInstance);
