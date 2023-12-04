@@ -1,5 +1,8 @@
-const errorHandlerMiddleware = (err, req, res, next) => { 
+import { ErrorRequestHandler, Request, Response, NextFunction } from 'express';
+
+const errorHandlerMiddleware: ErrorRequestHandler = (err: any, req: Request, res: Response, next: NextFunction) => { 
   console.error(err.stack); 
-  res.status(500).send('Error occured.'); 
+  res.status(500).send('Error occurred.'); 
 }; 
-export default errorHandlerMiddleware
+
+export default errorHandlerMiddleware;
