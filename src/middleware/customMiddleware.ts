@@ -1,16 +1,21 @@
-// import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 
-// const customMiddleware = (req: Request, res: Response, next: NextFunction) => {
-//   const timestamp:any = Date.now();
-//   req.timestamp = timestamp;
+interface CustomRequest extends Request {
+  timestamp?: number;
+}
 
-//   const data = [req.method, req.url, timestamp];
+const customMiddleware = (req: CustomRequest, res: Response, next: NextFunction) => {
+  const data = [req.method, req.url, req.timestamp];
 
-//   const time = Math.floor(timestamp / 1000);
-//   console.log(time);
-//   res.json(data); 
+  const timestamp = Date.now();
+  req.timestamp = timestamp;
 
-  
-// };
+  const time = Math.floor(timestamp / 1000);
+  console.log(time);
 
-// export default customMiddleware;
+  res.send(data);
+
+  next();
+};
+
+export default customMiddleware;

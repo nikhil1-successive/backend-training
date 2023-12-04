@@ -1,26 +1,39 @@
-// import { Request, Response, NextFunction } from 'express';
-// import jwt, { VerifyErrors } from 'jsonwebtoken';
-// import createError from 'http-errors';
+import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
+import createError from 'http-errors';
 
-// const secretKey = "12";
+interface DecodedToken {
+  userId: string;
+}
 
-// const auth = (req: Request, res: Response, next: NextFunction) => {
+declare module 'express-serve-static-core' {
+  interface Request {
+    user?: DecodedToken;
+  }
+}
 
-//   const token = req.headers['authorization'];
+const secretKey = "12";
 
-//   if (!token) {
-//     return next(createError(403, 'Please provide token'));
-//   }
+const auth = (req: Request, res: Response, next: NextFunction) => {
+  const token = req.headers['authorization'];
 
+  if (!token) {
+    return next(createError(403, 'Please provide a token'));
+  }
 
-//   jwt.verify(token as string, secretKey, (err: VerifyErrors | null, decoded?: object):any => {
-//     if (err) {
-//       return next(createError(401, 'Unauthorized'));
-//     }
+  try {
+    const decoded = jwt.verify(token as string, secretKey) as DecodedToken;
 
-//     req.user = decoded as { [key: string]: any };
-//     next();
-//   });
-// };
+    if (!decoded) {
+      return next(createError(401, 'Unauthorized'));
+    }
 
-// export default auth;
+    req.user = decoded;
+    next();
+  } catch (err) {
+    console.error('JWT Verification Error:', err);
+    return next(createError(401, 'Unauthorized'));
+  }
+};
+
+export default auth;
