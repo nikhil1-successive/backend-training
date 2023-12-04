@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt, { VerifyErrors} from 'jsonwebtoken';
+import jwt, { VerifyErrors, Secret } from 'jsonwebtoken';
 
-const secretKey = "123";
+const secretKey: Secret = "123";
 
 interface DecodedUser {
   id: string;
@@ -23,14 +23,13 @@ const tokenVerificationMiddleware = (req: Request, res: Response, next: NextFunc
     return res.status(403).json({ message: 'Token Missing.' });
   }
 
-  jwt.verify(token as string, secretKey, (err: VerifyErrors | null, decodeUser?: object) => {
-    if (err) {
-      return res.status(401).json({ message: 'Token Invalid.' });
-    }
-
-    req.user = decodeUser as DecodedUser;
+  try {
+    const decodeUser = jwt.verify(token as string, secretKey) as DecodedUser;
+    req.user = decodeUser;
     next();
-  });
+  } catch (err) {
+    return res.status(401).json({ message: 'Token Invalid.' });
+  }
 };
 
 export default tokenVerificationMiddleware;

@@ -11,14 +11,17 @@ const auth = (req, res, next) => {
     if (!token) {
         return next((0, http_errors_1.default)(403, 'Please provide a token'));
     }
-    jsonwebtoken_1.default.verify(token, secretKey, (err, decoded) => {
-        if (err) {
-            console.error('JWT Verification Error:', err);
+    try {
+        const decoded = jsonwebtoken_1.default.verify(token, secretKey);
+        if (!decoded) {
             return next((0, http_errors_1.default)(401, 'Unauthorized'));
         }
-        const decodedToken = decoded;
-        req.user = decodedToken;
+        req.user = decoded;
         next();
-    });
+    }
+    catch (err) {
+        console.error('JWT Verification Error:', err);
+        return next((0, http_errors_1.default)(401, 'Unauthorized'));
+    }
 };
 exports.default = auth;

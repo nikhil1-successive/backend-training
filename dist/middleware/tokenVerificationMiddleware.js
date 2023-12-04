@@ -10,12 +10,13 @@ const tokenVerificationMiddleware = (req, res, next) => {
     if (!token) {
         return res.status(403).json({ message: 'Token Missing.' });
     }
-    jsonwebtoken_1.default.verify(token, secretKey, (err, decodeUser) => {
-        if (err) {
-            return res.status(401).json({ message: 'Token Invalid.' });
-        }
+    try {
+        const decodeUser = jsonwebtoken_1.default.verify(token, secretKey);
         req.user = decodeUser;
         next();
-    });
+    }
+    catch (err) {
+        return res.status(401).json({ message: 'Token Invalid.' });
+    }
 };
 exports.default = tokenVerificationMiddleware;
