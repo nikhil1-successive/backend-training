@@ -13,18 +13,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const http_errors_1 = __importDefault(require("http-errors"));
 const body_parser_1 = __importDefault(require("body-parser"));
-// import limiter from '../middleware/limiterMiddleware';
+const limiterMiddleware_1 = __importDefault(require("../middleware/limiterMiddleware"));
 const customMiddleware_1 = __importDefault(require("../middleware/customMiddleware"));
-// import tokenVerificationMiddleware from '../middleware/tokenVerificationMiddleware';
+const tokenVerificationMiddleware_1 = __importDefault(require("../middleware/tokenVerificationMiddleware"));
 const middlewareFunctions_1 = require("../middleware/middlewareFunctions");
 const dataseeding_1 = __importDefault(require("../utils/dataseeding"));
 const mockData_1 = __importDefault(require("../utils/mockData"));
 const express_validation_1 = require("express-validation");
 const queryMiddleware_1 = __importDefault(require("../middleware/queryMiddleware"));
+const registrationValidationSchema_1 = __importDefault(require("../utils/registrationValidationSchema"));
 const locationMiddleware_1 = __importDefault(require("../middleware/locationMiddleware"));
-// import auth from '../middleware/auth';
+const auth_1 = __importDefault(require("../middleware/auth"));
 const asynchronousRoutes_1 = require("./asynchronousRoutes");
 const parameterRoute_1 = __importDefault(require("./parameterRoute"));
 const errorHandler_1 = __importDefault(require("../middleware/errorHandler"));
@@ -36,56 +38,59 @@ class MyRouter {
         this.setupRoutes();
     }
     setupMiddleware() {
-        // this.router.use(limiter);
+        this.router.use(limiterMiddleware_1.default);
         this.router.use(express_1.default.json());
         this.router.use(body_parser_1.default.json());
     }
     setupRoutes() {
-        // this.router.post('/register', this.registerUser.bind(this));
-        // this.router.get('/login', this.login.bind(this));
-        // this.router.get('/authorized', tokenVerificationMiddleware, this.authorized.bind(this));
+        this.router.post('/register', this.registerUser.bind(this));
+        this.router.get('/login', this.login.bind(this));
+        this.router.get('/authorized', tokenVerificationMiddleware_1.default, this.authorized.bind(this));
         this.router.get('/console', customMiddleware_1.default, this.console.bind(this));
         this.router.get('/middleware', middlewareFunctions_1.middleware1, middlewareFunctions_1.middleware2, this.middleware.bind(this));
         this.router.get('/getName', this.getName.bind(this));
         this.router.get('/getFood', this.getFood.bind(this));
         this.router.get('/error', errorHandler_1.default, this.error.bind(this));
-        // this.router.post('/registerUser', validateRegistration, this.registerUser.bind(this));
+        this.router.post('/registerUser', registrationValidationSchema_1.default, this.registerUser.bind(this));
         this.router.get('/query', queryMiddleware_1.default, this.query.bind(this));
         this.router.get('/location', locationMiddleware_1.default, this.location.bind(this));
         this.router.use(this.validationError.bind(this));
-        // this.router.get('/protected', auth, this.protected.bind(this));
+        this.router.get('/protected', auth_1.default, this.protected.bind(this));
         this.router.get('/async', (0, asynchronousRoutes_1.asyncHandler)(this.asyncFunction.bind(this)));
         this.router.post('/params', parameterRoute_1.default, this.params.bind(this));
         this.router.use(this.handleError.bind(this));
         this.router.get('/errormiddleware', this.errorMiddleware.bind(this));
+        this.router.get('/gethealth', this.healthFunction.bind(this));
         this.router.use(this.notFound.bind(this));
         this.router.use(this.handleGlobalError.bind(this));
     }
-    // private registerUser(req: Request, res: Response): void {
-    //   try {
-    //     const newUser: UserData = req.body;
-    //     if (!newUser || !newUser.name) {
-    //       throw createError(400, 'Invalid user data');
-    //     }
-    //     nameData.push(newUser);
-    //     res.json(nameData);
-    //   } catch (error) {
-    //     res.status(error.status || 500).json({ error: error.message });
-    //   }
-    // }
-    // private login(req: Request, res: Response): void {
-    //   const { name } = req.body;
-    //   const user = nameData.find((user) => user.name === name);
-    //   if (user) {
-    //     const token = jwt.sign({ name: user.name }, this.secretKey, { expiresIn: '10h' });
-    //     res.json({ token });
-    //   } else {
-    //     res.status(401).json({ message: 'Invalid username' });
-    //   }
-    // }
-    // private authorized(req: Request, res: Response): void {
-    //   res.json({ message: 'Welcome To Authorized Content.', user: req.user });
-    // }
+    registerUser(req, res) {
+        try {
+            const newUser = req.body;
+            if (!newUser || !newUser.name) {
+                throw (0, http_errors_1.default)(400, 'Invalid user data');
+            }
+            mockData_1.default.push(newUser);
+            res.json(mockData_1.default);
+        }
+        catch (error) {
+            res.status(error.status || 500).json({ error: error.message });
+        }
+    }
+    login(req, res) {
+        const { name } = req.body;
+        const user = mockData_1.default.find((user) => user.name === name);
+        if (user) {
+            const token = jsonwebtoken_1.default.sign({ name: user.name }, this.secretKey, { expiresIn: '10h' });
+            res.json({ token });
+        }
+        else {
+            res.status(401).json({ message: 'Invalid username' });
+        }
+    }
+    authorized(req, res) {
+        res.json({ message: 'Welcome To Authorized Content.', user: req.user });
+    }
     console(req, res) {
         res.send('User Details');
     }
@@ -97,6 +102,9 @@ class MyRouter {
     }
     getFood(req, res) {
         res.send(dataseeding_1.default);
+    }
+    healthFunction(req, res) {
+        res.json({ message: "Health Is Ok" });
     }
     error(req, res) {
         res.send('404 Not Found');
@@ -115,9 +123,9 @@ class MyRouter {
             next(err);
         }
     }
-    // private protected(req: Request, res: Response): void {
-    //   res.json({ message: 'This is a protected resource', user: req.user });
-    // }
+    protected(req, res) {
+        res.json({ message: 'This is a protected resource', user: req.user });
+    }
     asyncFunction(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

@@ -1,24 +1,24 @@
 "use strict";
-// import { Request, Response, NextFunction } from 'express';
-// import jwt, { VerifyErrors } from 'jsonwebtoken';
-// import createError from 'http-errors';
-// interface DecodedToken {
-//   userId: string;
-// }
-// const secretKey = "12";
-// const auth = (req: Request, res: Response, next: NextFunction) => {
-//   const token = req.headers['authorization'];
-//   if (!token) {
-//     return next(createError(403, 'Please provide a token'));
-//   }
-//   jwt.verify(token as string, secretKey, (err: VerifyErrors | null, decoded?: object) => {
-//     if (err) {
-//       console.error('JWT Verification Error:', err);
-//       return next(createError(401, 'Unauthorized'));
-//     }
-//     const decodedToken = decoded as DecodedToken;
-//     req.user = decodedToken;
-//     next();
-//   });
-// };
-// export default auth;
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const http_errors_1 = __importDefault(require("http-errors"));
+const secretKey = "12";
+const auth = (req, res, next) => {
+    const token = req.headers['authorization'];
+    if (!token) {
+        return next((0, http_errors_1.default)(403, 'Please provide a token'));
+    }
+    jsonwebtoken_1.default.verify(token, secretKey, (err, decoded) => {
+        if (err) {
+            console.error('JWT Verification Error:', err);
+            return next((0, http_errors_1.default)(401, 'Unauthorized'));
+        }
+        const decodedToken = decoded;
+        req.user = decodedToken;
+        next();
+    });
+};
+exports.default = auth;
