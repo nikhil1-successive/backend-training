@@ -1,26 +1,26 @@
-import { Request, Response, NextFunction } from 'express';
-import jwt, { VerifyErrors } from 'jsonwebtoken';
-import createError from 'http-errors';
+// import { Request, Response, NextFunction } from 'express';
+// import jwt, { VerifyErrors } from 'jsonwebtoken';
+// import createError from 'http-errors';
 
-const secretKey = "12";
+// const secretKey = "12";
 
-const auth = (req: Request, res: Response, next: NextFunction) => {
+// const auth = (req: Request, res: Response, next: NextFunction) => {
 
-  const token = req.headers['authorization'];
+//   const token = req.headers['authorization'];
 
-  if (!token) {
-    return next(createError(403, 'Please provide token'));
-  }
+//   if (!token) {
+//     return next(createError(403, 'Please provide token'));
+//   }
 
 
-  jwt.verify(token as string, secretKey, (err: VerifyErrors | null, decoded?: object):any => {
-    if (err) {
-      return next(createError(401, 'Unauthorized'));
-    }
+//   jwt.verify(token as string, secretKey, (err: VerifyErrors | null, decoded?: object):any => {
+//     if (err) {
+//       return next(createError(401, 'Unauthorized'));
+//     }
 
-    req.user = decoded as { [key: string]: any };
-    next();
-  });
-};
+//     req.user = decoded as { [key: string]: any };
+//     next();
+//   });
+// };
 
-export default auth;
+// export default auth;
