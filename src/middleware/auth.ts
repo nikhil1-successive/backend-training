@@ -6,8 +6,10 @@ interface DecodedToken {
   userId: string;
 }
 
-interface Request {
-  user?: DecodedToken;
+declare module 'express-serve-static-core' {
+  interface Request {
+    user?: DecodedToken;
+  }
 }
 
 const secretKey = "12";
@@ -21,7 +23,6 @@ const auth = (req: Request, res: Response, next: NextFunction) => {
 
   try {
     const decoded = jwt.verify(token as string, secretKey) as DecodedToken;
-
 
     if (!decoded) {
       return next(createError(401, 'Unauthorized'));

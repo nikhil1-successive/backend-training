@@ -4,7 +4,7 @@ import createError from 'http-errors';
 import bodyParser from 'body-parser';
 import limiter from '../middleware/limiterMiddleware';
 import customMiddleware from '../middleware/customMiddleware';
-import tokenVerificationMiddleware from '../middleware/tokenVerificationMiddleware';
+// import tokenVerificationMiddleware from '../middleware/tokenVerificationMiddleware';
 import { middleware1, middleware2 } from '../middleware/middlewareFunctions';
 import foodData from '../utils/dataseeding';
 import nameData from '../utils/mockData';
@@ -43,15 +43,15 @@ class MyRouter {
   }
 
   private setupRoutes(): void {
-    this.router.post('/register', this.registerUser.bind(this));
-    this.router.get('/login', this.login.bind(this));
-    this.router.get('/authorized', tokenVerificationMiddleware, this.authorized.bind(this));
+    // this.router.post('/register', this.registerUser.bind(this));
+    // this.router.get('/login', this.login.bind(this));
+    // this.router.get('/authorized', tokenVerificationMiddleware, this.authorized.bind(this));
     this.router.get('/console', customMiddleware, this.console.bind(this));
     this.router.get('/middleware', middleware1, middleware2, this.middleware.bind(this));
     this.router.get('/getName', this.getName.bind(this));
     this.router.get('/getFood', this.getFood.bind(this));
     this.router.get('/error', errorHandlerMiddleware, this.error.bind(this));
-    this.router.post('/registerUser', validateRegistration, this.registerUser.bind(this));
+    // this.router.post('/registerUser', validateRegistration, this.registerUser.bind(this));
     this.router.get('/query', queryValidation, this.query.bind(this));
     this.router.get('/location', locationMiddleware, this.location.bind(this));
     this.router.use(this.validationError.bind(this));
@@ -65,32 +65,32 @@ class MyRouter {
     this.router.use(this.handleGlobalError.bind(this));
   }
 
-  private registerUser(req: Request, res: Response): void {
-    try {
-      const newUser: UserData = req.body;
+  // private registerUser(req: Request, res: Response): void {
+  //   try {
+  //     const newUser: UserData = req.body;
 
-      if (!newUser || !newUser.name) {
-        throw createError(400, 'Invalid user data');
-      }
+  //     if (!newUser || !newUser.name) {
+  //       throw createError(400, 'Invalid user data');
+  //     }
 
-      nameData.push(newUser);
-      res.json(nameData);
-    } catch (error) {
-      res.status(error.status || 500).json({ error: error.message });
-    }
-  }
+  //     nameData.push(newUser);
+  //     res.json(nameData);
+  //   } catch (error) {
+  //     res.status(error.status || 500).json({ error: error.message });
+  //   }
+  // }
 
-  private login(req: Request, res: Response): void {
-    const { name } = req.body;
-    const user = nameData.find((user) => user.name === name);
+  // private login(req: Request, res: Response): void {
+  //   const { name } = req.body;
+  //   const user = nameData.find((user) => user.name === name);
 
-    if (user) {
-      const token = jwt.sign({ name: user.name }, this.secretKey, { expiresIn: '10h' });
-      res.json({ token });
-    } else {
-      res.status(401).json({ message: 'Invalid username' });
-    }
-  }
+  //   if (user) {
+  //     const token = jwt.sign({ name: user.name }, this.secretKey, { expiresIn: '10h' });
+  //     res.json({ token });
+  //   } else {
+  //     res.status(401).json({ message: 'Invalid username' });
+  //   }
+  // }
 
   private authorized(req: Request, res: Response): void {
     res.json({ message: 'Welcome To Authorized Content.', user: req.user });

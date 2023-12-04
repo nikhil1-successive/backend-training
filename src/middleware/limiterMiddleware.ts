@@ -1,8 +1,8 @@
-import rateLimit, { RateLimit } from 'express-rate-limit';
+import rateLimit from 'express-rate-limit';
 import { Request, Response, NextFunction } from 'express';
 
-const limiter: RateLimit = rateLimit({
-  windowMs: 1000 * 60 * 1000, 
+const limiter = rateLimit({
+  windowMs: 1000 * 60 * 1000,
   max: 100,
   headers: true,
 });

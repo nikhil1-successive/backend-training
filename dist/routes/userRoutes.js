@@ -13,18 +13,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const http_errors_1 = __importDefault(require("http-errors"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const limiterMiddleware_1 = __importDefault(require("../middleware/limiterMiddleware"));
 const customMiddleware_1 = __importDefault(require("../middleware/customMiddleware"));
-const tokenVerificationMiddleware_1 = __importDefault(require("../middleware/tokenVerificationMiddleware"));
+// import tokenVerificationMiddleware from '../middleware/tokenVerificationMiddleware';
 const middlewareFunctions_1 = require("../middleware/middlewareFunctions");
 const dataseeding_1 = __importDefault(require("../utils/dataseeding"));
 const mockData_1 = __importDefault(require("../utils/mockData"));
 const express_validation_1 = require("express-validation");
 const queryMiddleware_1 = __importDefault(require("../middleware/queryMiddleware"));
-const registrationValidationSchema_1 = __importDefault(require("../utils/registrationValidationSchema"));
 const locationMiddleware_1 = __importDefault(require("../middleware/locationMiddleware"));
 const auth_1 = __importDefault(require("../middleware/auth"));
 const asynchronousRoutes_1 = require("./asynchronousRoutes");
@@ -43,15 +41,15 @@ class MyRouter {
         this.router.use(body_parser_1.default.json());
     }
     setupRoutes() {
-        this.router.post('/register', this.registerUser.bind(this));
-        this.router.get('/login', this.login.bind(this));
-        this.router.get('/authorized', tokenVerificationMiddleware_1.default, this.authorized.bind(this));
+        // this.router.post('/register', this.registerUser.bind(this));
+        // this.router.get('/login', this.login.bind(this));
+        // this.router.get('/authorized', tokenVerificationMiddleware, this.authorized.bind(this));
         this.router.get('/console', customMiddleware_1.default, this.console.bind(this));
         this.router.get('/middleware', middlewareFunctions_1.middleware1, middlewareFunctions_1.middleware2, this.middleware.bind(this));
         this.router.get('/getName', this.getName.bind(this));
         this.router.get('/getFood', this.getFood.bind(this));
         this.router.get('/error', errorHandler_1.default, this.error.bind(this));
-        this.router.post('/registerUser', registrationValidationSchema_1.default, this.registerUser.bind(this));
+        // this.router.post('/registerUser', validateRegistration, this.registerUser.bind(this));
         this.router.get('/query', queryMiddleware_1.default, this.query.bind(this));
         this.router.get('/location', locationMiddleware_1.default, this.location.bind(this));
         this.router.use(this.validationError.bind(this));
@@ -64,30 +62,28 @@ class MyRouter {
         this.router.use(this.notFound.bind(this));
         this.router.use(this.handleGlobalError.bind(this));
     }
-    registerUser(req, res) {
-        try {
-            const newUser = req.body;
-            if (!newUser || !newUser.name) {
-                throw (0, http_errors_1.default)(400, 'Invalid user data');
-            }
-            mockData_1.default.push(newUser);
-            res.json(mockData_1.default);
-        }
-        catch (error) {
-            res.status(error.status || 500).json({ error: error.message });
-        }
-    }
-    login(req, res) {
-        const { name } = req.body;
-        const user = mockData_1.default.find((user) => user.name === name);
-        if (user) {
-            const token = jsonwebtoken_1.default.sign({ name: user.name }, this.secretKey, { expiresIn: '10h' });
-            res.json({ token });
-        }
-        else {
-            res.status(401).json({ message: 'Invalid username' });
-        }
-    }
+    // private registerUser(req: Request, res: Response): void {
+    //   try {
+    //     const newUser: UserData = req.body;
+    //     if (!newUser || !newUser.name) {
+    //       throw createError(400, 'Invalid user data');
+    //     }
+    //     nameData.push(newUser);
+    //     res.json(nameData);
+    //   } catch (error) {
+    //     res.status(error.status || 500).json({ error: error.message });
+    //   }
+    // }
+    // private login(req: Request, res: Response): void {
+    //   const { name } = req.body;
+    //   const user = nameData.find((user) => user.name === name);
+    //   if (user) {
+    //     const token = jwt.sign({ name: user.name }, this.secretKey, { expiresIn: '10h' });
+    //     res.json({ token });
+    //   } else {
+    //     res.status(401).json({ message: 'Invalid username' });
+    //   }
+    // }
     authorized(req, res) {
         res.json({ message: 'Welcome To Authorized Content.', user: req.user });
     }
