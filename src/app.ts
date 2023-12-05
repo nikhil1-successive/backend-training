@@ -1,16 +1,40 @@
-import express from 'express';
+import express, { Express, Router } from 'express';
 import userRoutes from './routes/index';
+import bodyParser from 'body-parser';
+import limiter from './middleware/limiterMiddleware';
 
-const app = express();
+class App {
+  private app: Express;
+  private port: number;
 
-app.get('/', function (req, res) {
-  res.send('Welcome.');
-});
+  constructor() {
+    this.app = express();
+    this.port = 3000;
 
-app.use('/route', userRoutes);
+    this.configureMiddleware();
+    this.configureRoutes();
+  }
 
-const port = 8000;
+  private configureMiddleware(): void {
+    this.app.use(limiter);
+    this.app.use(express.json());
+    this.app.use(bodyParser.json());
+  }
 
-app.listen(port, () => {
-  console.log(`http://localhost:${port}`);
-});
+  private configureRoutes(): void {
+    this.app.get('/', (req, res) => {
+      res.send('Welcome.');
+    });
+
+    this.app.use('/route', userRoutes);
+  }
+
+  public run(): void {
+    this.app.listen(this.port, () => {
+      console.log(`Server is running on port ${this.port}`);
+      console.log(`http://localhost:${this.port}`);
+    });
+  }
+}
+
+export default App;

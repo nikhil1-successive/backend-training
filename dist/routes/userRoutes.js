@@ -14,10 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const http_errors_1 = __importDefault(require("http-errors"));
-const body_parser_1 = __importDefault(require("body-parser"));
-const limiterMiddleware_1 = __importDefault(require("../middleware/limiterMiddleware"));
 const customMiddleware_1 = __importDefault(require("../middleware/customMiddleware"));
-// import tokenVerificationMiddleware from '../middleware/tokenVerificationMiddleware';
 const middlewareFunctions_1 = require("../middleware/middlewareFunctions");
 const dataseeding_1 = __importDefault(require("../utils/dataseeding"));
 const mockData_1 = __importDefault(require("../utils/mockData"));
@@ -29,129 +26,113 @@ const auth_1 = __importDefault(require("../middleware/auth"));
 const asynchronousRoutes_1 = require("./asynchronousRoutes");
 const parameterRoute_1 = __importDefault(require("./parameterRoute"));
 const errorHandler_1 = __importDefault(require("../middleware/errorHandler"));
-class MyRouter {
-    constructor() {
-        this.secretKey = 'Nikhil';
-        this.router = express_1.default.Router();
-        this.setupMiddleware();
-        this.setupRoutes();
+const secretKey = 'Nikhil';
+function setupRoutes(router) {
+    router.post('/register', registerUser);
+    router.get('/console', customMiddleware_1.default, consoleEndpoint);
+    router.get('/middleware', middlewareFunctions_1.middleware1, middlewareFunctions_1.middleware2, middlewareEndpoint);
+    router.get('/getName', getName);
+    router.get('/getFood', getFood);
+    router.get('/error', errorHandler_1.default, errorEndpoint);
+    router.post('/registerUser', registrationValidationSchema_1.default, registerUser);
+    router.get('/query', queryMiddleware_1.default, queryEndpoint);
+    router.get('/location', locationMiddleware_1.default, locationEndpoint);
+    router.use(validationError);
+    router.get('/protected', auth_1.default, protectedEndpoint);
+    router.get('/async', (0, asynchronousRoutes_1.asyncHandler)(asyncFunction));
+    router.post('/params', parameterRoute_1.default, paramsEndpoint);
+    router.use(handleError);
+    router.get('/errormiddleware', errorMiddleware);
+    router.get('/gethealth', healthFunction);
+    router.use(notFound);
+    router.use(handleGlobalError);
+}
+function consoleEndpoint(req, res) {
+    res.send('User Details');
+}
+function middlewareEndpoint(req, res) {
+    res.send('Middleware Called');
+}
+function getName(req, res) {
+    res.send(mockData_1.default);
+}
+function getFood(req, res) {
+    res.send(dataseeding_1.default);
+}
+function healthFunction(req, res) {
+    res.json({ message: 'Health Is Ok' });
+}
+function errorEndpoint(req, res) {
+    res.send('404 Not Found');
+}
+function queryEndpoint(req, res) {
+    res.json('Query.');
+}
+function locationEndpoint(req, res) {
+    res.json({ message: 'Access granted!' });
+}
+function validationError(err, req, res, next) {
+    if (err instanceof express_validation_1.ValidationError) {
+        res.json('Unauthorized Access');
     }
-    setupMiddleware() {
-        this.router.use(limiterMiddleware_1.default);
-        this.router.use(express_1.default.json());
-        this.router.use(body_parser_1.default.json());
+    else {
+        next(err);
     }
-    setupRoutes() {
-        this.router.post('/register', this.registerUser.bind(this));
-        // this.router.get('/login', this.login.bind(this));
-        // this.router.get('/authorized', tokenVerificationMiddleware, this.authorized.bind(this));
-        this.router.get('/console', customMiddleware_1.default, this.console.bind(this));
-        this.router.get('/middleware', middlewareFunctions_1.middleware1, middlewareFunctions_1.middleware2, this.middleware.bind(this));
-        this.router.get('/getName', this.getName.bind(this));
-        this.router.get('/getFood', this.getFood.bind(this));
-        this.router.get('/error', errorHandler_1.default, this.error.bind(this));
-        this.router.post('/registerUser', registrationValidationSchema_1.default, this.registerUser.bind(this));
-        this.router.get('/query', queryMiddleware_1.default, this.query.bind(this));
-        this.router.get('/location', locationMiddleware_1.default, this.location.bind(this));
-        this.router.use(this.validationError.bind(this));
-        this.router.get('/protected', auth_1.default, this.protected.bind(this));
-        this.router.get('/async', (0, asynchronousRoutes_1.asyncHandler)(this.asyncFunction.bind(this)));
-        this.router.post('/params', parameterRoute_1.default, this.params.bind(this));
-        this.router.use(this.handleError.bind(this));
-        this.router.get('/errormiddleware', this.errorMiddleware.bind(this));
-        this.router.get('/gethealth', this.healthFunction.bind(this));
-        this.router.use(this.notFound.bind(this));
-        this.router.use(this.handleGlobalError.bind(this));
-    }
-    authorized(req, res) {
-        res.json({ message: 'Welcome To Authorized Content.', user: req.user });
-    }
-    console(req, res) {
-        res.send('User Details');
-    }
-    middleware(req, res) {
-        res.send('Middleware Called');
-    }
-    getName(req, res) {
-        res.send(mockData_1.default);
-    }
-    getFood(req, res) {
-        res.send(dataseeding_1.default);
-    }
-    healthFunction(req, res) {
-        res.json({ message: "Health Is Ok" });
-    }
-    error(req, res) {
-        res.send('404 Not Found');
-    }
-    query(req, res) {
-        res.json('Query.');
-    }
-    location(req, res) {
-        res.json({ message: 'Access granted!' });
-    }
-    validationError(err, req, res, next) {
-        if (err instanceof express_validation_1.ValidationError) {
-            res.json('Unauthorized Access');
-        }
-        else {
-            next(err);
-        }
-    }
-    protected(req, res) {
-        res.json({ message: 'This is a protected resource', user: req.user });
-    }
-    asyncFunction(req, res, next) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                yield new Promise((_, reject) => reject((0, http_errors_1.default)(401, 'Unauthorized')));
-                res.send('Success');
-            }
-            catch (error) {
-                next(error);
-            }
-        });
-    }
-    params(req, res) {
-        res.json({ message: 'Success' });
-    }
-    handleError(err, req, res, next) {
-        const statusCode = err.status || 500;
-        res.status(statusCode).json({ error: err.message });
-    }
-    errorMiddleware(req, res, next) {
+}
+function protectedEndpoint(req, res) {
+    res.json({ message: 'This is a protected resource', user: req.user });
+}
+function asyncFunction(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
         try {
-            throw new Error('Something went wrong');
+            yield new Promise((_, reject) => reject((0, http_errors_1.default)(401, 'Unauthorized')));
             res.send('Success');
         }
         catch (error) {
             next(error);
         }
+    });
+}
+function paramsEndpoint(req, res) {
+    res.json({ message: 'Success' });
+}
+function handleError(err, req, res, next) {
+    const statusCode = err.status || 500;
+    res.status(statusCode).json({ error: err.message });
+}
+function errorMiddleware(req, res, next) {
+    try {
+        throw new Error('Something went wrong');
+        res.send('Success');
     }
-    notFound(req, res, next) {
-        next((0, http_errors_1.default)(404, 'Not Found'));
-    }
-    handleGlobalError(err, req, res, next) {
-        res.status(err.status || 500);
-        res.json({
-            error: {
-                message: err.message,
-            },
-        });
-    }
-    registerUser(req, res) {
-        try {
-            const newUser = req.body;
-            if (!newUser || !newUser.name) {
-                throw (0, http_errors_1.default)(400, 'Invalid user data');
-            }
-            mockData_1.default.push(newUser.name);
-            res.json(mockData_1.default);
-        }
-        catch (error) {
-            res.status(error.status || 500).json({ error: error.message });
-        }
+    catch (error) {
+        next(error);
     }
 }
-const myRouter = new MyRouter();
-exports.default = myRouter.router;
+function notFound(req, res, next) {
+    next((0, http_errors_1.default)(404, 'Not Found'));
+}
+function handleGlobalError(err, req, res, next) {
+    res.status(err.status || 500);
+    res.json({
+        error: {
+            message: err.message,
+        },
+    });
+}
+function registerUser(req, res) {
+    try {
+        const newUser = req.body;
+        if (!newUser || !newUser.name) {
+            throw (0, http_errors_1.default)(400, 'Invalid user data');
+        }
+        mockData_1.default.push(newUser.name);
+        res.json(mockData_1.default);
+    }
+    catch (error) {
+        res.status(error.status || 500).json({ error: error.message });
+    }
+}
+const router = express_1.default.Router();
+setupRoutes(router);
+exports.default = router;
