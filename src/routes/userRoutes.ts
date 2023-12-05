@@ -73,9 +73,9 @@ class MyRouter {
         throw createError(400, 'Invalid user data');
       }
 
-      nameData.push(newUser);
+      nameData.push(newUser.name);
       res.json(nameData);
-    } catch (error:unknown) {
+    } catch (error:any) {
       res.status(error.status || 500).json({ error: error.message });
     }
   }

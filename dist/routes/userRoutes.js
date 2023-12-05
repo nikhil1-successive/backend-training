@@ -68,7 +68,7 @@ class MyRouter {
             if (!newUser || !newUser.name) {
                 throw (0, http_errors_1.default)(400, 'Invalid user data');
             }
-            mockData_1.default.push(newUser);
+            mockData_1.default.push(newUser.name);
             res.json(mockData_1.default);
         }
         catch (error) {
