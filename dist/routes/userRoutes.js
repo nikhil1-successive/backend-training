@@ -63,29 +63,6 @@ class MyRouter {
         this.router.use(this.notFound.bind(this));
         this.router.use(this.handleGlobalError.bind(this));
     }
-    registerUser(req, res) {
-        try {
-            const newUser = req.body;
-            if (!newUser || !newUser.name) {
-                throw (0, http_errors_1.default)(400, 'Invalid user data');
-            }
-            mockData_1.default.push(newUser.name);
-            res.json(mockData_1.default);
-        }
-        catch (error) {
-            res.status(error.status || 500).json({ error: error.message });
-        }
-    }
-    // private login(req: Request, res: Response): void {
-    //   const  name:String  = req.body;
-    //   const user = nameData.find((user) => user.name === name);
-    //   if (user) {
-    //     const token = jwt.sign({ name: user.name }, this.secretKey, { expiresIn: '10h' });
-    //     res.json({ token });
-    //   } else {
-    //     res.status(401).json({ message: 'Invalid username' });
-    //   }
-    // }
     authorized(req, res) {
         res.json({ message: 'Welcome To Authorized Content.', user: req.user });
     }
@@ -161,6 +138,19 @@ class MyRouter {
                 message: err.message,
             },
         });
+    }
+    registerUser(req, res) {
+        try {
+            const newUser = req.body;
+            if (!newUser || !newUser.name) {
+                throw (0, http_errors_1.default)(400, 'Invalid user data');
+            }
+            mockData_1.default.push(newUser.name);
+            res.json(mockData_1.default);
+        }
+        catch (error) {
+            res.status(error.status || 500).json({ error: error.message });
+        }
     }
 }
 const myRouter = new MyRouter();
