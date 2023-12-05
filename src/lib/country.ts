@@ -14,4 +14,4 @@ const playingCountriesSchema: Schema<IPlayingCountries> = new mongoose.Schema({
 
 const PlayingCountries = mongoose.model<IPlayingCountries>('PlayingCountries', playingCountriesSchema);
 
-export default PlayingCountries;
+export { PlayingCountries, IPlayingCountries };

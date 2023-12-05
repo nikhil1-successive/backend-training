@@ -1,15 +1,15 @@
 import lodash from "lodash"
 
-function add(num1:Number, num2:Number) {
+function add(num1: number, num2: number) {
     return lodash.sum([num1, num2]);
 }
-function sub(num1:Number, num2:Number) {
+function sub(num1: number, num2: number) {
     return lodash.subtract(num1, num2);
 }
-function mul(num1:Number, num2:Number) {
+function mul(num1: number, num2: number) {
     return lodash.multiply(num1, num2);
 }
-function div(num1:Number, num2:Number) {
+function div(num1: number, num2: number) {
     return lodash.divide(num1, num2);
 }
 
