@@ -62,18 +62,19 @@ class MyRouter {
         this.router.use(this.notFound.bind(this));
         this.router.use(this.handleGlobalError.bind(this));
     }
-    // private registerUser(req: Request, res: Response): void {
-    //   try {
-    //     const newUser: UserData = req.body;
-    //     if (!newUser || !newUser.name) {
-    //       throw createError(400, 'Invalid user data');
-    //     }
-    //     nameData.push(newUser);
-    //     res.json(nameData);
-    //   } catch (error) {
-    //     res.status(error.status || 500).json({ error: error.message });
-    //   }
-    // }
+    registerUser(req, res) {
+        try {
+            const newUser = req.body;
+            if (!newUser || !newUser.name) {
+                throw (0, http_errors_1.default)(400, 'Invalid user data');
+            }
+            mockData_1.default.push(newUser);
+            res.json(mockData_1.default);
+        }
+        catch (error) {
+            res.status(error.status || 500).json({ error: error.message });
+        }
+    }
     // private login(req: Request, res: Response): void {
     //   const { name } = req.body;
     //   const user = nameData.find((user) => user.name === name);
