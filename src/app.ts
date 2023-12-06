@@ -10,7 +10,6 @@ class App {
   constructor() {
     this.app = express();
     this.port = 3000;
-
     this.configureMiddleware();
     this.configureRoutes();
   }
