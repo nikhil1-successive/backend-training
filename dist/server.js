@@ -9,7 +9,7 @@ const app = (0, express_1.default)();
 app.get('/', function (req, res) {
     res.send('Welcome.');
 });
-const port = 4790
+const port = 8000;
 app.listen(port, () => {
     console.log(`http://localhost:${port}`);
 });
