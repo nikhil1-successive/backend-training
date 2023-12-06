@@ -1,14 +1,15 @@
-import { Model } from "mongoose";
-import userModel from "../model/userModel";
 
-class UserRepo{
-private model:Model;
-constructor(){
-    this.model=userModel;
-}
-public getAllUsers=()=>{
-    this.model.find();
-}
+import mongoose from 'mongoose';
+import userModel from "../model/userModel.js";
+
+class UserRepo {
+    private model: mongoose.Model<any>;
+    constructor(model) {
+        this.model = userModel;
+    }
+    public getAllUsers = () => {
+        this.model.find();
+    }
 
 
 }

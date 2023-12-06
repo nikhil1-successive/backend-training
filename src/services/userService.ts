@@ -1,16 +1,12 @@
-import UserRepo from "../repositories/UserRepo";
+import UserRepo from "../repositories/UserRepo.js";
 
-class UserService{
-    private repo:UserRepo
-    constructor(){
-        this.repo=new UserRepo();
+class UserService {
+    private repo: UserRepo
+    constructor() {
+        this.repo = new UserRepo();
     }
-    public getAllUsers=()=>{
+    public getAllUsers = () => {
         this.repo.getAllUsers();
     }
-
-
-
-
 }
 export default UserService;
