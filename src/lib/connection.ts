@@ -11,6 +11,5 @@ class Connection {
             console.log(error)
         }
     }
-
 }
 export default Connection
