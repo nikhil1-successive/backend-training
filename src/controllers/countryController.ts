@@ -6,5 +6,10 @@ class CountryController{
         const data= await this.countryService.getAllCountry();
         res.send(data);
     }
+    public addCountry=async(req:Request,res:Response)=>{
+        const data= req.body
+        await this.countryService.addCountry(data)
+        res.send("Data added");
+    }
 }
 export default CountryController;

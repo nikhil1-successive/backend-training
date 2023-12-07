@@ -14,7 +14,7 @@ class App {
   constructor() {
     this.connection = new Connection()
     this.app = express();
-    this.port = 4784;
+    this.port = 3856
     this.configureMiddleware();
     this.configureRoutes();
 

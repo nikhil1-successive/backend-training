@@ -18,6 +18,9 @@ class CountryService {
         this.getAllCountry = () => __awaiter(this, void 0, void 0, function* () {
             yield this.repo.getAllCountry();
         });
+        this.addCountry = (data) => __awaiter(this, void 0, void 0, function* () {
+            yield this.repo.addCountry(data);
+        });
         this.repo = new CountryRepo_1.default();
     }
 }

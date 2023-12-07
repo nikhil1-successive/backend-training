@@ -34,7 +34,7 @@ class App {
         });
         this.connection = new connection_1.default();
         this.app = (0, express_1.default)();
-        this.port = 4784;
+        this.port = 3856;
         this.configureMiddleware();
         this.configureRoutes();
         // this.seedData();

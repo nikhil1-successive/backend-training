@@ -20,6 +20,11 @@ class CountryController {
             const data = yield this.countryService.getAllCountry();
             res.send(data);
         });
+        this.addCountry = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const data = req.body;
+            yield this.countryService.addCountry(data);
+            res.send("Data added");
+        });
     }
 }
 exports.default = CountryController;

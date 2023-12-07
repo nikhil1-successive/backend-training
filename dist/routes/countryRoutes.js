@@ -8,4 +8,5 @@ const countryController_1 = __importDefault(require("../controllers/countryContr
 const router = express_1.default.Router();
 const countryController = new countryController_1.default();
 router.get("/get", countryController.getAllCountry);
+router.post("/create", countryController.addCountry);
 exports.default = router;
