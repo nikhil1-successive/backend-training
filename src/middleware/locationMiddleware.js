@@ -7,7 +7,7 @@ const locationMiddleware = async () => {
       const response = await axios.get(`https://ipinfo.io/${clientIP}/json`);
       const { country } = response.data;
 
-      if (country!=="India") {
+      if (country !== "India") {
         return res.status(403).json({
           error: 'Access denied.',
         });

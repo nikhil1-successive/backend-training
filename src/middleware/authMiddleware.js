@@ -1,4 +1,4 @@
-const tokenVerificationMiddleware = (req, res, next) => {
+const authMiddleware = (req, res, next) => {
     const token = req.headers['authorization']
   
     if (token === null) {
@@ -12,4 +12,4 @@ const tokenVerificationMiddleware = (req, res, next) => {
       next()
     })
   }
-  export default tokenVerificationMiddleware
+  export default authMiddleware
