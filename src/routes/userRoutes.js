@@ -1,14 +1,11 @@
 import express from 'express'
 import jwt from 'jsonwebtoken'
 import customMiddleware from "../middleware/customMiddleware.js"
-import authMiddleware from '../middleware/authMiddleware.js'
-import { errorHandlerMiddleware } from "../middleware/errorHandlingMiddleware.js"
 import limiter from '../middleware/limiterMiddleware.js'
 import { middleware1, middleware2 } from '../middleware/middlewareFunctions.js'
 import foodData from '../utils/dataseeding.js'
 import nameData from '../utils/mockData.js'
 import bodyParser from "body-parser"
-import { ValidationError } from 'express-validation'
 import queryValidation from '../middleware/queryMiddleware.js'
 import validateRegistration from '../utils/registrationValidationSchema.js'
 import locationMiddleware from '../middleware/locationMiddleware.js'
@@ -24,7 +21,7 @@ router.post('/register', (req, res) => {
   res.json(nameData)
 })
 
-router.get('/login',  (req, res) => {
+router.get('/login', (req, res) => {
   const { name } = req.body
   const user = nameData.find((user) => user.name === name)
   if (user) {
@@ -40,7 +37,7 @@ router.get('/login',  (req, res) => {
 })
 
 
-router.get('/console',  customMiddleware, (req, res) => {
+router.get('/console', customMiddleware, (req, res) => {
   res.send("User Details")
 })
 
@@ -48,41 +45,27 @@ router.get('/middleware', middleware1, middleware2, (req, res) => {
   res.send("Middleware Called")
 })
 
-router.get('/getName',  (req, res) => {
+router.get('/getName', (req, res) => {
   res.send(nameData)
 })
-
 
 router.get('/getFood', (req, res) => {
   res.send(foodData)
 })
-router.get('/error',  errorHandlerMiddleware, (req, res) => {
-  res.send("404 Not Found")
-})
 
-router.post('/registeruser',  validateRegistration, (req, res) => {
-  const { email, password } = req.body;
-  res.json({ message: 'Registration successful' });
+router.post('/signup', validateRegistration, validateRequest("login"), (req, res) => {
+  const { username, email, password } = req.body;
+  console.log('Email:', email);
+  res.json({ message: 'Registration successful', data: { email } });
 });
 
-router.post("/validationrule",  validateRequest("login"), (req, res) => {
-  res.json({ success: true })
-})
-
-router.get('/query',  queryValidation, (req, res) => {
-  res.json("Query.")
+// http://localhost:8000/routes/query?value=ew (hit query route like this)
+router.get('/query', queryValidation, (req, res) => {
+  res.json("Query Send")
 })
 
 router.get('/location', locationMiddleware, (req, res) => {
   res.json({ message: 'Access granted!' });
 });
-
-router.use(function (err, res) {
-  if (err instanceof ValidationError) {
-    return res.json("Unauthorized Access")
-  }
-
-  return res.json(err)
-})
 
 export default router

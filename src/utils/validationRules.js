@@ -4,6 +4,7 @@ const validationRules = {
   login: {
     email: Joi.string().email().required(),
     password: Joi.string().min(6).required(),
+    username: Joi.string().alphanum().min(3).max(30).required(), 
   },
 };
 
@@ -17,11 +18,10 @@ const validateRequest = (route) => {
 
     if (error) {
       const errorDetails = error.details.map((detail) => detail.message);
-      return res.status(400).json({ error: "Validation error", details: errorDetails });
+      return res.status(422).json({ error: "Validation error", details: errorDetails });
     }
     next();
   };
 };
 
 export default validateRequest;
-
