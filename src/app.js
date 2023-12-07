@@ -6,7 +6,8 @@ app.get('/', (req, res) => {
     res.send('Welcome To Home Page.')
 })
 app.use('/routes', userRoutes)
-const port = 6789
+
+const port = 8000
 
 app.listen(port, () => {
     console.log(`http://localhost:${port}`);

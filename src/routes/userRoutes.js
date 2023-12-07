@@ -2,64 +2,51 @@ import express from 'express'
 import jwt from 'jsonwebtoken'
 import customMiddleware from "../middleware/customMiddleware.js"
 import authMiddleware from '../middleware/authMiddleware.js'
-import { errorHandlerMiddleware } from "../middleware/errorHandlingMiddleware.js"
+import errorHandlerMiddleware from "../middleware/errorHandlingMiddleware.js"
 import limiter from '../middleware/limiterMiddleware.js'
 import { middleware1, middleware2 } from '../middleware/middlewareFunctions.js'
-import foodData from '../utils/dataseeding.js'
-import nameData from '../utils/mockData.js'
-import bodyParser from "body-parser"
+import userData from '../utils/mockData.js'
+import customHeaderMiddleware from '../middleware/customheaderMiddleware.js'
+import { dataSeeder } from '../utils/dataseeding.js';
 import { ValidationError } from 'express-validation'
 import queryValidation from '../middleware/queryMiddleware.js'
 import validateRegistration from '../utils/registrationValidationSchema.js'
 import locationMiddleware from '../middleware/locationMiddleware.js'
 import validateRequest from '../utils/validationRules.js'
-
 const router = express.Router()
-const secretKey = 'Nikhil'
-router.use(limiter)
-router.use(express.json())
-router.use(bodyParser.json())
-router.post('/register', (req, res) => {
-  nameData.push(req.body.name)
-  res.json(nameData)
-})
+const secretKey = 'alpha-beta-gamma'
 
-router.get('/login',  (req, res) => {
-  const { name } = req.body
-  const user = nameData.find((user) => user.name === name)
+router.use(express.json());
+router.use(limiter);
+router.use(customHeaderMiddleware);
+router.use(errorHandlerMiddleware);
+
+// Refer to mockData.js for email and password required for authentication
+router.post('/login', customMiddleware, (req, res) => {
+  const { email, password } = req.body;
+  const user = userData.find(u => u.email === email && u.password === password);
+
   if (user) {
     const token = jwt.sign(
-      { name: user.name },
+      { email: user.email },
       secretKey,
-      { expiresIn: '10h' }
-    )
-    res.json({ token })
+      { expiresIn: '1h' }
+    );
+    res.json({ token });
   } else {
-    res.status(401).json({ message: 'Invalid username' })
+    res.status(401).json({ message: 'Invalid email or password' });
   }
-})
+});
 
-
-router.get('/console',  customMiddleware, (req, res) => {
-  res.send("User Details")
-})
-
-router.get('/middleware', middleware1, middleware2, (req, res) => {
+router.get('/chainMiddleware', customMiddleware, authMiddleware, middleware1, middleware2, (req, res) => {
   res.send("Middleware Called")
 })
 
-router.get('/getName',  (req, res) => {
-  res.send(nameData)
-})
-
-
-router.get('/getFood', (req, res) => {
-  res.send(foodData)
-})
-router.get('/error',  errorHandlerMiddleware, (req, res) => {
-  res.send("404 Not Found")
-})
-
+router.post('/seedData', customMiddleware, authMiddleware, (req, res) => {
+  const foodData = dataSeeder();
+  res.json(foodData);
+  console.log("Data seeding completed");
+});
 router.post('/registeruser',  validateRegistration, (req, res) => {
   const { email, password } = req.body;
   res.json({ message: 'Registration successful' });
@@ -84,5 +71,4 @@ router.use(function (err, res) {
 
   return res.json(err)
 })
-
 export default router
