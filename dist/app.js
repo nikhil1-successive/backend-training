@@ -13,17 +13,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const index_1 = __importDefault(require("./routes/index"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const limiterMiddleware_1 = __importDefault(require("./middleware/limiterMiddleware"));
-const seeding_1 = __importDefault(require("./lib/seeding"));
+// import SeedData from './lib/seeding';
+const countryRoutes_1 = __importDefault(require("./routes/countryRoutes"));
+const connection_1 = __importDefault(require("./lib/connection"));
 class App {
     constructor() {
+        // private async seedData(): Promise<void> {
+        //   const seedDatas = new SeedData();
+        //   console.log("Hi")
+        //   await seedDatas.seedData();
+        // }
+        this.run = () => __awaiter(this, void 0, void 0, function* () {
+            yield this.connection.connectDB();
+            this.app.listen(this.port, () => {
+                console.log(`Server is running on port ${this.port}`);
+                console.log(`http://localhost:${this.port}`);
+            });
+        });
+        this.connection = new connection_1.default();
         this.app = (0, express_1.default)();
-        this.port = 4893;
+        this.port = 4784;
         this.configureMiddleware();
         this.configureRoutes();
-        this.seedData();
+        // this.seedData();
     }
     configureMiddleware() {
         this.app.use(limiterMiddleware_1.default);
@@ -34,20 +48,8 @@ class App {
         this.app.get('/', (req, res) => {
             res.send('Welcome.');
         });
-        this.app.use('/route', index_1.default);
-    }
-    seedData() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const seedDatas = new seeding_1.default();
-            console.log("Hi");
-            yield seedDatas.seedData();
-        });
-    }
-    run() {
-        this.app.listen(this.port, () => {
-            console.log(`Server is running on port ${this.port}`);
-            console.log(`http://localhost:${this.port}`);
-        });
+        // this.app.use('/route', userRoutes);
+        this.app.use('/country', countryRoutes_1.default);
     }
 }
 exports.default = App;

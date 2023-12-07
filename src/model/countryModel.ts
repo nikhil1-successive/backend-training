@@ -1,7 +1,9 @@
 import mongoose from 'mongoose'
 const countrySchema = new mongoose.Schema({
-    name: { type: String }
+    country: { type: String, required: true },
+    captain: { type: String, required: true },
+    playersName: [{ type: String }],
 })
 
-const userModel = mongoose.model("user", countrySchema);
-export default userModel
+const countryModel = mongoose.model("country", countrySchema);
+export default countryModel

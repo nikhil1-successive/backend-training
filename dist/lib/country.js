@@ -1,14 +1,14 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.PlayingCountries = void 0;
-const mongoose_1 = __importDefault(require("mongoose"));
-const playingCountriesSchema = new mongoose_1.default.Schema({
-    country: { type: String, required: true },
-    captain: { type: String, required: true },
-    playersName: [{ type: String }],
-});
-const PlayingCountries = mongoose_1.default.model('PlayingCountries', playingCountriesSchema);
-exports.PlayingCountries = PlayingCountries;
+// import mongoose, { Document, Schema } from 'mongoose';
+// // interface IPlayingCountries extends Document {
+// //     country: string;
+// //     captain: string;
+// //     playersName: string[];
+// // }
+// // const playingCountriesSchema: Schema<IPlayingCountries> = new mongoose.Schema({
+// //     country: { type: String, required: true },
+// //     captain: { type: String, required: true },
+// //     playersName: [{ type: String }],
+// // });
+// const PlayingCountries = mongoose.model<IPlayingCountries>('PlayingCountries', playingCountriesSchema);
+// export { PlayingCountries, IPlayingCountries };

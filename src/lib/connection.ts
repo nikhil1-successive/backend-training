@@ -1,14 +1,16 @@
 import mongoose from 'mongoose'
-import { Connection } from 'mongoose';
+class Connection {
+    private url: string = 'mongodb://localhost:27017/config';
+    public connectDB = async () => {
+        try {
+            await mongoose.connect(this.url);
+            console.log("Connected")
 
-const url = 'mongodb://localhost:27017/config';
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
 
-mongoose.connect(url);
-
-const db: Connection = mongoose.connection;
-
-db.once('open', () => {
-    console.log('Successfully Connected To Database.');
-});
-
-export default db;
+}
+export default Connection

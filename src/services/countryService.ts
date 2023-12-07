@@ -1,12 +1,12 @@
-import UserRepo from "../repositories/UserRepo.js";
+import CountryRepo from "../repositories/CountryRepo";
 
 class CountryService {
-    private repo: UserRepo
+    private repo: CountryRepo
     constructor() {
-        this.repo = new UserRepo();
+        this.repo = new CountryRepo();
     }
-    public getAllUsers = () => {
-        this.repo.getAllUsers();
+    public getAllCountry = async() => {
+        await this.repo.getAllCountry();
     }
 }
 export default CountryService;

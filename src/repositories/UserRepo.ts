@@ -4,12 +4,13 @@ import userModel from "../model/userModel.js";
 
 class UserRepo {
     private model: mongoose.Model<any>;
-    constructor(model) {
+    constructor() {
         this.model = userModel;
     }
     public getAllUsers = () => {
         this.model.find();
     }
+   
 
 
 }

@@ -12,19 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = __importDefault(require("mongoose"));
-class Connection {
+const CountryRepo_1 = __importDefault(require("../repositories/CountryRepo"));
+class CountryService {
     constructor() {
-        this.url = 'mongodb://localhost:27017/config';
-        this.connectDB = () => __awaiter(this, void 0, void 0, function* () {
-            try {
-                yield mongoose_1.default.connect(this.url);
-                console.log("Connected");
-            }
-            catch (error) {
-                console.log(error);
-            }
+        this.getAllCountry = () => __awaiter(this, void 0, void 0, function* () {
+            yield this.repo.getAllCountry();
         });
+        this.repo = new CountryRepo_1.default();
     }
 }
-exports.default = Connection;
+exports.default = CountryService;

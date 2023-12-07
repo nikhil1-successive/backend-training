@@ -1,15 +1,18 @@
 
 import mongoose from 'mongoose';
-import userModel from "../model/userModel.js";
+import countryModel from '../model/countryModel';
 
 class CountryRepo {
     private model: mongoose.Model<any>;
-    constructor(model) {
-        this.model = userModel;
+    constructor() {
+        this.model = countryModel;
     }
-    public getAllCountry = () => {
-        this.model.find();
+    public getAllCountry = async () => {
+        await this.model.find();
     }
+    // public addAllCountry=async()=>{
+    //     await this.model.
+    // }
 
 
 }
