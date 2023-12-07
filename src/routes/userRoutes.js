@@ -7,26 +7,19 @@ import limiter from '../middleware/limiterMiddleware.js'
 import { middleware1, middleware2 } from '../middleware/middlewareFunctions.js'
 import nameData from '../utils/mockData.js'
 import customHeaderMiddleware from '../middleware/customheaderMiddleware.js'
-import { dataseeder } from '../utils/dataseeding.js';
+import { dataSeeder } from '../utils/dataseeding.js';
 
 const router = express.Router()
-const secretKey = 'Nikhil'
+const secretKey = 'alpha-beta-gamma'
 
-router.use(express.json())
-router.use(limiter)
-router.use(customHeaderMiddleware)
+router.use(express.json());
+router.use(limiter);
+router.use(customHeaderMiddleware);
 router.use(errorHandlerMiddleware);
 
-router.post('/registerauth', authMiddleware, (req, res) => {
-  if (req.body.name) {
-    nameData.push(req.body.name)
-    res.json(nameData)
-  }
-})
-
-router.get('/login', authMiddleware, (req, res) => {
+router.get('/login', customMiddleware, (req, res) => {
   const { name } = req.body;
-  const user = nameData.find((u) => u.name === name);
+  const user = nameData.find((u) => u === name);
   if (user) {
     const token = jwt.sign(
       { name: user.name },
@@ -39,25 +32,15 @@ router.get('/login', authMiddleware, (req, res) => {
   }
 });
 
-router.get('/console', authMiddleware, customMiddleware, (req, res) => {
-  res.send("User Details")
-})
 
-router.get('/middleware', authMiddleware, middleware1, middleware2, (req, res) => {
+router.get('/chainMiddleware', customMiddleware, authMiddleware, middleware1, middleware2, (req, res) => {
   res.send("Middleware Called")
 })
 
-router.post('/seeddata', authMiddleware, (req, res) => {
-  const foodData = dataseeder();
+router.post('/seedData', customMiddleware, authMiddleware, (req, res) => {
+  const foodData = dataSeeder();
   res.json(foodData);
   console.log("Data seeding completed");
-});
-
-router.get('/getfood', authMiddleware, (req, res) => {
-  res.send(foodData)
-})
-router.get('/error', authMiddleware, (req, res) => {
-  throw new Error('Error!');
 });
 
 export default router

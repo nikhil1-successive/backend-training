@@ -1,14 +1,14 @@
 import jwt from "jsonwebtoken"
-const secretKey = 'Nikhil'
+const secretKey = 'alpha-beta-gamma'
 const authMiddleware = (req, res, next) => {
   const token = req.headers['Authorization']  //Key:Authorization //Value:Token
 
   if (token === null) {
-    return res.status(403).json({ message: 'Token Missing.' })
+    return res.status(403).json({ message: 'Token missing' })
   }
   jwt.verify(token, secretKey, (err, decodeUser) => {
     if (err) {
-      return res.status(401).json({ message: 'Token Invalid.' })
+      return res.status(401).json({ message: 'Token invalid' })
     }
     req.user = decodeUser
     next()
