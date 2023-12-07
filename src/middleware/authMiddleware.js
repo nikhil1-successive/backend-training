@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken"
 
 const authMiddleware = (req, res, next) => {
   const secretKey = 'alpha-beta-gamma'
-  const token = req.headers['Authorization']  //Key:Authorization //Value:Token
+  const token = req.headers['authorization']  //Key:authorization //Value:Token
 
   if (token === null) {
     return res.status(403).json({ message: 'Token missing' })
