@@ -22,33 +22,33 @@ router.post('/login', customMiddleware, (req, res) => {
   const { email, password } = req.body;
   const user = userData.find(u => u.email === email && u.password === password);
 
-router.get('/login', (req, res) => {
-  const { name } = req.body
-  const user = nameData.find((user) => user.name === name)
-  if (user) {
-    const token = jwt.sign(
-      { email: user.email },
-      secretKey,
-      { expiresIn: '1h' }
-    );
-    res.json({ token });
-  } else {
-    res.status(401).json({ message: 'Invalid email or password' });
-  }
-})
+  router.get('/login', (req, res) => {
+    const { name } = req.body
+    const user = nameData.find((user) => user.name === name)
+    if (user) {
+      const token = jwt.sign(
+        { email: user.email },
+        secretKey,
+        { expiresIn: '1h' }
+      );
+      res.json({ token });
+    } else {
+      res.status(401).json({ message: 'Invalid email or password' });
+    }
+  })
 
 
-router.get('/chainMiddleware', customMiddleware, authMiddleware, middleware1, middleware2, (req, res) => {
-  res.send("Middleware Called")
-})
+  router.get('/chainMiddleware', customMiddleware, authMiddleware, middleware1, middleware2, (req, res) => {
+    res.send("Middleware Called")
+  })
 
-// http://localhost:8000/routes/query?value=ew (hit query route like this)
-router.get('/query', queryValidation, (req, res) => {
-  res.json("Query Send")
-})
+  // http://localhost:8000/routes/query?value=ew (hit query route like this)
+  router.get('/query', queryValidation, (req, res) => {
+    res.json("Query Send")
+  })
 
-router.get('/location', locationMiddleware, (req, res) => {
-  res.json({ message: 'Access granted!' });
-});
+  router.get('/location', locationMiddleware, (req, res) => {
+    res.json({ message: 'Access granted!' });
+  });
 
-export default router
+  export default router

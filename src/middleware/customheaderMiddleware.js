@@ -1,4 +1,3 @@
-
 const addCustomHeader = (header, headerVal) => {
   return (req, res, next) => {
     res.setHeader(header, headerVal);

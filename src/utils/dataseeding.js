@@ -1,4 +1,3 @@
-
 export const dataSeeder = () => {
     console.log("Data seeding started");
     const foodData = ["Paneer", "Chola", "Chicken"];
