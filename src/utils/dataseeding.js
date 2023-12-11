@@ -4,3 +4,4 @@ export const dataSeeder = () => {
     console.log("Data seeding in progress");
     return foodData;
 };
+

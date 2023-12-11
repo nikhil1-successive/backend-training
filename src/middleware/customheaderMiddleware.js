@@ -7,3 +7,4 @@ const addCustomHeader = (header, headerVal) => {
 
 const customHeaderMiddleware = addCustomHeader('MyHeader', 'Header1');
 export default customHeaderMiddleware
+
