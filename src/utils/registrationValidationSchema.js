@@ -2,7 +2,7 @@ import Joi from 'joi'
 
 const validateRegistration = (req, res, next) => {
   const userSchema = Joi.object({
-    username:Joi.string().required(),
+    username: Joi.string().required(),
     email: Joi.string().email().required(),
     password: Joi.string().min(6).required(),
   });

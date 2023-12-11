@@ -37,7 +37,7 @@ router.post('/login', customMiddleware, (req, res) => {
 })
 
 
-router.get('/chainMiddleware', customMiddleware, authMiddleware, middleware1, middleware2, (req, res) => {
+router.get('/chainmiddleware', customMiddleware, authMiddleware, middleware1, middleware2, (req, res) => {
   res.send("Middleware Called")
 })
 
@@ -46,6 +46,10 @@ router.post('/seedData', customMiddleware, authMiddleware, (req, res) => {
   res.json(foodData);
   console.log("Data seeding completed");
 });
+
+router.post("/signup", validateRequest("login"), validateRegistration, (req, res) => {
+  res.json({ success: true })
+})
 
 // http://localhost:8000/routes/query?value=ew (hit query route like this)
 router.get('/query', queryValidation, (req, res) => {
