@@ -2,14 +2,13 @@ import express from 'express'
 import userRoutes from './routes/index.js'
 
 const app = express()
-
-app.get('/', function (req, res) {
-    res.send('Welcome.')
+app.get('/', (req, res) => {
+    res.send('Welcome To Home Page.')
 })
-app.use('/route', userRoutes)
-
-const port = 4563
+app.use('/routes', userRoutes)
+const port = 8000
 
 app.listen(port, () => {
     console.log(`http://localhost:${port}`);
 });
+
