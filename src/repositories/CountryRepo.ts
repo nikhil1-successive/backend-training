@@ -9,9 +9,9 @@ class CountryRepo {
         this.model = countryModel;
     }
 
-    // public getAllCountry = async () => {
-    //     return await this.model.find();
-    // }
+    public getAllCountry = async () => {
+        return await this.model.find();
+    }
 
     public addCountry = async (data: ICountry) => {
         await this.model.insertMany(data)

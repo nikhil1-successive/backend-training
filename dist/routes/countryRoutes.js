@@ -10,4 +10,5 @@ const router = express_1.default.Router();
 const countryController = new countryController_1.default();
 router.get("/get", countryController.getAllCountry);
 router.post("/create", validatecountryMiddleware_js_1.default, countryController.addCountry);
+// router.get("/gets", UserController.createUser)
 exports.default = router;

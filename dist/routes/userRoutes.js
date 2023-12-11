@@ -135,4 +135,4 @@ function registerUser(req, res) {
 }
 const router = express_1.default.Router();
 setupRoutes(router);
-exports.default = router;
+// export default router;

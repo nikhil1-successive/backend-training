@@ -1,10 +1,11 @@
 import express, { Express } from 'express';
-import userRoutes from './routes/index';
+
 import bodyParser from 'body-parser';
 import limiter from './middleware/limiterMiddleware';
 // import SeedData from './lib/seeding';
-import router from './routes/countryRoutes';
+// import router from './routes';
 import Connection from './lib/connection';
+import router from './modules/users/routes';
 
 class App {
   private app: Express;
@@ -14,7 +15,7 @@ class App {
   constructor() {
     this.connection = new Connection()
     this.app = express();
-    this.port = 4839
+    this.port = 4028
     this.configureMiddleware();
     this.configureRoutes();
 
@@ -33,7 +34,7 @@ class App {
     });
 
     // this.app.use('/route', userRoutes);
-    this.app.use('/country', router);
+    this.app.use('/user', router);
   }
 
   // private async seedData(): Promise<void> {

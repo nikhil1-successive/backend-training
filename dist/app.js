@@ -16,8 +16,9 @@ const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const limiterMiddleware_1 = __importDefault(require("./middleware/limiterMiddleware"));
 // import SeedData from './lib/seeding';
-const countryRoutes_1 = __importDefault(require("./routes/countryRoutes"));
+// import router from './routes';
 const connection_1 = __importDefault(require("./lib/connection"));
+const routes_1 = __importDefault(require("./modules/users/routes"));
 class App {
     constructor() {
         // private async seedData(): Promise<void> {
@@ -34,7 +35,7 @@ class App {
         });
         this.connection = new connection_1.default();
         this.app = (0, express_1.default)();
-        this.port = 4839;
+        this.port = 4987;
         this.configureMiddleware();
         this.configureRoutes();
         // this.seedData();
@@ -49,7 +50,7 @@ class App {
             res.send('Welcome.');
         });
         // this.app.use('/route', userRoutes);
-        this.app.use('/country', countryRoutes_1.default);
+        this.app.use('/user', routes_1.default);
     }
 }
 exports.default = App;

@@ -143,4 +143,4 @@ function registerUser(req: Request, res: Response): void {
 const router: Router = express.Router();
 setupRoutes(router);
 
-export default router;
+// export default router;
