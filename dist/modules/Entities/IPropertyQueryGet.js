@@ -1,2 +1,7 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+// export interface IPropertyQueryPost {
+//   title: string;
+//   description: string;
+//   price: number;
+//   location: string; 
+// }

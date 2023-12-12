@@ -1,30 +1,23 @@
-import { Model, Document, Query } from 'mongoose';
-import { IProperty, PropertyModel } from './Model';
+import { RealEstateListingModel } from './Model';
 
-export class PropertyRepository {
-  private model: Model<IProperty>;
-
-  constructor(model: Model<IProperty> = PropertyModel) {
-    this.model = model;
+export class RealEstateListingRepository {
+  getAllListings() {
+    return RealEstateListingModel.find({});
   }
 
-  create(data: any): Promise<IProperty> {
-    return this.model.create(data);
+  getListingById(listingId: string) {
+    return RealEstateListingModel.findById(listingId);
   }
 
-  findById(id: string): Query<IProperty | null, IProperty, {}> {
-    return this.model.findById(id);
+  createListing(listingData: any) {
+    return RealEstateListingModel.create(listingData);
   }
 
-  findAll(): Query<IProperty[], IProperty, {}> {
-    return this.model.find({});
+  updateListing(listingId: string, listingData: any) {
+    return RealEstateListingModel.findByIdAndUpdate(listingId, listingData, { new: true });
   }
 
-  update(id: string, data: any): Query<IProperty | null, IProperty, {}> {
-    return this.model.findByIdAndUpdate(id, data, { new: true });
+  deleteListing(listingId: string) {
+    return RealEstateListingModel.findByIdAndDelete(listingId);
   }
-
-//   delete(id: string): Query<IProperty | null, IProperty, {}> {
-//     return this.model.findByIdAndDelete(id);
-//   }
 }

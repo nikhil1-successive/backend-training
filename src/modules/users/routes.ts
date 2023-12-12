@@ -1,48 +1,35 @@
+import express, { Router } from 'express';
+import RealEstateListingController from './controller';
+import {
+  validateCreateListing,
+  validateUpdateListing,
+  validateGetListingById,
+} from './validation';
 
+const router = Router();
+const realEstateListingController = new RealEstateListingController();
 
-import express, { Request, Response } from 'express';
-import { UserController } from './controller';
-
-const router = express.Router();
-const userController = new UserController();
-
-router.get('/', async (req: Request, res: Response) => {
-  try {
-    const users = await userController.getAllUsers();
-    res.json(users);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
+router.post('/listings', async (req, res) => {
+  await realEstateListingController.createRealEstateListing(req, res);
 });
 
-router.get('/:userId', async (req: Request, res: Response) => {
-  const userId = req.params.userId;
 
-  try {
-    const user = await userController.getUserById(userId);
-    if (user) {
-      res.json(user);
-    } else {
-      res.status(404).json({ error: 'User not found' });
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
+router.get('/listings', async (req, res) => {
+  await realEstateListingController.getRealEstateListings(req, res);
 });
 
-router.post('/', async (req: Request, res: Response) => {
-  const userData = req.body;
 
-  try {
-    const newUser = await userController.createUser(userData);
-    res.status(201).json(newUser);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
+router.put('/listings/:listingId', async (req, res) => {
+  await realEstateListingController.updateRealEstateListing(req, res);
 });
 
+
+router.get('/listings/:listingId', async (req, res) => {
+  await realEstateListingController.getRealEstateListingById(req, res);
+});
+
+router.delete('/listings/:listingId', async (req, res) => {
+  await realEstateListingController.deleteRealEstateListing(req, res);
+});
 
 export default router;

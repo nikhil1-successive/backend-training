@@ -16,7 +16,7 @@ curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
 
 sudo apt install nodejs
 
-# Verify Installation - 
+# Verify Installation -
 
 node -v
 
@@ -41,4 +41,3 @@ sudo apt-get update
 # Install Postman
 
 sudo apt-get install postman
-

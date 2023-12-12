@@ -20,6 +20,6 @@ export class BaseRepository<T extends Document> {
   }
 
 //   delete(id: string): Query<T | null, T, {}> {
-//     return this.model.findByIdAndDelete(id);
+//     this.model.findByIdAndDelete(id);
 //   }
 }

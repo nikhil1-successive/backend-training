@@ -1,5 +1,4 @@
 import express, { Express } from 'express';
-
 import bodyParser from 'body-parser';
 import limiter from './middleware/limiterMiddleware';
 // import SeedData from './lib/seeding';
@@ -15,10 +14,9 @@ class App {
   constructor() {
     this.connection = new Connection()
     this.app = express();
-    this.port = 4028
+    this.port = 5784
     this.configureMiddleware();
     this.configureRoutes();
-
     // this.seedData();
   }
 
@@ -32,7 +30,6 @@ class App {
     this.app.get('/', (req, res) => {
       res.send('Welcome.');
     });
-
     // this.app.use('/route', userRoutes);
     this.app.use('/user', router);
   }

@@ -1,22 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PropertyRepository = void 0;
+exports.RealEstateListingRepository = void 0;
 const Model_1 = require("./Model");
-class PropertyRepository {
-    constructor(model = Model_1.PropertyModel) {
-        this.model = model;
+class RealEstateListingRepository {
+    getAllListings() {
+        return Model_1.RealEstateListingModel.find({});
     }
-    create(data) {
-        return this.model.create(data);
+    getListingById(listingId) {
+        return Model_1.RealEstateListingModel.findById(listingId);
     }
-    findById(id) {
-        return this.model.findById(id);
+    createListing(listingData) {
+        return Model_1.RealEstateListingModel.create(listingData);
     }
-    findAll() {
-        return this.model.find({});
+    updateListing(listingId, listingData) {
+        return Model_1.RealEstateListingModel.findByIdAndUpdate(listingId, listingData, { new: true });
     }
-    update(id, data) {
-        return this.model.findByIdAndUpdate(id, data, { new: true });
+    deleteListing(listingId) {
+        return Model_1.RealEstateListingModel.findByIdAndDelete(listingId);
     }
 }
-exports.PropertyRepository = PropertyRepository;
+exports.RealEstateListingRepository = RealEstateListingRepository;

@@ -1,17 +1,23 @@
+import { RealEstateListingModel } from './repositories/Model';
 
-import { PropertyModel } from './repositories/Model';
-
-export class UserService {
-  getAllUsers() {
-    return PropertyModel.find({});
+export class RealEstateListingService {
+  getRealEstateListings() {
+    return RealEstateListingModel.find({});
   }
 
-  getUserById(userId: string) {
-    return PropertyModel.findById(userId);
+  getRealEstateListingById(listingId: string) {
+    return RealEstateListingModel.findById(listingId);
   }
 
-  createUser(userData: any) {
-    return PropertyModel.create(userData);
+  createRealEstateListing(listingData: any) {
+    return RealEstateListingModel.create(listingData);
   }
 
+  updateRealEstateListing(listingId: string, listingData: any) {
+    return RealEstateListingModel.findByIdAndUpdate(listingId, listingData, { new: true });
+  }
+
+  deleteRealEstateListing(listingId: string) {
+    return RealEstateListingModel.findByIdAndDelete(listingId);
+  }
 }

@@ -1,16 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserService = void 0;
+exports.RealEstateListingService = void 0;
 const Model_1 = require("./repositories/Model");
-class UserService {
-    getAllUsers() {
-        return Model_1.PropertyModel.find({});
+class RealEstateListingService {
+    getRealEstateListings() {
+        return Model_1.RealEstateListingModel.find({});
     }
-    getUserById(userId) {
-        return Model_1.PropertyModel.findById(userId);
+    getRealEstateListingById(listingId) {
+        return Model_1.RealEstateListingModel.findById(listingId);
     }
-    createUser(userData) {
-        return Model_1.PropertyModel.create(userData);
+    createRealEstateListing(listingData) {
+        return Model_1.RealEstateListingModel.create(listingData);
+    }
+    updateRealEstateListing(listingId, listingData) {
+        return Model_1.RealEstateListingModel.findByIdAndUpdate(listingId, listingData, { new: true });
+    }
+    deleteRealEstateListing(listingId) {
+        return Model_1.RealEstateListingModel.findByIdAndDelete(listingId);
     }
 }
-exports.UserService = UserService;
+exports.RealEstateListingService = RealEstateListingService;

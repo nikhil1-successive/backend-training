@@ -5,7 +5,6 @@ class Connection {
         try {
             await mongoose.connect(this.url);
             console.log("Connected")
-
         }
         catch (error) {
             console.log(error)

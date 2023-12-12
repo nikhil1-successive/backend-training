@@ -1,6 +1,4 @@
-
-
-export interface IProperty {
+export interface IRealEstateListing {
   id: string;
   title: string;
   description: string;
@@ -8,4 +6,20 @@ export interface IProperty {
   location: string;
   createdAt: Date;
   updatedAt: Date;
+
+  details: {
+    bedrooms: number;
+    bathrooms: number;
+    areaSquareFeet: number;
+    isFurnished: boolean;
+    hasGarage: boolean;
+    isPetsAllowed: boolean;
+    agentName: string;
+    contactEmail: string;
+    contactPhone: string;
+    hasSwimmingPool: boolean;
+    isSecurityEnabled: boolean;
+    hasGarden: boolean;
+    constructionYear: number;
+  };
 }
