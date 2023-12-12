@@ -1,34 +1,82 @@
-import express, { Router } from 'express';
-import RealEstateListingController from './controller';
-import {
-  validateCreateListing,
-  validateUpdateListing,
-  validateGetListingById,
-} from './validation';
+// import express, { Router } from 'express';
+// import RealEstateListingController from './controller';
 
+// const router = Router();
+// const realEstateListingController = new RealEstateListingController();
+
+// router.post('/listings', async (req, res) => {
+//   await realEstateListingController.createRealEstateListing(req, res);
+// });
+
+
+// router.get('/listings', async (req, res) => {
+//   await realEstateListingController.getRealEstateListings(req, res);
+// });
+
+
+// router.put('/listings/:listingId', async (req, res) => {
+//   await realEstateListingController.updateRealEstateListing(req, res);
+// });
+
+
+// router.get('/listings/:listingId', async (req, res) => {
+//   await realEstateListingController.getRealEstateListingById(req, res);
+// });
+
+// router.delete('/listings/:listingId', async (req, res) => {
+//   await realEstateListingController.deleteRealEstateListing(req, res);
+// });
+
+// export default router;
+import express, { Router, Request, Response, NextFunction } from 'express';
+import { body, validationResult } from 'express-validator';
+import bcrypt from 'bcrypt';
+import RealEstateListingController from './controller';
+import mongoose, { Document, Schema } from 'mongoose';
+
+interface IUser extends Document {
+  username: string;
+  password: string;
+}
+
+const userSchema = new Schema<IUser>({
+  username: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+});
+
+const User = mongoose.model<IUser>('User', userSchema);
 const router = Router();
 const realEstateListingController = new RealEstateListingController();
 
-router.post('/listings', async (req, res) => {
+// Validation middleware for signup
+const signupValidationRules = [
+  body('username').isLength({ min: 5 }).withMessage('Username must be at least 5 characters long'),
+  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+];
+
+// Middleware for signup validation on POST /listings
+const validateSignupMiddleware = (req: Request, res: Response, next: NextFunction) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  next();
+};
+
+// POST /listings route with signup validation and bcrypt for password hashing
+router.post('/listings', signupValidationRules, validateSignupMiddleware, async (req: Request, res: Response) => {
   await realEstateListingController.createRealEstateListing(req, res);
 });
 
-
-router.get('/listings', async (req, res) => {
-  await realEstateListingController.getRealEstateListings(req, res);
-});
-
-
-router.put('/listings/:listingId', async (req, res) => {
+router.put('/listings/:listingId', async (req: Request, res: Response) => {
   await realEstateListingController.updateRealEstateListing(req, res);
 });
 
-
-router.get('/listings/:listingId', async (req, res) => {
+router.get('/listings/:listingId', async (req: Request, res: Response) => {
   await realEstateListingController.getRealEstateListingById(req, res);
 });
 
-router.delete('/listings/:listingId', async (req, res) => {
+router.delete('/listings/:listingId', async (req: Request, res: Response) => {
   await realEstateListingController.deleteRealEstateListing(req, res);
 });
 
