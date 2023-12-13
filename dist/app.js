@@ -20,7 +20,7 @@ const seeding_1 = __importDefault(require("./lib/seeding"));
 class App {
     constructor() {
         this.app = (0, express_1.default)();
-        this.port = 4893;
+        this.port = 4897;
         this.configureMiddleware();
         this.configureRoutes();
         this.seedData();
@@ -39,7 +39,7 @@ class App {
     seedData() {
         return __awaiter(this, void 0, void 0, function* () {
             const seedDatas = new seeding_1.default();
-            console.log("Hi");
+            console.log("Seeding started");
             yield seedDatas.seedData();
         });
     }

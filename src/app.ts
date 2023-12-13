@@ -10,7 +10,7 @@ class App {
 
   constructor() {
     this.app = express();
-    this.port = 4893;
+    this.port = 4897
     this.configureMiddleware();
     this.configureRoutes();
     this.seedData();
@@ -32,7 +32,7 @@ class App {
 
   private async seedData(): Promise<void> {
     const seedDatas = new SeedData();
-    console.log("Hi")
+    console.log("Seeding started")
     await seedDatas.seedData();
   }
 
