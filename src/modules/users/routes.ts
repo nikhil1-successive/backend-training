@@ -63,7 +63,7 @@ const validateSignupMiddleware = (req: Request, res: Response, next: NextFunctio
   next();
 };
 
-// POST /listings route with signup validation and bcrypt for password hashing
+
 router.post('/listings', signupValidationRules, validateSignupMiddleware, async (req: Request, res: Response) => {
   await realEstateListingController.createRealEstateListing(req, res);
 });
@@ -79,5 +79,25 @@ router.get('/listings/:listingId', async (req: Request, res: Response) => {
 router.delete('/listings/:listingId', async (req: Request, res: Response) => {
   await realEstateListingController.deleteRealEstateListing(req, res);
 });
+router.get('/listings/title/:title', async (req: Request, res: Response) => {
+  await realEstateListingController.getRealEstateListingsByTitle(req, res);
+});
+
+router.get('/listings/address/:address', async (req: Request, res: Response) => {
+  await realEstateListingController.getRealEstateListingsByAddress(req, res);
+});
+
+router.get('/listings/price/:price', async (req: Request, res: Response) => {
+  await realEstateListingController.getRealEstateListingsByPrice(req, res);
+});
+
+router.get('/listings/bathrooms/:bathrooms', async (req: Request, res: Response) => {
+  await realEstateListingController.getRealEstateListingsByBathrooms(req, res);
+});
+
+router.get('/listings/areaSquareFeet/:areaSquareFeet', async (req: Request, res: Response) => {
+  await realEstateListingController.getRealEstateListingsByAreaSquareFeet(req, res);
+});
+
 
 export default router;

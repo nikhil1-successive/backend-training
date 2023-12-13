@@ -76,6 +76,65 @@ export class RealEstateListingController {
       res.status(500).json({ error: 'Internal Server Error: Unable to delete real estate listing' });
     }
   }
+  async getRealEstateListingsByTitle(req: Request, res: Response): Promise<void> {
+    const title = req.params.title;
+
+    try {
+      const listings = await this.realEstateListingService.getRealEstateListingsByTitle(title);
+      res.json(listings);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error: Unable to get real estate listings by title' });
+    }
+  }
+
+  async getRealEstateListingsByAddress(req: Request, res: Response): Promise<void> {
+    const address = req.params.address;
+
+    try {
+      const listings = await this.realEstateListingService.getRealEstateListingsByAddress(address);
+      res.json(listings);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error: Unable to get real estate listings by address' });
+    }
+  }
+
+  async getRealEstateListingsByPrice(req: Request, res: Response): Promise<void> {
+    const price = parseFloat(req.params.price);
+
+    try {
+      const listings = await this.realEstateListingService.getRealEstateListingsByPrice(price);
+      res.json(listings);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error: Unable to get real estate listings by price' });
+    }
+  }
+
+  async getRealEstateListingsByBathrooms(req: Request, res: Response): Promise<void> {
+    const bathrooms = req.params.bathrooms
+
+    try {
+      const listings = await this.realEstateListingService.getRealEstateListingsByBathrooms(bathrooms);
+      res.json(listings);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error: Unable to get real estate listings by bathrooms' });
+    }
+  }
+
+  async getRealEstateListingsByAreaSquareFeet(req: Request, res: Response): Promise<void> {
+    const areaSquareFeet = parseFloat(req.params.areaSquareFeet);
+
+    try {
+      const listings = await this.realEstateListingService.getRealEstateListingsByAreaSquareFeet(areaSquareFeet);
+      res.json(listings);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error: Unable to get real estate listings by areaSquareFeet' });
+    }
+  }
 }
 
 export default RealEstateListingController;

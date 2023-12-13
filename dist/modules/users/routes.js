@@ -92,4 +92,19 @@ router.get('/listings/:listingId', (req, res) => __awaiter(void 0, void 0, void 
 router.delete('/listings/:listingId', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield realEstateListingController.deleteRealEstateListing(req, res);
 }));
+router.get('/listings/title/:title', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield realEstateListingController.getRealEstateListingsByTitle(req, res);
+}));
+router.get('/listings/address/:address', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield realEstateListingController.getRealEstateListingsByAddress(req, res);
+}));
+router.get('/listings/price/:price', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield realEstateListingController.getRealEstateListingsByPrice(req, res);
+}));
+router.get('/listings/bathrooms/:bathrooms', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield realEstateListingController.getRealEstateListingsByBathrooms(req, res);
+}));
+router.get('/listings/areaSquareFeet/:areaSquareFeet', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield realEstateListingController.getRealEstateListingsByAreaSquareFeet(req, res);
+}));
 exports.default = router;
