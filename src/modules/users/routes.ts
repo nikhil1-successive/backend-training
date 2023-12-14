@@ -98,6 +98,19 @@ router.get('/listings/bathrooms/:bathrooms', async (req: Request, res: Response)
 router.get('/listings/areaSquareFeet/:areaSquareFeet', async (req: Request, res: Response) => {
   await realEstateListingController.getRealEstateListingsByAreaSquareFeet(req, res);
 });
+// router.get('/listings', async (req, res) => {
+//   const { price, bathrooms, areaSquareFeet } = req.query;
+
+//   if (price) {
+//     await realEstateListingController.getRealEstateListingsByPrice(req, res);
+//   } else if (bathrooms) {
+//     await realEstateListingController.getRealEstateListingsByBathrooms(req, res);
+//   } else if (areaSquareFeet) {
+//     await realEstateListingController.getRealEstateListingsByAreaSquareFeet(req, res);
+//   } else {
+//     res.status(400).json({ error: 'No filter provided' });
+//   }
+// });
 
 
 export default router;
