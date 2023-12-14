@@ -12,6 +12,10 @@ import queryValidation from '../middleware/queryMiddleware.js'
 import validateRegistration from '../utils/registrationValidationSchema.js'
 import locationMiddleware from '../middleware/locationMiddleware.js'
 import validateRequest from '../utils/validationRules.js'
+import validateParameters from '../middleware/validateParamMiddleware.js'
+import { asyncHandler,asyncFunc} from '../utils/helperFunction.js'
+
+
 const router = express.Router()
 const secretKey = 'alpha-beta-gamma'
 
@@ -40,9 +44,6 @@ router.post('/login', customMiddleware, (req, res) => {
 router.get('/chainmiddleware', customMiddleware, authMiddleware, middleware1, middleware2, (req, res) => {
   res.send("Middleware Called")
 })
-router.get('/console', customMiddleware, (req, res) => {
-  res.send("User Details")
-})
 
 router.post('/seedData', customMiddleware, authMiddleware, (req, res) => {
   const foodData = dataSeeder();
@@ -65,7 +66,7 @@ router.get('/location', locationMiddleware, (req, res) => {
 
 router.get('/async', asyncHandler(async (req, res, next) => {
   try {
-    const result1 = await asyncFunc(Promise.reject(401));
+    const result1 = await asyncFunc();
     const result = `${result1}`;
     return res.send(result);
   } catch (error) {
@@ -74,7 +75,10 @@ router.get('/async', asyncHandler(async (req, res, next) => {
 }));
 
 router.post('/params', validateParameters, (req, res) => {
-  res.json({ message: 'Success' });
+  res.json({ 
+    message: 'Success',
+    status:'400',
+    location:'params' });
 });
 
 export default router
