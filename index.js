@@ -57,6 +57,5 @@ if (operationFeasible) {
             }
         );
     }
-
 }
 

@@ -12,6 +12,10 @@ import queryValidation from '../middleware/queryMiddleware.js'
 import validateRegistration from '../utils/registrationValidationSchema.js'
 import locationMiddleware from '../middleware/locationMiddleware.js'
 import validateRequest from '../utils/validationRules.js'
+import validateParameters from '../middleware/validateParamMiddleware.js'
+import { asyncHandler, asyncFunc } from '../utils/helperFunction.js'
+
+
 const router = express.Router()
 const secretKey = 'alpha-beta-gamma'
 
@@ -58,6 +62,24 @@ router.get('/query', queryValidation, (req, res) => {
 
 router.get('/location', locationMiddleware, (req, res) => {
   res.json({ message: 'Access granted!' });
+});
+
+router.get('/async', asyncHandler(async (req, res, next) => {
+  try {
+    const result1 = await asyncFunc();
+    const result = `${result1}`;
+    return res.send(result);
+  } catch (error) {
+    next(error);
+  }
+}));
+
+router.post('/params', validateParameters, (req, res) => {
+  res.json({
+    message: 'Success',
+    status: 400,
+    location: 'body'
+  });
 });
 
 export default router
