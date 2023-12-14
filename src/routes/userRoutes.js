@@ -78,7 +78,7 @@ router.post('/params', validateParameters, (req, res) => {
   res.json({
     message: 'Success',
     status: '400',
-    location: 'params'
+    location: 'body'
   });
 });
 
