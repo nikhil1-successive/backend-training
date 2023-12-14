@@ -1,3 +1,4 @@
+<<<<<<< HEAD:dist/middleware/customheaderMiddleware.js
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const myHeaders = new Headers();
@@ -12,3 +13,15 @@ const myRequest = new Request("https://expressjs.com/images/express-facebook-sha
 const myContentType = myRequest.headers.get("Content-Type");
 console.log(myContentType);
 exports.default = myHeaders;
+=======
+const addCustomHeader = (header, headerVal) => {
+  return (req, res, next) => {
+    res.setHeader(header, headerVal);
+    next();
+  };
+};
+
+const customHeaderMiddleware = addCustomHeader('MyHeader', 'Header1');
+export default customHeaderMiddleware
+
+>>>>>>> d36087e382655e436dffaa8c7c55a8743c5721d0:src/middleware/customheaderMiddleware.js

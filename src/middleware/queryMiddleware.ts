@@ -1,19 +1,14 @@
-import { Request, Response, NextFunction } from 'express';
-
-const queryValidation = () => (req: Request, res: Response, next: NextFunction) => {
-  const params: string[] = req.body;
-
-  for (const param of params) {
-    const paramVal = req.body[param];
-
-    if (paramVal === undefined || isNaN(Number(paramVal))) {
-      return res.status(400).json({
-        error: 'Not A Numeric Value ' + param,
-      });
+const queryMiddleware = (req, res, next) => {
+  try {
+    const value = req.query.value;
+    console.log("Query:", value)
+    if (isNaN(value)) {
+      console.log("Query is not number")
     }
+    next();
+  } catch (error) {
+    return res.status(422).send(error);
   }
-
-  next();
 };
 
-export default queryValidation;
+export default queryMiddleware;
