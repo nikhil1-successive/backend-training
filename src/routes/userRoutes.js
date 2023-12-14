@@ -77,7 +77,7 @@ router.get('/async', asyncHandler(async (req, res, next) => {
 router.post('/params', validateParameters, (req, res) => {
   res.json({
     message: 'Success',
-    status: '400',
+    status: 400,
     location: 'body'
   });
 });
