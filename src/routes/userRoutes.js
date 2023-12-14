@@ -13,7 +13,7 @@ import validateRegistration from '../utils/registrationValidationSchema.js'
 import locationMiddleware from '../middleware/locationMiddleware.js'
 import validateRequest from '../utils/validationRules.js'
 import validateParameters from '../middleware/validateParamMiddleware.js'
-import { asyncHandler,asyncFunc} from '../utils/helperFunction.js'
+import { asyncHandler, asyncFunc } from '../utils/helperFunction.js'
 
 
 const router = express.Router()
@@ -75,10 +75,11 @@ router.get('/async', asyncHandler(async (req, res, next) => {
 }));
 
 router.post('/params', validateParameters, (req, res) => {
-  res.json({ 
+  res.json({
     message: 'Success',
-    status:'400',
-    location:'params' });
+    status: '400',
+    location: 'params'
+  });
 });
 
 export default router
