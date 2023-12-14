@@ -7,6 +7,8 @@ const limiter = rateLimit({
   headers: true,
 });
 
-export default (req: Request, res: Response, next: NextFunction) => {
+const rateLimiterMiddleware = (req: Request, res: Response, next: NextFunction) => {
   limiter(req, res, next);
 };
+
+export default rateLimiterMiddleware;

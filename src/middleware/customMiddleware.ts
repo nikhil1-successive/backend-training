@@ -1,20 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 
-interface CustomRequest extends Request {
-  timestamp?: number;
-}
-
-const customMiddleware = (req: CustomRequest, res: Response, next: NextFunction) => {
-  const data = [req.method, req.url, req.timestamp];
-
-  const timestamp = Date.now();
-  req.timestamp = timestamp;
-
-  const time = Math.floor(timestamp / 1000);
-  console.log(time);
-
-  res.send(data);
-
+const customMiddleware = (req: Request, res: Response, next: NextFunction) => {
+  const timestamp = new Date().toISOString();
+  console.log(`Timestamp: ${timestamp}, Request Method: ${req.method}, Request Url: ${req.url}`);
   next();
 };
 

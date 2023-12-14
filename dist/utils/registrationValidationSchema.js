@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const joi_1 = __importDefault(require("joi"));
 const validateRegistration = (req, res, next) => {
     const userSchema = joi_1.default.object({
+        username: joi_1.default.string().required(),
         email: joi_1.default.string().email().required(),
         password: joi_1.default.string().min(6).required(),
     });

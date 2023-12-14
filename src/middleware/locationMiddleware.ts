@@ -1,9 +1,9 @@
 import axios from "axios";
 import { Request, Response, NextFunction } from "express";
 
-const locationMiddleware = async () => {
+const locationMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const clientIP = req.ip
+    const clientIP = req.ip;
     const response = await axios.get(`https://ipinfo.io/${clientIP}/json`);
     const { country } = response.data;
 
@@ -12,6 +12,7 @@ const locationMiddleware = async () => {
         error: 'Access denied.',
       });
     }
+
     next();
   } catch (error) {
     return res.status(500).json({
@@ -19,6 +20,5 @@ const locationMiddleware = async () => {
     });
   }
 };
-
 
 export default locationMiddleware;

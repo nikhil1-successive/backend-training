@@ -1,6 +1,15 @@
-import Joi from "joi";
+import Joi from 'joi';
+import { Request, Response, NextFunction } from 'express';
 
-const validationRules = {
+interface ValidationRules {
+  login: {
+    email: Joi.StringSchema;
+    password: Joi.StringSchema;
+    username: Joi.StringSchema;
+  };
+}
+
+const validationRules: ValidationRules = {
   login: {
     email: Joi.string().email().required(),
     password: Joi.string().min(6).required(),
@@ -8,8 +17,8 @@ const validationRules = {
   },
 };
 
-const validateRequest = (route) => {
-  return (req, res, next) => {
+const validateRequest = (route: keyof ValidationRules) => {
+  return (req: Request, res: Response, next: NextFunction) => {
     if (!validationRules[route]) {
       return next();
     }
@@ -18,7 +27,7 @@ const validateRequest = (route) => {
 
     if (error) {
       const errorDetails = error.details.map((detail) => detail.message);
-      return res.status(422).json({ error: "Validation error", details: errorDetails });
+      return res.status(422).json({ error: 'Validation error', details: errorDetails });
     }
     next();
   };

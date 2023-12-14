@@ -1,7 +1,6 @@
-export const dataSeeder = () => {
+export const dataSeeder = (): string[] => {
     console.log("Data seeding started");
-    const foodData = ["Paneer", "Chola", "Chicken"];
+    const foodData: string[] = ["Paneer", "Chola", "Chicken"];
     console.log("Data seeding in progress");
     return foodData;
 };
-

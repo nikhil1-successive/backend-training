@@ -1,4 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const foodData = ["Paneer", "Chola", "Chicken"];
-exports.default = foodData;
+exports.dataSeeder = void 0;
+const dataSeeder = () => {
+    console.log("Data seeding started");
+    const foodData = ["Paneer", "Chola", "Chicken"];
+    console.log("Data seeding in progress");
+    return foodData;
+};
+exports.dataSeeder = dataSeeder;

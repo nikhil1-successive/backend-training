@@ -9,6 +9,7 @@ const limiter = (0, express_rate_limit_1.default)({
     max: 100,
     headers: true,
 });
-exports.default = (req, res, next) => {
+const rateLimiterMiddleware = (req, res, next) => {
     limiter(req, res, next);
 };
+exports.default = rateLimiterMiddleware;

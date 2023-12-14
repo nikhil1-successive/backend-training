@@ -1,6 +1,7 @@
-import Joi from 'joi'
+import Joi from 'joi';
+import { Request, Response, NextFunction } from 'express';
 
-const validateRegistration = (req, res, next) => {
+const validateRegistration = (req: Request, res: Response, next: NextFunction) => {
   const userSchema = Joi.object({
     username: Joi.string().required(),
     email: Joi.string().email().required(),

@@ -1,5 +1,10 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 
-export const errorHandlerMiddleware = async (req: Request, res: Response) => {
-  console.log("404 Not Found");
+const errorHandlerMiddleware = (err: any, req: Request, res: Response, next: NextFunction) => {
+    res.status(500).json({
+        error: 'Internal Server Error',
+        message: err.message,
+    });
 };
+
+export default errorHandlerMiddleware;
