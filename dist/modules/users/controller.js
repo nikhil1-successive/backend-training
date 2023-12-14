@@ -132,32 +132,6 @@ class RealEstateListingController {
             }
         });
     }
-    getRealEstateListingsByBathrooms(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const bathrooms = parseFloat(req.params.bathrooms);
-            try {
-                const listings = yield this.realEstateListingService.getRealEstateListingsByBathrooms(bathrooms);
-                res.json(listings);
-            }
-            catch (error) {
-                console.error(error);
-                res.status(500).json({ error: 'Internal Server Error: Unable to get real estate listings by bathrooms' });
-            }
-        });
-    }
-    getRealEstateListingsByAreaSquareFeet(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const areaSquareFeet = parseFloat(req.params.areaSquareFeet);
-            try {
-                const listings = yield this.realEstateListingService.getRealEstateListingsByAreaSquareFeet(areaSquareFeet);
-                res.json(listings);
-            }
-            catch (error) {
-                console.error(error);
-                res.status(500).json({ error: 'Internal Server Error: Unable to get real estate listings by areaSquareFeet' });
-            }
-        });
-    }
 }
 exports.RealEstateListingController = RealEstateListingController;
 exports.default = RealEstateListingController;

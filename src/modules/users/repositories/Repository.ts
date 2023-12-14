@@ -1,23 +1,65 @@
-import { RealEstateListingModel } from './Model';
+// import { RealEstateListingModel } from './Model';
+
+// export class RealEstateListingRepository {
+//   getAllListings() {
+//     return RealEstateListingModel.find({});
+//   }
+
+//   getListingById(listingId: string) {
+//     return RealEstateListingModel.findById(listingId);
+//   }
+
+//   createListing(listingData: any) {
+//     return RealEstateListingModel.create(listingData);
+//   }
+
+//   updateListing(listingId: string, listingData: any) {
+//     return RealEstateListingModel.findByIdAndUpdate(listingId, listingData, { new: true });
+//   }
+
+//   deleteListing(listingId: string) {
+//     return RealEstateListingModel.findByIdAndDelete(listingId);
+//   }
+// }
+import { Model, Document } from 'mongoose';
+import { RealEstateListingModel} from './Model'
+import { IRealEstateListing } from './Model';
 
 export class RealEstateListingRepository {
-  getAllListings() {
-    return RealEstateListingModel.find({});
+  private model: Model<IRealEstateListing>;
+
+  constructor() {
+    this.model = RealEstateListingModel;
   }
 
-  getListingById(listingId: string) {
-    return RealEstateListingModel.findById(listingId);
+  async findAll(): Promise<IRealEstateListing[]> {
+    return this.model.find({}).exec();
   }
 
-  createListing(listingData: any) {
-    return RealEstateListingModel.create(listingData);
+  async findById(id: string): Promise<IRealEstateListing | null> {
+    return this.model.findById(id).exec();
   }
 
-  updateListing(listingId: string, listingData: any) {
-    return RealEstateListingModel.findByIdAndUpdate(listingId, listingData, { new: true });
+  async create(data: any): Promise<IRealEstateListing> {
+    return this.model.create(data);
   }
 
-  deleteListing(listingId: string) {
-    return RealEstateListingModel.findByIdAndDelete(listingId);
+  async update(id: string, data: any): Promise<IRealEstateListing | null> {
+    return this.model.findByIdAndUpdate(id, data, { new: true }).exec();
   }
+
+  async delete(id: string){
+    return this.model.findByIdAndDelete(id).exec();
+  }
+
+  async findByTitle(title: string): Promise<IRealEstateListing[]> {
+    return this.model.find({ title: { $regex: new RegExp(title, 'i') } }).exec();
+  }
+  async findByAddress(address: string): Promise<IRealEstateListing[]> {
+    return this.model.find({ title: { $regex: new RegExp(address, 'i') } }).exec();
+  }
+  async findByPrice(price: string): Promise<IRealEstateListing[]> {
+    return this.model.find({ price: { $regex: new RegExp(price, 'i') } }).exec();
+  }
+
 }

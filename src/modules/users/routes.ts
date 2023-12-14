@@ -28,43 +28,48 @@
 // });
 
 // export default router;
+
+// interface IUser extends Document {
+//   username: string;
+//   password: string;
+// }
+
+// const userSchema = new Schema<IUser>({
+//   username: { type: String, required: true, unique: true },
+//   password: { type: String, required: true },
+// });
+
+// // Validation middleware for signup
+// const signupValidationRules = [
+//   body('username').isLength({ min: 5 }).withMessage('Username must be at least 5 characters long'),
+//   body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+// ];
+
+// // Middleware for signup validation on POST /listings
+// const validateSignupMiddleware = (req: Request, res: Response, next: NextFunction) => {
+//   const errors = validationResult(req);
+//   if (!errors.isEmpty()) {
+//     return res.status(400).json({ errors: errors.array() });
+//   }
+//   next();
+// };
+
+
+// router.post('/listings', signupValidationRules, validateSignupMiddleware, async (req: Request, res: Response) => {
+//   await realEstateListingController.createRealEstateListing(req, res);
+// });
+
+
+// const User = mongoose.model<IUser>('User', userSchema);
+
 import express, { Router, Request, Response, NextFunction } from 'express';
 import { body, validationResult } from 'express-validator';
 import bcrypt from 'bcrypt';
 import RealEstateListingController from './controller';
 import mongoose, { Document, Schema } from 'mongoose';
-
-interface IUser extends Document {
-  username: string;
-  password: string;
-}
-
-const userSchema = new Schema<IUser>({
-  username: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-});
-
-const User = mongoose.model<IUser>('User', userSchema);
 const router = Router();
 const realEstateListingController = new RealEstateListingController();
-
-// Validation middleware for signup
-const signupValidationRules = [
-  body('username').isLength({ min: 5 }).withMessage('Username must be at least 5 characters long'),
-  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
-];
-
-// Middleware for signup validation on POST /listings
-const validateSignupMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-  next();
-};
-
-
-router.post('/listings', signupValidationRules, validateSignupMiddleware, async (req: Request, res: Response) => {
+router.post('/listings', async (req: Request, res: Response) => {
   await realEstateListingController.createRealEstateListing(req, res);
 });
 
@@ -83,6 +88,10 @@ router.get('/listings/title/:title', async (req: Request, res: Response) => {
   await realEstateListingController.getRealEstateListingsByTitle(req, res);
 });
 
+router.delete('/listings/:listingId', async (req, res) => {
+  await realEstateListingController.deleteRealEstateListing(req, res);
+});
+
 router.get('/listings/address/:address', async (req: Request, res: Response) => {
   await realEstateListingController.getRealEstateListingsByAddress(req, res);
 });
@@ -91,13 +100,16 @@ router.get('/listings/price/:price', async (req: Request, res: Response) => {
   await realEstateListingController.getRealEstateListingsByPrice(req, res);
 });
 
-router.get('/listings/bathrooms/:bathrooms', async (req: Request, res: Response) => {
-  await realEstateListingController.getRealEstateListingsByBathrooms(req, res);
-});
+export default router;
 
-router.get('/listings/areaSquareFeet/:areaSquareFeet', async (req: Request, res: Response) => {
-  await realEstateListingController.getRealEstateListingsByAreaSquareFeet(req, res);
-});
+
+// router.get('/listings/bathrooms/:bathrooms', async (req: Request, res: Response) => {
+//   await realEstateListingController.getRealEstateListingsByBathrooms(req, res);
+// });
+
+// router.get('/listings/areaSquareFeet/:areaSquareFeet', async (req: Request, res: Response) => {
+//   await realEstateListingController.getRealEstateListingsByAreaSquareFeet(req, res);
+// });
 // router.get('/listings', async (req, res) => {
 //   const { price, bathrooms, areaSquareFeet } = req.query;
 
@@ -112,5 +124,3 @@ router.get('/listings/areaSquareFeet/:areaSquareFeet', async (req: Request, res:
 //   }
 // });
 
-
-export default router;

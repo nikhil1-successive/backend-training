@@ -1,21 +1,20 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.BaseRepository = void 0;
-class BaseRepository {
-    constructor(model) {
-        this.model = model;
-    }
-    create(data) {
-        return this.model.create(data);
-    }
-    findById(id) {
-        return this.model.findById(id);
-    }
-    findAll() {
-        return this.model.find({});
-    }
-    update(id, data) {
-        return this.model.findByIdAndUpdate(id, data, { new: true });
-    }
-}
-exports.BaseRepository = BaseRepository;
+// import { Model, Document, Schema, Query } from 'mongoose';
+// export class BaseRepository<T extends Document> {
+//   constructor(private model: Model<T>) {}
+//   create(data: any): Promise<T> {
+//     return this.model.create(data);
+//   }
+//   findById(id: string): Query<T | null, T, {}> {
+//     return this.model.findById(id);
+//   }
+//   findAll(): Query<T[], T, {}> {
+//     return this.model.find({});
+//   }
+//   update(id: string, data: any): Query<T | null, T, {}> {
+//     return this.model.findByIdAndUpdate(id, data, { new: true });
+//   }
+//   delete(id: string): Query<T | null, T, {}> {
+//     this.model.findByIdAndDelete(id);
+//   }
+// }

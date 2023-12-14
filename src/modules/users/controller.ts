@@ -112,29 +112,29 @@ export class RealEstateListingController {
     }
   }
 
-  async getRealEstateListingsByBathrooms(req: Request, res: Response): Promise<void> {
-    const bathrooms = parseFloat(req.params.bathrooms)
+  // async getRealEstateListingsByBathrooms(req: Request, res: Response): Promise<void> {
+  //   const bathrooms = parseFloat(req.params.bathrooms)
 
-    try {
-      const listings = await this.realEstateListingService.getRealEstateListingsByBathrooms(bathrooms);
-      res.json(listings);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal Server Error: Unable to get real estate listings by bathrooms' });
-    }
-  }
+  //   try {
+  //     const listings = await this.realEstateListingService.getRealEstateListingsByBathrooms(bathrooms);
+  //     res.json(listings);
+  //   } catch (error) {
+  //     console.error(error);
+  //     res.status(500).json({ error: 'Internal Server Error: Unable to get real estate listings by bathrooms' });
+  //   }
+  // }
 
-  async getRealEstateListingsByAreaSquareFeet(req: Request, res: Response): Promise<void> {
-    const areaSquareFeet = parseFloat(req.params.areaSquareFeet);
+  // async getRealEstateListingsByAreaSquareFeet(req: Request, res: Response): Promise<void> {
+  //   const areaSquareFeet = parseFloat(req.params.areaSquareFeet);
 
-    try {
-      const listings = await this.realEstateListingService.getRealEstateListingsByAreaSquareFeet(areaSquareFeet);
-      res.json(listings);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal Server Error: Unable to get real estate listings by areaSquareFeet' });
-    }
-  }
+  //   try {
+  //     const listings = await this.realEstateListingService.getRealEstateListingsByAreaSquareFeet(areaSquareFeet);
+  //     res.json(listings);
+  //   } catch (error) {
+  //     console.error(error);
+  //     res.status(500).json({ error: 'Internal Server Error: Unable to get real estate listings by areaSquareFeet' });
+  //   }
+  // }
 }
 
 export default RealEstateListingController;
