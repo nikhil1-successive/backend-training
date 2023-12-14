@@ -113,7 +113,7 @@ export class RealEstateListingController {
   }
 
   async getRealEstateListingsByBathrooms(req: Request, res: Response): Promise<void> {
-    const bathrooms = req.params.bathrooms
+    const bathrooms = parseFloat(req.params.bathrooms)
 
     try {
       const listings = await this.realEstateListingService.getRealEstateListingsByBathrooms(bathrooms);

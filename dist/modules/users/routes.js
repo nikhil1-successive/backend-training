@@ -79,7 +79,6 @@ const validateSignupMiddleware = (req, res, next) => {
     }
     next();
 };
-// POST /listings route with signup validation and bcrypt for password hashing
 router.post('/listings', signupValidationRules, validateSignupMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield realEstateListingController.createRealEstateListing(req, res);
 }));

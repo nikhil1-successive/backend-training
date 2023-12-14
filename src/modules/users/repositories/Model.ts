@@ -4,7 +4,7 @@ export interface IRealEstateListing extends Document {
   title: string;
   description: string;
   price: number;
-  location: string;
+  address: string;
   createdAt: Date;
   updatedAt: Date;
 
@@ -17,7 +17,7 @@ export interface IRealEstateListing extends Document {
     isPetsAllowed: boolean;
     agentName: string;
     contactEmail: string;
-    contactPhone: string;
+    contactPhone: number;
     hasSwimmingPool: boolean;
     isSecurityEnabled: boolean;
     isGatedCommunity: boolean;
@@ -31,7 +31,7 @@ const realEstateListingSchema = new Schema<IRealEstateListing>({
   title: { type: String, required: true },
   description: { type: String, required: true },
   price: { type: Number },
-  location: { type: String },
+  address: { type: String },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
   details: {

@@ -134,7 +134,7 @@ class RealEstateListingController {
     }
     getRealEstateListingsByBathrooms(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const bathrooms = Number(req.params.bathrooms);
+            const bathrooms = parseInt(req.params.bathrooms);
             try {
                 const listings = yield this.realEstateListingService.getRealEstateListingsByBathrooms(bathrooms);
                 res.json(listings);
