@@ -1,5 +1,4 @@
 "use strict";
-// import { RealEstateListingModel } from './repositories/Model';
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -16,41 +15,47 @@ class RealEstateListingService {
     constructor() {
         this.repository = new Repository_1.RealEstateListingRepository();
     }
-    getRealEstateListings() {
+    getAllListings() {
         return __awaiter(this, void 0, void 0, function* () {
             return this.repository.findAll();
         });
     }
-    getRealEstateListingById(listingId) {
+    getListingById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.repository.findById(listingId);
+            return this.repository.findById(id);
         });
     }
-    createRealEstateListing(listingData) {
+    createListing(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.repository.create(listingData);
+            // You may want to add validation or any other business logic here before creating a listing
+            return this.repository.create(data);
         });
     }
-    updateRealEstateListing(listingId, listingData) {
+    updateListing(id, data) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.repository.update(listingId, listingData);
+            // You may want to add validation or any other business logic here before updating a listing
+            return this.repository.update(id, data);
         });
     }
-    deleteRealEstateListing(listingId) {
+    deleteListing(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.repository.delete(listingId);
+            this.repository.delete(id);
         });
     }
-    getRealEstateListingsByTitle(title) {
+    searchListingsByTitle(title) {
         return __awaiter(this, void 0, void 0, function* () {
             return this.repository.findByTitle(title);
         });
     }
-    getRealEstateListingsByAddress(address) {
-        return this.repository.findByAddress(address);
+    searchListingsByAddress(address) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.repository.findByAddress(address);
+        });
     }
-    getRealEstateListingsByPrice(price) {
-        return this.repository.findByPrice(price);
+    searchListingsByPrice(price) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.repository.findByPrice(price);
+        });
     }
 }
 exports.RealEstateListingService = RealEstateListingService;

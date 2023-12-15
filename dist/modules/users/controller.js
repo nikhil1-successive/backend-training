@@ -9,129 +9,114 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RealEstateListingController = void 0;
 const services_1 = require("./services");
+const realEstateService = new services_1.RealEstateListingService();
 class RealEstateListingController {
-    constructor() {
-        this.realEstateListingService = new services_1.RealEstateListingService();
-    }
-    createRealEstateListing(req, res) {
+    static getAllListings(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const newListing = yield this.realEstateListingService.createRealEstateListing(req.body);
+                const listings = yield realEstateService.getAllListings();
+                res.status(200).json(listings);
+            }
+            catch (error) {
+                res.status(500).json({ error: error.message });
+            }
+        });
+    }
+    static getListingById(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { id } = req.params;
+            try {
+                const listing = yield realEstateService.getListingById(id);
+                if (listing) {
+                    res.status(200).json(listing);
+                }
+                else {
+                    res.status(404).json({ message: 'Listing not found' });
+                }
+            }
+            catch (error) {
+                res.status(500).json({ error: error.message });
+            }
+        });
+    }
+    static createListing(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const listingData = req.body;
+            try {
+                const newListing = yield realEstateService.createListing(listingData);
                 res.status(201).json(newListing);
             }
             catch (error) {
-                console.error(error);
-                res.status(500).json({ error: 'Internal Server Error: Unable to create real estate listing' });
+                res.status(500).json({ error: error.message });
             }
         });
     }
-    getRealEstateListings(req, res) {
+    static updateListing(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const { id } = req.params;
+            const listingData = req.body;
             try {
-                const listings = yield this.realEstateListingService.getRealEstateListings();
-                res.json(listings);
-            }
-            catch (error) {
-                console.error(error);
-                res.status(500).json({ error: 'Internal Server Error: Unable to get real estate listings' });
-            }
-        });
-    }
-    updateRealEstateListing(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const listingId = req.params.listingId;
-            try {
-                const updatedListing = yield this.realEstateListingService.updateRealEstateListing(listingId, req.body);
+                const updatedListing = yield realEstateService.updateListing(id, listingData);
                 if (updatedListing) {
-                    res.json(updatedListing);
+                    res.status(200).json(updatedListing);
                 }
                 else {
-                    res.status(404).json({ error: 'Real Estate Listing not found' });
+                    res.status(404).json({ message: 'Listing not found' });
                 }
             }
             catch (error) {
-                console.error(error);
-                res.status(500).json({ error: 'Internal Server Error: Unable to update real estate listing' });
+                res.status(500).json({ error: error.message });
             }
         });
     }
-    getRealEstateListingById(req, res) {
+    static deleteListing(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const listingId = req.params.listingId;
+            const { id } = req.params;
             try {
-                const listing = yield this.realEstateListingService.getRealEstateListingById(listingId);
-                if (listing) {
-                    res.json(listing);
-                }
-                else {
-                    res.status(404).json({ error: 'Real Estate Listing not found' });
-                }
+                yield realEstateService.deleteListing(id);
+                res.status(204).send();
             }
             catch (error) {
-                console.error(error);
-                res.status(500).json({ error: 'Internal Server Error: Unable to get real estate listing by ID' });
+                res.status(500).json({ error: error.message });
             }
         });
     }
-    deleteRealEstateListing(req, res) {
+    static searchListingsByTitle(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const listingId = req.params.listingId;
+            const { title } = req.params;
             try {
-                const deletedListing = yield this.realEstateListingService.deleteRealEstateListing(listingId);
-                if (deletedListing) {
-                    res.json(deletedListing);
-                }
-                else {
-                    res.status(404).json({ error: 'Real Estate Listing not found' });
-                }
+                const listings = yield realEstateService.searchListingsByTitle(title);
+                res.status(200).json(listings);
             }
             catch (error) {
-                console.error(error);
-                res.status(500).json({ error: 'Internal Server Error: Unable to delete real estate listing' });
+                res.status(500).json({ error: error.message });
             }
         });
     }
-    getRealEstateListingsByTitle(req, res) {
+    static searchListingsByAddress(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const title = req.params.title;
+            const { address } = req.params;
             try {
-                const listings = yield this.realEstateListingService.getRealEstateListingsByTitle(title);
-                res.json(listings);
+                const listings = yield realEstateService.searchListingsByAddress(address);
+                res.status(200).json(listings);
             }
             catch (error) {
-                console.error(error);
-                res.status(500).json({ error: 'Internal Server Error: Unable to get real estate listings by title' });
+                res.status(500).json({ error: error.message });
             }
         });
     }
-    getRealEstateListingsByAddress(req, res) {
+    static searchListingsByPrice(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const address = req.params.address;
+            const { price } = req.params;
             try {
-                const listings = yield this.realEstateListingService.getRealEstateListingsByAddress(address);
-                res.json(listings);
+                const listings = yield realEstateService.searchListingsByPrice(price);
+                res.status(200).json(listings);
             }
             catch (error) {
-                console.error(error);
-                res.status(500).json({ error: 'Internal Server Error: Unable to get real estate listings by address' });
-            }
-        });
-    }
-    getRealEstateListingsByPrice(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const price = parseFloat(req.params.price);
-            try {
-                const listings = yield this.realEstateListingService.getRealEstateListingsByPrice(price);
-                res.json(listings);
-            }
-            catch (error) {
-                console.error(error);
-                res.status(500).json({ error: 'Internal Server Error: Unable to get real estate listings by price' });
+                res.status(500).json({ error: error.message });
             }
         });
     }
 }
-exports.RealEstateListingController = RealEstateListingController;
 exports.default = RealEstateListingController;

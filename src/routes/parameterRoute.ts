@@ -6,7 +6,7 @@ const validateParameters = (req: Request, res: Response, next: NextFunction) => 
   if (arg1 == null || arg2 == null) {
     return res.status(400).json({ error: 'Invalid parameters' });
   }
-  
+
   next();
 };
 
