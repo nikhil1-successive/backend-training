@@ -22,7 +22,7 @@ router.use(limiter);
 router.use(customHeaderMiddleware);
 router.use(errorHandlerMiddleware);
 
-// Refer to mockData.js for email and password required for authentication
+// Refer to mockData file for email and password required for authentication
 router.post('/login', customMiddleware, (req: Request, res: Response) => {
   const { email, password }: any = req.body;
   const user: any = userData.find(u => u.email === email && u.password === password);
