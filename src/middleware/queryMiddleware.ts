@@ -1,13 +1,18 @@
 import { Request, Response, NextFunction } from 'express';
 
-const validateParameters = (req: Request, res: Response, next: NextFunction) => {
-  const { arg1, arg2 }: any = req.body;
+const queryMiddleware = (req: Request, res: Response, next: NextFunction): void => {
+  try {
+    const value: any = req.query.value;
+    console.log("Query:", value);
 
-  if (arg1.trim() === '' || arg2.trim() === '') {
-    return res.status(400).json({ error: 'Invalid parameters' });
+    if (isNaN(value)) {
+      console.log("Query is not a number");
+    }
+    next();
+  } catch (error) {
+    console.error(error);
+    res.status(422).send('Internal Server Error');
   }
-
-  next();
 };
 
-export default validateParameters;
+export default queryMiddleware;
