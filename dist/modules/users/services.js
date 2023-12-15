@@ -27,13 +27,11 @@ class RealEstateListingService {
     }
     createListing(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            // You may want to add validation or any other business logic here before creating a listing
             return this.repository.create(data);
         });
     }
     updateListing(id, data) {
         return __awaiter(this, void 0, void 0, function* () {
-            // You may want to add validation or any other business logic here before updating a listing
             return this.repository.update(id, data);
         });
     }
