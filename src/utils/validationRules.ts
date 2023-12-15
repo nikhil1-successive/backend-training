@@ -22,11 +22,11 @@ const validateRequest = (route: keyof ValidationRules) => {
     if (!validationRules[route]) {
       return next();
     }
-    const schema = Joi.object(validationRules[route]);
+    const schema: Joi.ObjectSchema<any> = Joi.object(validationRules[route]);
     const { error } = schema.validate(req.body, { abortEarly: false });
 
     if (error) {
-      const errorDetails = error.details.map((detail) => detail.message);
+      const errorDetails: string[] = error.details.map((detail) => detail.message);
       return res.status(422).json({ error: 'Validation error', details: errorDetails });
     }
     next();

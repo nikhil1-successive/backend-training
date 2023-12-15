@@ -1,12 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const queryMiddleware = (req, res, next) => {
-    const value = req.query.value;
-    console.log("Query:", value);
-    if (isNaN(Number(value))) {
-        console.log("Query is not a number");
-        return res.status(422).json({ error: 'Invalid value in query parameter' });
+const validateParameters = (req, res, next) => {
+    const { arg1, arg2 } = req.body;
+    if (arg1.trim() === '' || arg2.trim() === '') {
+        return res.status(400).json({ error: 'Invalid parameters' });
     }
     next();
 };
-exports.default = queryMiddleware;
+exports.default = validateParameters;

@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, Router } from 'express';
 import jwt from 'jsonwebtoken';
 import customMiddleware from '../middleware/customMiddleware';
 import authMiddleware from '../middleware/authMiddleware';
@@ -14,8 +14,8 @@ import locationMiddleware from '../middleware/locationMiddleware';
 import validateRequest from '../utils/validationRules';
 import validateParameters from '../middleware/validateParamMiddleware';
 
-const router = express.Router();
-const secretKey = 'alpha-beta-gamma';
+const router: Router = express.Router();
+const secretKey: string = 'alpha-beta-gamma';
 
 router.use(express.json());
 router.use(limiter);
@@ -24,8 +24,8 @@ router.use(errorHandlerMiddleware);
 
 // Refer to mockData.js for email and password required for authentication
 router.post('/login', customMiddleware, (req: Request, res: Response) => {
-  const { email, password } = req.body;
-  const user = userData.find(u => u.email === email && u.password === password);
+  const { email, password }: any = req.body;
+  const user: any = userData.find(u => u.email === email && u.password === password);
   if (user) {
     const token = jwt.sign(
       { email: user.email },
@@ -43,7 +43,7 @@ router.get('/chainmiddleware', customMiddleware, authMiddleware, middleware1, mi
 });
 
 router.post('/seeddata', customMiddleware, authMiddleware, (req: Request, res: Response) => {
-  const foodData = dataSeeder();
+  const foodData: string[] = dataSeeder();
   res.json(foodData);
   console.log("Data seeding completed");
 });

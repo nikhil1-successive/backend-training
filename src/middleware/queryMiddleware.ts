@@ -1,16 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 
-const queryMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  const value = req.query.value;
+const validateParameters = (req: Request, res: Response, next: NextFunction) => {
+  const { arg1, arg2 }: any = req.body;
 
-  console.log("Query:", value);
-
-  if (isNaN(Number(value))) {
-    console.log("Query is not a number");
-    return res.status(422).json({ error: 'Invalid value in query parameter' });
+  if (arg1.trim() === '' || arg2.trim() === '') {
+    return res.status(400).json({ error: 'Invalid parameters' });
   }
 
   next();
 };
 
-export default queryMiddleware;
+export default validateParameters;

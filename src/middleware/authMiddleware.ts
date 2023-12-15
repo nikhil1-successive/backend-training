@@ -2,9 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import createError from 'http-errors';
 
-const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  const secretKey = 'alpha-beta-gamma';
-  const token = req.headers['authorization'];  // Key: authorization // Value: Token
+const authMiddleware = (req: Request, res: Response, next: NextFunction): void => {
+  const secretKey: string = 'alpha-beta-gamma';
+  const token: string | undefined = req.headers['authorization'];  // Key: authorization // Value: Token
 
   if (!token) {
     next(createError(403, 'Please provide token'));
