@@ -1,40 +1,39 @@
-import { add, sub, mul, div } from "./lib/math.js";
+import { add, sub, mul, div } from "./lib/math";
 import fs from "fs";
 
-const args = process.argv;
-const operation = args[2];
-const num1 = parseFloat(args[3]);
-const num2 = parseFloat(args[4]);
-const sumNumbers = add(num1, num2);
-const subtractNumbers = sub(num1, num2);
-const multiplyNumbers = mul(num1, num2);
-const divideNumbers = div(num1, num2);
-let result = 0;
-let operationFeasible = true
-let userOperation = ""
+const args: string[] = process.argv;
+const operation: string | undefined = args[2];
+const num1: number = parseFloat(args[3]);
+const num2: number = parseFloat(args[4]);
+const sumNumbers: number = add(num1, num2);
+const subtractNumbers: number = sub(num1, num2);
+const multiplyNumbers: number = mul(num1, num2);
+const divideNumbers: number = div(num1, num2);
+let result: number = 0;
+let operationFeasible: boolean = true;
+let userOperation: string = "";
 
 if (operation === "+") {
     result += sumNumbers;
-    userOperation = "Addition"
+    userOperation = "Addition";
 } else if (operation === "-") {
     result += subtractNumbers;
-    userOperation = "Subtraction"
+    userOperation = "Subtraction";
 } else if (operation === "X") {
     result += multiplyNumbers;
-    userOperation = "Multiplication"
+    userOperation = "Multiplication";
 } else if (operation === "/") {
     result += divideNumbers;
-    userOperation = "Divison"
-}
-else {
-    operationFeasible = false
-    console.log("Please perform mentioned Operation only.")
+    userOperation = "Division";
+} else {
+    operationFeasible = false;
+    console.log("Please perform mentioned Operation only.");
 }
 
 if (operationFeasible) {
-    if (fs.existsSync("Maths Operation Result.xlsx")) {
+    if (fs.existsSync("MathsOperationResult.xlsx")) {
         fs.appendFile(
-            "Maths Operation Result.xlsx",
+            "MathsOperationResult.xlsx",
             `${userOperation},${num1},${num2},${result}\n`,
             (err) => {
                 if (err) {
@@ -46,7 +45,7 @@ if (operationFeasible) {
         );
     } else {
         fs.appendFile(
-            "Maths Operation Result.xlsx",
+            "MathsOperationResult.xlsx",
             `Operation,Num1,Num2,Result\n${userOperation},${num1},${num2},${result}\n`,
             (err) => {
                 if (err) {
@@ -58,4 +57,3 @@ if (operationFeasible) {
         );
     }
 }
-

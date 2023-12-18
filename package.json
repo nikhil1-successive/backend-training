@@ -1,12 +1,12 @@
 {
   "name": "backend_training",
-  "type": "module",
+  "type": "commonjs",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/app.js"
+    "start": "npx tsc && nodemon dist/app.js"
   },
   "author": "",
   "license": "ISC",
