@@ -12,7 +12,7 @@ declare module 'express-serve-static-core' {
   }
 }
 
-const secretKey = "12";
+const secretKey = "alpha-beta-gamma";
 
 const auth = (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers['authorization'];

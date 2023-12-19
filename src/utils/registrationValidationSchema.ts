@@ -10,6 +10,7 @@ interface RegistrationRequest extends Request {
 
 const validateRegistration = (req: RegistrationRequest, res: Response, next: NextFunction) => {
   const userSchema = Joi.object({
+    username: Joi.string().required(),
     email: Joi.string().email().required(),
     password: Joi.string().min(6).required(),
   });
@@ -17,7 +18,7 @@ const validateRegistration = (req: RegistrationRequest, res: Response, next: Nex
   const validationResult: ValidationResult = userSchema.validate(req.body, { abortEarly: false });
 
   if (validationResult.error) {
-    const errors = validationResult.error.details.map((detail) => detail.message);
+    const errors: string[] = validationResult.error.details.map((detail) => detail.message);
     return res.status(400).json({ errors });
   }
 

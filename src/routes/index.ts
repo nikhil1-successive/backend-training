@@ -1,2 +1,2 @@
-import userRoutes from "./userRoutes.js"
+import userRoutes from "./userRoutes"
 export default userRoutes

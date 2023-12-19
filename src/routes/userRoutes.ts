@@ -1,185 +1,75 @@
-import express, { Request, Response, NextFunction, Router } from 'express';
+import express, { Request, Response, Router } from 'express';
 import jwt from 'jsonwebtoken';
-import createError from 'http-errors';
-import bodyParser from 'body-parser';
-import limiter from '../middleware/limiterMiddleware';
 import customMiddleware from '../middleware/customMiddleware';
-// import tokenVerificationMiddleware from '../middleware/tokenVerificationMiddleware';
+import authMiddleware from '../middleware/authMiddleware';
+import errorHandlerMiddleware from '../middleware/errorHandlingMiddleware';
+import limiter from '../middleware/limiterMiddleware';
 import { middleware1, middleware2 } from '../middleware/middlewareFunctions';
-import foodData from '../utils/dataseeding';
-import nameData from '../utils/mockData';
-import { ValidationError } from 'express-validation';
+import userData from '../utils/mockData';
+import customHeaderMiddleware from '../middleware/customheaderMiddleware';
+import { dataSeeder } from '../utils/dataseeding';
 import queryValidation from '../middleware/queryMiddleware';
 import validateRegistration from '../utils/registrationValidationSchema';
 import locationMiddleware from '../middleware/locationMiddleware';
-import auth from '../middleware/auth';
-import { asyncHandler, asyncFunc } from './asynchronousRoutes';
-import validateParameters from './parameterRoute';
-import errorHandlerMiddleware from '../middleware/errorHandler';
+import validateRequest from '../utils/validationRules';
+import validateParameters from '../middleware/validateParamMiddleware';
 
-interface UserData {
-  name: string;
-}
+const router: Router = express.Router();
+const secretKey: string = 'alpha-beta-gamma';
 
-interface TokenPayload {
-  name: string;
-}
+router.use(express.json());
+router.use(limiter);
+router.use(customHeaderMiddleware);
+router.use(errorHandlerMiddleware);
 
-class MyRouter {
-  public router: Router;
-
-  private secretKey = 'Nikhil';
-
-  constructor() {
-    this.router = express.Router();
-    this.setupMiddleware();
-    this.setupRoutes();
+// Refer to mockData file for email and password required for authentication
+router.post('/login', customMiddleware, (req: Request, res: Response) => {
+  const { email, password }: any = req.body;
+  const user: any = userData.find(u => u.email === email && u.password === password);
+  if (user) {
+    const token = jwt.sign(
+      { email: user.email },
+      secretKey,
+      { expiresIn: '1h' }
+    );
+    res.json({ token });
+  } else {
+    res.status(401).json({ message: 'Invalid email or password' });
   }
+});
 
-  private setupMiddleware(): void {
-    this.router.use(limiter);
-    this.router.use(express.json());
-    this.router.use(bodyParser.json());
-  }
+router.get('/chainmiddleware', customMiddleware, authMiddleware, middleware1, middleware2, (req: Request, res: Response) => {
+  res.send("Middleware Called");
+});
 
-  private setupRoutes(): void {
-    this.router.post('/register', this.registerUser.bind(this));
-    // this.router.get('/login', this.login.bind(this));
-    // this.router.get('/authorized', tokenVerificationMiddleware, this.authorized.bind(this));
-    this.router.get('/console', customMiddleware, this.console.bind(this));
-    this.router.get('/middleware', middleware1, middleware2, this.middleware.bind(this));
-    this.router.get('/getName', this.getName.bind(this));
-    this.router.get('/getFood', this.getFood.bind(this));
-    this.router.get('/error', errorHandlerMiddleware, this.error.bind(this));
-    this.router.post('/registerUser', validateRegistration, this.registerUser.bind(this));
-    this.router.get('/query', queryValidation, this.query.bind(this));
-    this.router.get('/location', locationMiddleware, this.location.bind(this));
-    this.router.use(this.validationError.bind(this));
-    this.router.get('/protected', auth, this.protected.bind(this));
-    this.router.get('/async', asyncHandler(this.asyncFunction.bind(this)));
-    this.router.post('/params', validateParameters, this.params.bind(this));
-    this.router.use(this.handleError.bind(this));
-    this.router.get('/errormiddleware', this.errorMiddleware.bind(this));
-    this.router.get('/gethealth', this.healthFunction.bind(this));
-    this.router.use(this.notFound.bind(this));
-    this.router.use(this.handleGlobalError.bind(this));
-  }
+router.post('/seeddata', customMiddleware, authMiddleware, (req: Request, res: Response) => {
+  const foodData: string[] = dataSeeder();
+  res.json(foodData);
+  console.log("Data seeding completed");
+});
 
-  private authorized(req: Request, res: Response): void {
-    res.json({ message: 'Welcome To Authorized Content.', user: req.user });
-  }
+// http://localhost:6000/routes/signup ( body : {"email":"nik@gmail.com","username":"nik","password":"1223223"})
+router.post("/signup", validateRequest("login"), validateRegistration, (req: Request, res: Response) => {
+  res.json({ success: true });
+});
 
-  private console(req: Request, res: Response): void {
-    res.send('User Details');
-  }
+// http://localhost:8000/routes/query?value=ew (hit query route like this)
+router.get('/query', queryValidation, (req: Request, res: Response) => {
+  res.json("Query Send");
+});
 
-  private middleware(req: Request, res: Response): void {
-    res.send('Middleware Called');
-  }
+// hit this route - (http://localhost:6000/routes/location)
+router.get('/location', locationMiddleware, (req: Request, res: Response) => {
+  res.json({ message: 'Access granted!' });
+});
 
-  private getName(req: Request, res: Response): void {
-    res.send(nameData);
-  }
+// hit this route - (http://localhost:6000/routes/params) with body ({ "arg1":"a","arg2":"s"})
+router.post('/params', validateParameters, (req: Request, res: Response) => {
+  res.json({
+    message: 'Success',
+    status: 400,
+    location: 'body'
+  });
+});
 
-  private getFood(req: Request, res: Response): void {
-    res.send(foodData);
-  }
-
-  private healthFunction(req: Request, res: Response): void {
-    res.json({ message: "Health Is Ok" });
-  }
-
-  private error(req: Request, res: Response): void {
-    res.send('404 Not Found');
-  }
-
-  private query(req: Request, res: Response): void {
-    res.json('Query.');
-  }
-
-  private location(req: Request, res: Response): void {
-    res.json({ message: 'Access granted!' });
-  }
-
-  private validationError(err: any, req: Request, res: Response, next: NextFunction): void {
-    if (err instanceof ValidationError) {
-      res.json('Unauthorized Access');
-    } else {
-      next(err);
-    }
-  }
-
-  private protected(req: Request, res: Response): void {
-    res.json({ message: 'This is a protected resource', user: req.user });
-  }
-
-  private async asyncFunction(req: Request, res: Response, next: NextFunction): Promise<void> {
-    try {
-      await new Promise((_, reject) => reject(createError(401, 'Unauthorized')));
-      res.send('Success');
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  private params(req: Request, res: Response): void {
-    res.json({ message: 'Success' });
-  }
-
-  private handleError(err: any, req: Request, res: Response, next: NextFunction): void {
-    const statusCode = err.status || 500;
-    res.status(statusCode).json({ error: err.message });
-  }
-
-  private errorMiddleware(req: Request, res: Response, next: NextFunction): void {
-    try {
-      throw new Error('Something went wrong');
-      res.send('Success');
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  private notFound(req: Request, res: Response, next: NextFunction): void {
-    next(createError(404, 'Not Found'));
-  }
-
-  private handleGlobalError(err: any, req: Request, res: Response, next: NextFunction): void {
-    res.status(err.status || 500);
-    res.json({
-      error: {
-        message: err.message,
-      },
-    });
-  }
-  private registerUser(req: Request, res: Response): void {
-    try {
-      const newUser: UserData = req.body;
-
-      if (!newUser || !newUser.name) {
-        throw createError(400, 'Invalid user data');
-      }
-
-      nameData.push(newUser.name);
-      res.json(nameData);
-    } catch (error:any) {
-      res.status(error.status || 500).json({ error: error.message });
-    }
-  }
-
-  // private login(req: Request, res: Response): void {
-  //   const  name:String  = req.body;
-  //   const user = nameData.find((user) => user.name === name);
-
-  //   if (user) {
-  //     const token = jwt.sign({ name: user.name }, this.secretKey, { expiresIn: '10h' });
-  //     res.json({ token });
-  //   } else {
-  //     res.status(401).json({ message: 'Invalid username' });
-  //   }
-  // }
-
-}
-
-const myRouter = new MyRouter();
-export default myRouter.router;
+export default router;
