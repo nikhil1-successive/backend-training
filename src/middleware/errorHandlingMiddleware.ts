@@ -1,12 +1,12 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 
 class ErrorHandlerMiddleware {
-  async handleNotFound(req: Request, res: Response): Promise<void> {
-    console.log("404 Not Found");
-    res.status(404).json({ error: 'Not Found' });
+  processError(err: any, req: Request, res: Response, next: NextFunction): void {
+    res.status(500).json({
+      error: 'Internal Server Error',
+      message: err.message,
+    });
   }
 }
 
-const errorHandlerInstance = new ErrorHandlerMiddleware();
-
-export default errorHandlerInstance.handleNotFound.bind(errorHandlerInstance);
+export default ErrorHandlerMiddleware;

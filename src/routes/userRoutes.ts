@@ -1,32 +1,39 @@
 import express, { Request, Response, Router } from 'express';
 import jwt from 'jsonwebtoken';
-import customMiddleware from '../middleware/customMiddleware';
-import authMiddleware from '../middleware/authMiddleware';
-import errorHandlerMiddleware from '../middleware/errorHandlingMiddleware';
-import limiter from '../middleware/limiterMiddleware';
-import { middleware1, middleware2 } from '../middleware/middlewareFunctions';
-import userData from '../utils/mockData';
-import customHeaderMiddleware from '../middleware/customheaderMiddleware';
-import { dataSeeder } from '../utils/dataseeding';
-import queryValidation from '../middleware/queryMiddleware';
+import UserData, { User } from '../utils/mockData';
+import RateLimiterMiddleware from '../middleware/limiterMiddleware';
+import ErrorHandlerMiddleware from '../middleware/errorHandlingMiddleware';
+import DataSeeder from '../utils/dataseeding';
 import validateRegistration from '../utils/registrationValidationSchema';
-import locationMiddleware from '../middleware/locationMiddleware';
+import LocationMiddleware from '../middleware/locationMiddleware';
+import AuthMiddleware from '../middleware/authMiddleware';
 import validateRequest from '../utils/validationRules';
-import validateParameters from '../middleware/validateParamMiddleware';
+import ParameterValidatorMiddleware from '../middleware/validateParamMiddleware';
+import QueryMiddleware from '../middleware/queryMiddleware';
+import CustomMiddleware from '../middleware/customMiddleware';
 
 const router: Router = express.Router();
 const secretKey: string = 'alpha-beta-gamma';
+const rateLimiter = new RateLimiterMiddleware();
+const userData = new UserData();
+const errorHandler = new ErrorHandlerMiddleware();
+const dataSeeder = new DataSeeder();
+const queryMiddleware = new QueryMiddleware();
+const locationMiddleware = new LocationMiddleware();
+const customMiddleware = new CustomMiddleware()
+const validateParametersMiddleware = new ParameterValidatorMiddleware();
+const authMiddleware = new AuthMiddleware(secretKey);
 
 router.use(express.json());
-router.use(limiter);
-router.use(customHeaderMiddleware);
-router.use(errorHandlerMiddleware);
+router.use(rateLimiter.processRequest.bind(rateLimiter));
+router.use(dataSeeder.seedData.bind(dataSeeder));
+router.use(errorHandler.processError.bind(errorHandler));
 
-// Refer to mockData file for email and password required for authentication
-router.post('/login', customMiddleware, (req: Request, res: Response) => {
+router.post('/login', customMiddleware.middleware, (req: Request, res: Response) => {
   const { email, password }: any = req.body;
-  const user: any = userData.find(u => u.email === email && u.password === password);
-  if (user) {
+  const user: User | undefined = UserData.getUserByEmail(email);
+
+  if (user && user.password === password) {
     const token = jwt.sign(
       { email: user.email },
       secretKey,
@@ -38,33 +45,29 @@ router.post('/login', customMiddleware, (req: Request, res: Response) => {
   }
 });
 
-router.get('/chainmiddleware', customMiddleware, authMiddleware, middleware1, middleware2, (req: Request, res: Response) => {
+router.get('/chainmiddleware', authMiddleware.authenticate, (req: Request, res: Response) => {
   res.send("Middleware Called");
 });
 
-router.post('/seeddata', customMiddleware, authMiddleware, (req: Request, res: Response) => {
-  const foodData: string[] = dataSeeder();
+router.post('/seeddata', (req: Request, res: Response) => {
+  const foodData: string[] = dataSeeder.seedData()
   res.json(foodData);
   console.log("Data seeding completed");
 });
 
-// http://localhost:6000/routes/signup ( body : {"email":"nik@gmail.com","username":"nik","password":"1223223"})
 router.post("/signup", validateRequest("login"), validateRegistration, (req: Request, res: Response) => {
   res.json({ success: true });
 });
 
-// http://localhost:8000/routes/query?value=ew (hit query route like this)
-router.get('/query', queryValidation, (req: Request, res: Response) => {
+router.get('/query', queryMiddleware.processRequest, (req: Request, res: Response) => {
   res.json("Query Send");
 });
 
-// hit this route - (http://localhost:6000/routes/location)
-router.get('/location', locationMiddleware, (req: Request, res: Response) => {
+router.get('/location', locationMiddleware.processRequest, (req: Request, res: Response) => {
   res.json({ message: 'Access granted!' });
 });
 
-// hit this route - (http://localhost:6000/routes/params) with body ({ "arg1":"a","arg2":"s"})
-router.post('/params', validateParameters, (req: Request, res: Response) => {
+router.post('/params', validateParametersMiddleware.validateParameters, (req: Request, res: Response) => {
   res.json({
     message: 'Success',
     status: 400,

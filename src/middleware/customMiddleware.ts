@@ -20,6 +20,4 @@ class CustomMiddleware {
   }
 }
 
-const customMiddlewareInstance = new CustomMiddleware();
-
-export default customMiddlewareInstance.middleware.bind(customMiddlewareInstance);
+export default CustomMiddleware

@@ -14,26 +14,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
 class LocationMiddleware {
-    execute(req, res, next) {
+    processRequest(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const clientIP = req.ip;
                 const response = yield axios_1.default.get(`https://ipinfo.io/${clientIP}/json`);
                 const { country } = response.data;
-                if (country !== "India") {
-                    return res.status(403).json({
+                if (country !== 'India') {
+                    res.status(403).json({
                         error: 'Access denied.',
                     });
                 }
                 next();
             }
             catch (error) {
-                return res.status(500).json({
+                console.error(error);
+                res.status(500).json({
                     error: 'Error',
                 });
             }
         });
     }
 }
-const locationMiddlewareInstance = new LocationMiddleware();
-exports.default = locationMiddlewareInstance.execute.bind(locationMiddlewareInstance);
+exports.default = LocationMiddleware;

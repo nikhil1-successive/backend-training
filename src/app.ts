@@ -1,15 +1,30 @@
-import express, { Application } from 'express';
+import express, { Application, Request, Response } from 'express';
 import userRoutes from './routes/index';
 
-const app: Application = express();
-const port: number = 8000;
+class MyApp {
+  private app: Application;
+  private port: number;
 
-app.get('/', (req, res) => {
-  res.send('Welcome To Home Page.');
-});
+  constructor() {
+    this.app = express();
+    this.port = 8000;
+    this.setupRoutes();
+    this.startServer();
+  }
 
-app.use('/routes', userRoutes);
+  private setupRoutes(): void {
+    this.app.get('/', (req: Request, res: Response) => {
+      res.send('Welcome To Home Page.');
+    });
 
-app.listen(port, () => {
-  console.log(`http://localhost:${port}`);
-});
+    this.app.use('/routes', userRoutes);
+  }
+
+  private startServer(): void {
+    this.app.listen(this.port, () => {
+      console.log(`Server is running at http://localhost:${this.port}`);
+    });
+  }
+}
+
+const myApp = new MyApp();

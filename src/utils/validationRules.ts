@@ -1,12 +1,36 @@
-import Joi from 'joi';
+import Joi, { StringSchema, ObjectSchema } from 'joi';
 import { Request, Response, NextFunction } from 'express';
 
 interface ValidationRules {
   login: {
-    email: Joi.StringSchema;
-    password: Joi.StringSchema;
-    username: Joi.StringSchema;
+    email: StringSchema;
+    password: StringSchema;
+    username: StringSchema;
   };
+}
+
+class RequestValidator {
+  private validationRules: ValidationRules;
+
+  constructor(validationRules: ValidationRules) {
+    this.validationRules = validationRules;
+  }
+
+  validate(route: keyof ValidationRules) {
+    return (req: Request, res: Response, next: NextFunction): void => {
+      if (!this.validationRules[route]) {
+        return next();
+      }
+      const schema: ObjectSchema<any> = Joi.object(this.validationRules[route]);
+      const { error } = schema.validate(req.body, { abortEarly: false });
+
+      if (error) {
+        const errorDetails: string[] = error.details.map((detail) => detail.message);
+        res.status(422).json({ error: 'Validation error', details: errorDetails });
+      }
+      next();
+    };
+  }
 }
 
 const validationRules: ValidationRules = {
@@ -17,20 +41,5 @@ const validationRules: ValidationRules = {
   },
 };
 
-const validateRequest = (route: keyof ValidationRules) => {
-  return (req: Request, res: Response, next: NextFunction) => {
-    if (!validationRules[route]) {
-      return next();
-    }
-    const schema: Joi.ObjectSchema<any> = Joi.object(validationRules[route]);
-    const { error } = schema.validate(req.body, { abortEarly: false });
-
-    if (error) {
-      const errorDetails: string[] = error.details.map((detail) => detail.message);
-      return res.status(422).json({ error: 'Validation error', details: errorDetails });
-    }
-    next();
-  };
-};
-
-export default validateRequest;
+const requestValidator = new RequestValidator(validationRules);
+export default requestValidator.validate.bind(requestValidator);

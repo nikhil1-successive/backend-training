@@ -1,29 +1,26 @@
-import axios from "axios";
-import { Request, Response, NextFunction } from "express";
+import axios, { AxiosResponse } from 'axios';
+import { Request, Response, NextFunction } from 'express';
 
 class LocationMiddleware {
-  async execute(req: Request, res: Response, next: NextFunction) {
+  async processRequest(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const clientIP = req.ip;
-      const response = await axios.get(`https://ipinfo.io/${clientIP}/json`);
-      const { country } = response.data;
+      const clientIP: string | undefined = req.ip;
+      const response: AxiosResponse<any> = await axios.get(`https://ipinfo.io/${clientIP}/json`);
+      const { country }: any = response.data;
 
-      if (country !== "India") {
-        return res.status(403).json({
+      if (country !== 'India') {
+        res.status(403).json({
           error: 'Access denied.',
         });
       }
       next();
     } catch (error) {
-      return res.status(500).json({
+      console.error(error);
+      res.status(500).json({
         error: 'Error',
       });
     }
   }
 }
 
-const locationMiddlewareInstance = new LocationMiddleware();
-
-export default async (req: Request, res: Response, next: NextFunction) => {
-  await locationMiddlewareInstance.execute(req, res, next);
-};
+export default LocationMiddleware;

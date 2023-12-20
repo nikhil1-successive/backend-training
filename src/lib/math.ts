@@ -1,19 +1,29 @@
-import lodash from 'lodash';
+// import _ from "lodash";
 
-function add(num1: number, num2: number): number {
-  return lodash.sum([num1, num2]);
-}
+// class MathOperations {
+//   private lodashInstance: typeof _;
 
-function sub(num1: number, num2: number): number {
-  return lodash.subtract(num1, num2);
-}
+//   constructor(lodashInstance: typeof _) {
+//     this.lodashInstance = lodashInstance;
+//   }
 
-function mul(num1: number, num2: number): number {
-  return lodash.multiply(num1, num2);
-}
+//   add(num1: number, num2: number): number {
+//     return this.lodashInstance.sum([num1, num2]);
+//   }
 
-function div(num1: number, num2: number): number {
-  return lodash.divide(num1, num2);
-}
+//   sub(num1: number, num2: number): number {
+//     return this.lodashInstance.subtract(num1, num2);
+//   }
 
-export { add, sub, mul, div };
+//   mul(num1: number, num2: number): number {
+//     return this.lodashInstance.multiply(num1, num2);
+//   }
+
+//   div(num1: number, num2: number): number {
+//     return this.lodashInstance.divide(num1, num2);
+//   }
+// }
+
+// const mathOperations = new MathOperations(_);
+
+// export default mathOperations;

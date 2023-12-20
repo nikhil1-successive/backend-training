@@ -1,28 +1,23 @@
+import Joi from 'joi';
 import { Request, Response, NextFunction } from 'express';
-import Joi, { ValidationResult } from 'joi';
 
-interface RegistrationRequest extends Request {
-  body: {
-    email: string;
-    password: string;
-  };
-}
-
-const validateRegistration = (req: RegistrationRequest, res: Response, next: NextFunction) => {
-  const userSchema = Joi.object({
+class RegistrationValidator {
+  private userSchema = Joi.object({
     username: Joi.string().required(),
     email: Joi.string().email().required(),
     password: Joi.string().min(6).required(),
   });
 
-  const validationResult: ValidationResult = userSchema.validate(req.body, { abortEarly: false });
+  validate(req: Request, res: Response, next: NextFunction): void {
+    const validationResult = this.userSchema.validate(req.body, { abortEarly: false });
 
-  if (validationResult.error) {
-    const errors: string[] = validationResult.error.details.map((detail) => detail.message);
-    return res.status(400).json({ errors });
+    if (validationResult.error) {
+      const errors: string[] = validationResult.error.details.map((detail) => detail.message);
+      res.status(400).json({ errors });
+    }
+    next();
   }
+}
 
-  next();
-};
-
-export default validateRegistration;
+const registrationValidator = new RegistrationValidator();
+export default registrationValidator.validate.bind(registrationValidator);
