@@ -14,4 +14,5 @@ class Middleware {
 
 const middlewareInstance = new Middleware();
 
-export const { middleware1, middleware2 } = middlewareInstance;
+export const middleware1 = middlewareInstance.middleware1.bind(middlewareInstance);
+export const middleware2 = middlewareInstance.middleware2.bind(middlewareInstance);

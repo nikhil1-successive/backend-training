@@ -1,5 +1,12 @@
 import { Request, Response } from 'express';
 
-export const errorHandlerMiddleware = async (req: Request, res: Response) => {
-  console.log("404 Not Found");
-};
+class ErrorHandlerMiddleware {
+  async handleNotFound(req: Request, res: Response): Promise<void> {
+    console.log("404 Not Found");
+    res.status(404).json({ error: 'Not Found' });
+  }
+}
+
+const errorHandlerInstance = new ErrorHandlerMiddleware();
+
+export default errorHandlerInstance.handleNotFound.bind(errorHandlerInstance);

@@ -4,18 +4,22 @@ interface CustomRequest extends Request {
   timestamp?: number;
 }
 
-const customMiddleware = (req: CustomRequest, res: Response, next: NextFunction) => {
-  const data = [req.method, req.url, req.timestamp];
+class CustomMiddleware {
+  middleware(req: CustomRequest, res: Response, next: NextFunction): void {
+    const data = [req.method, req.url, req.timestamp];
 
-  const timestamp = Date.now();
-  req.timestamp = timestamp;
+    const timestamp = Date.now();
+    req.timestamp = timestamp;
 
-  const time = Math.floor(timestamp / 1000);
-  console.log(time);
+    const time = Math.floor(timestamp / 1000);
+    console.log(time);
 
-  res.send(data);
+    res.send(data);
 
-  next();
-};
+    next();
+  }
+}
 
-export default customMiddleware;
+const customMiddlewareInstance = new CustomMiddleware();
+
+export default customMiddlewareInstance.middleware.bind(customMiddlewareInstance);

@@ -24,4 +24,6 @@ class LocationMiddleware {
 
 const locationMiddlewareInstance = new LocationMiddleware();
 
-export default locationMiddlewareInstance.execute.bind(locationMiddlewareInstance);
+export default async (req: Request, res: Response, next: NextFunction) => {
+  await locationMiddlewareInstance.execute(req, res, next);
+};

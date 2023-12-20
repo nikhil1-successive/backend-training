@@ -1,25 +1,26 @@
 class MyHeaders extends Headers {
   constructor() {
     super();
-    this.append("Content-Type", "images/png");
+    this.append("Content-Type", "image/png"); // Corrected Content-Type
   }
 }
 
 interface MyRequestOptions extends RequestInit {
-  headers: MyHeaders;
+  headers?: MyHeaders;
 }
 
 class MyRequest extends Request {
   constructor(url: string, options?: MyRequestOptions) {
+    // Ensure options.headers is properly initialized
+    options = options || {};
+    options.headers = options.headers || new MyHeaders();
+
     super(url, options);
   }
 }
 
-const myHeaders = new MyHeaders();
-
 const myInit: MyRequestOptions = {
   method: "GET",
-  headers: myHeaders,
   mode: "cors",
   cache: "default",
 };
@@ -29,4 +30,4 @@ const myRequest = new MyRequest("https://expressjs.com/images/express-facebook-s
 const myContentType: string | null = myRequest.headers.get("Content-Type");
 console.log(myContentType);
 
-export default myHeaders;
+export default myRequest.headers;
