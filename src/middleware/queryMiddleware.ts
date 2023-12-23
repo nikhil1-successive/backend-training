@@ -5,7 +5,6 @@ class QueryMiddleware {
     try {
       const value: any = req.query.value;
       console.log('Query:', value);
-
       if (isNaN(value)) {
         console.log('Query is not a number');
       }
@@ -16,5 +15,4 @@ class QueryMiddleware {
     }
   }
 }
-
 export default QueryMiddleware;

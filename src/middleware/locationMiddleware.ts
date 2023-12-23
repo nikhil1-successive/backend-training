@@ -1,14 +1,21 @@
-import axios, { AxiosResponse } from 'axios';
-import { Request, Response, NextFunction } from 'express';
+import axios, { AxiosResponse } from "axios";
+import { Request, Response, NextFunction } from "express";
 
-class LocationMiddleware {
-  async processRequest(req: Request, res: Response, next: NextFunction): Promise<void> {
+interface GeoLocationMiddlewareOptions {
+  allowedCountry: string;
+}
+
+class GeoLocationMiddleware {
+  private allowedCountry: string;
+  constructor(options: GeoLocationMiddlewareOptions) {
+    this.allowedCountry = options.allowedCountry;
+  }
+  public middleware = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const clientIP: string | undefined = req.ip;
-      const response: AxiosResponse<any> = await axios.get(`https://ipinfo.io/${clientIP}/json`);
+      const response: AxiosResponse<any, any> = await axios.get(`https://ipinfo.io/${clientIP}/json`);
       const { country }: any = response.data;
-
-      if (country !== 'India') {
+      if (country !== this.allowedCountry) {
         res.status(403).json({
           error: 'Access denied.',
         });
@@ -20,7 +27,6 @@ class LocationMiddleware {
         error: 'Error',
       });
     }
-  }
+  };
 }
-
-export default LocationMiddleware;
+export default GeoLocationMiddleware;

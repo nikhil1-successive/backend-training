@@ -6,10 +6,11 @@ const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
 class RateLimiterMiddleware {
     constructor() {
         this.limiter = (0, express_rate_limit_1.default)({
-            max: 100, // Default maxRequests
-            windowMs: 60 * 1000, // Default windowMs (1 minute)
+            max: 100,
+            windowMs: 60 * 1000,
         });
     }
+    // processRequest Method
     processRequest(req, res, next) {
         this.limiter(req, res, next);
     }

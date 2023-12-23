@@ -14,5 +14,4 @@ class ParameterValidatorMiddleware {
     }
   }
 }
-
 export default ParameterValidatorMiddleware;

@@ -8,7 +8,7 @@ const index_1 = __importDefault(require("./routes/index"));
 class MyApp {
     constructor() {
         this.app = (0, express_1.default)();
-        this.port = 5000;
+        this.port = 7000;
         this.setupRoutes();
         this.startServer();
     }

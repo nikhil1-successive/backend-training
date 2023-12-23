@@ -11,11 +11,9 @@ interface ValidationRules {
 
 class RequestValidator {
   private validationRules: ValidationRules;
-
   constructor(validationRules: ValidationRules) {
     this.validationRules = validationRules;
   }
-
   validate(route: keyof ValidationRules) {
     return (req: Request, res: Response, next: NextFunction): void => {
       if (!this.validationRules[route]) {
@@ -23,7 +21,6 @@ class RequestValidator {
       }
       const schema: ObjectSchema<any> = Joi.object(this.validationRules[route]);
       const { error } = schema.validate(req.body, { abortEarly: false });
-
       if (error) {
         const errorDetails: string[] = error.details.map((detail) => detail.message);
         res.status(422).json({ error: 'Validation error', details: errorDetails });
@@ -32,7 +29,6 @@ class RequestValidator {
     };
   }
 }
-
 const validationRules: ValidationRules = {
   login: {
     email: Joi.string().email().required(),
@@ -40,6 +36,5 @@ const validationRules: ValidationRules = {
     username: Joi.string().alphanum().min(3).max(30).required(),
   },
 };
-
 const requestValidator = new RequestValidator(validationRules);
 export default requestValidator.validate.bind(requestValidator);
