@@ -1,13 +1,13 @@
 import axios, { AxiosResponse } from "axios";
 import { Request, Response, NextFunction } from "express";
 
-interface GeoLocationMiddlewareOptions {
+interface IGeoLocationMiddlewareOptions {
   allowedCountry: string;
 }
 
 class GeoLocationMiddleware {
   private allowedCountry: string;
-  constructor(options: GeoLocationMiddlewareOptions) {
+  constructor(options: IGeoLocationMiddlewareOptions) {
     this.allowedCountry = options.allowedCountry;
   }
   public middleware = async (req: Request, res: Response, next: NextFunction): Promise<void> => {

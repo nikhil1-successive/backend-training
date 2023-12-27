@@ -1,17 +1,17 @@
 import express, { Request, Response, Router } from 'express';
 import jwt from 'jsonwebtoken';
-import UserData, { User } from '../utils/mockData';
-import RateLimiterMiddleware from '../middleware/limiterMiddleware';
-import ErrorHandlerMiddleware from '../middleware/errorHandlingMiddleware';
-import { DataSeeder } from '../utils/dataseeding';
-import validateRegistration from '../utils/registrationValidationSchema';
-import AuthMiddleware from '../middleware/authMiddleware';
-import validateRequest from '../utils/validationRules';
-import ParameterValidatorMiddleware from '../middleware/validateParamMiddleware';
-import QueryMiddleware from '../middleware/queryMiddleware';
-import GeoLocationMiddleware from '../middleware/locationMiddleware'
+import UserData, { IUser } from '../utils/MockData';
+import RateLimiterMiddleware from '../middleware/LimiterMiddleware';
+import ErrorHandlerMiddleware from '../middleware/ErrorHandlingMiddleware';
+import { DataSeeder } from '../utils/Dataseeding';
+import validateRegistration from '../utils/RegistrationValidationSchema';
+import AuthMiddleware from '../middleware/AuthMiddleware';
+import validateRequest from '../utils/ValidationRules';
+import ParameterValidatorMiddleware from '../middleware/ValidateParamMiddleware';
+import QueryMiddleware from '../middleware/QueryMiddleware';
+import GeoLocationMiddleware from '../middleware/LocationMiddleware'
 import myCustomHeaderMiddleware from '../middleware/customheaderMiddleware';
-import CustomMiddleware from '../middleware/customMiddleware';
+import CustomMiddleware from '../middleware/CustomMiddleware';
 
 const router: Router = express.Router();
 const secretKey: string = 'alpha-beta-gamma';
@@ -30,7 +30,7 @@ router.use(errorHandler.processError.bind(errorHandler));
 // hit this route by passing email and password in body. Get email and body from mockData.ts file. 
 router.post('/login', (req: Request, res: Response) => {
   const { email, password }: any = req.body;
-  const user: User | undefined = UserData.getUserByEmail(email);
+  const user: IUser | undefined = UserData.getUserByEmail(email);
   if (user && user.password === password) {
     const token = jwt.sign(
       { email: user.email },

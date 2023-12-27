@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 
-interface CustomRequest extends Request {
+interface ICustomRequest extends Request {
   timestamp?: number;
 }
 
 class CustomMiddleware {
   //middleware method
-  middleware(req: CustomRequest, res: Response, next: NextFunction): void {
+  middleware(req: ICustomRequest, res: Response, next: NextFunction): void {
     const data = [req.method, req.url, req.timestamp];
     console.log("Data", data)
     const timestamp = Date.now();

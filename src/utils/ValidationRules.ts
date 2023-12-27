@@ -1,7 +1,7 @@
 import Joi, { StringSchema, ObjectSchema } from 'joi';
 import { Request, Response, NextFunction } from 'express';
 
-interface ValidationRules {
+interface IValidationRules {
   login: {
     email: StringSchema;
     password: StringSchema;
@@ -10,11 +10,11 @@ interface ValidationRules {
 }
 
 class RequestValidator {
-  private validationRules: ValidationRules;
-  constructor(validationRules: ValidationRules) {
+  private validationRules: IValidationRules;
+  constructor(validationRules: IValidationRules) {
     this.validationRules = validationRules;
   }
-  validate(route: keyof ValidationRules) {
+  validate(route: keyof IValidationRules) {
     return (req: Request, res: Response, next: NextFunction): void => {
       if (!this.validationRules[route]) {
         return next();
@@ -29,7 +29,7 @@ class RequestValidator {
     };
   }
 }
-const validationRules: ValidationRules = {
+const validationRules: IValidationRules = {
   login: {
     email: Joi.string().email().required(),
     password: Joi.string().min(6).required(),

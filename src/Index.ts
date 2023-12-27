@@ -1,10 +1,10 @@
 import fs from "fs";
 
-interface MathOperation {
+interface IMathOperation {
     performOperation(num1: number, num2: number): number;
 }
 
-class Calculator implements MathOperation {
+class Calculator implements IMathOperation {
     private static instance: Calculator | null = null;
     private constructor() { }
     static getInstance(): Calculator {
