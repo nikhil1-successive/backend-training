@@ -17,6 +17,7 @@ class MyApp {
     this.app.get('/', (req: Request, res: Response) => {
       res.send('Welcome To Home Page.');
     });
+     //router for handling till assignment-8:
     this.app.use('/routes', userRoutes);
      //specific router for assignment-9 to handle property model:
     this.app.use('/user', routers);
