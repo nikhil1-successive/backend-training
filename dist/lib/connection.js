@@ -13,18 +13,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
-class Connection {
-    constructor() {
-        this.url = 'mongodb://localhost:27017/config';
-        this.connectDB = () => __awaiter(this, void 0, void 0, function* () {
-            try {
-                yield mongoose_1.default.connect(this.url);
-                console.log("Connected");
-            }
-            catch (error) {
-                console.log(error);
-            }
-        });
+const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
+    const url = 'mongodb://localhost:27017/assignment-9_property_api';
+    try {
+        yield mongoose_1.default.connect(url);
+        console.log("Connected to MongoDB");
     }
-}
-exports.default = Connection;
+    catch (error) {
+        console.log(error);
+    }
+});
+exports.default = connectDB;

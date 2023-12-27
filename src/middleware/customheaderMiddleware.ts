@@ -1,33 +1,15 @@
-class MyHeaders extends Headers {
-    constructor() {
-      super();
-      this.append("Content-Type", "images/png");
-    }
-  }
-  
-  interface MyRequestOptions extends RequestInit {
-    headers: MyHeaders;
-  }
-  
-  class MyRequest extends Request {
-    constructor(url: string, options?: MyRequestOptions) {
-      super(url, options);
-    }
-  }
-  
-  const myHeaders = new MyHeaders();
-  
-  const myInit: MyRequestOptions = {
-    method: "GET",
-    headers: myHeaders,
-    mode: "cors",
-    cache: "default",
+import { Request, Response, NextFunction } from 'express';
+
+interface ICustomHeaderMiddleware {
+  (req: Request, res: Response, next: NextFunction): void;
+}
+//addCustomHeader Method
+const addCustomHeader = (header: string, headerVal: string): ICustomHeaderMiddleware => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    res.setHeader(header, headerVal);
+    next();
   };
-  
-  const myRequest = new MyRequest("https://expressjs.com/images/express-facebook-share.png", myInit);
-  
-  const myContentType: string | null = myRequest.headers.get("Content-Type");
-  console.log(myContentType);
-  
-  export default myHeaders;
-  
+};
+// instance of class
+const myCustomHeaderMiddleware: ICustomHeaderMiddleware = addCustomHeader('MyHeader', 'Header1');
+export = myCustomHeaderMiddleware;

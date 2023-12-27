@@ -12,10 +12,8 @@ export const validateCreateListing = [
     next();
   },
 ];
-
 export const validateUpdateListing = [
   param('listingId').isMongoId().withMessage('Invalid listing ID'),
-
   (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -24,10 +22,8 @@ export const validateUpdateListing = [
     next();
   },
 ];
-
 export const validateGetListingById = [
   param('listingId').isMongoId().withMessage('Invalid listing ID'),
-
   (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

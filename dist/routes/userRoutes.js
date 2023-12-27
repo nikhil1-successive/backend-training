@@ -1,138 +1,79 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const http_errors_1 = __importDefault(require("http-errors"));
-const customMiddleware_1 = __importDefault(require("../middleware/customMiddleware"));
-const middlewareFunctions_1 = require("../middleware/middlewareFunctions");
-const dataseeding_1 = __importDefault(require("../utils/dataseeding"));
-const mockData_1 = __importDefault(require("../utils/mockData"));
-const express_validation_1 = require("express-validation");
-const queryMiddleware_1 = __importDefault(require("../middleware/queryMiddleware"));
-const registrationValidationSchema_1 = __importDefault(require("../utils/registrationValidationSchema"));
-const locationMiddleware_1 = __importDefault(require("../middleware/locationMiddleware"));
-const auth_1 = __importDefault(require("../middleware/auth"));
-const asynchronousRoutes_1 = require("./asynchronousRoutes");
-const parameterRoute_1 = __importDefault(require("./parameterRoute"));
-const errorHandler_1 = __importDefault(require("../middleware/errorHandler"));
-const secretKey = 'Nikhil';
-function setupRoutes(router) {
-    router.post('/register', registerUser);
-    router.get('/console', customMiddleware_1.default, consoleEndpoint);
-    router.get('/middleware', middlewareFunctions_1.middleware1, middlewareFunctions_1.middleware2, middlewareEndpoint);
-    router.get('/getName', getName);
-    router.get('/getFood', getFood);
-    router.get('/error', errorHandler_1.default, errorEndpoint);
-    router.post('/registerUser', registrationValidationSchema_1.default, registerUser);
-    router.get('/query', queryMiddleware_1.default, queryEndpoint);
-    router.get('/location', locationMiddleware_1.default, locationEndpoint);
-    router.use(validationError);
-    router.get('/protected', auth_1.default, protectedEndpoint);
-    router.get('/async', (0, asynchronousRoutes_1.asyncHandler)(asyncFunction));
-    router.post('/params', parameterRoute_1.default, paramsEndpoint);
-    router.use(handleError);
-    router.get('/errormiddleware', errorMiddleware);
-    router.get('/gethealth', healthFunction);
-    router.use(notFound);
-    router.use(handleGlobalError);
-}
-function consoleEndpoint(req, res) {
-    res.send('User Details');
-}
-function middlewareEndpoint(req, res) {
-    res.send('Middleware Called');
-}
-function getName(req, res) {
-    res.send(mockData_1.default);
-}
-function getFood(req, res) {
-    res.send(dataseeding_1.default);
-}
-function healthFunction(req, res) {
-    res.json({ message: 'Health Is Ok' });
-}
-function errorEndpoint(req, res) {
-    res.send('404 Not Found');
-}
-function queryEndpoint(req, res) {
-    res.json('Query.');
-}
-function locationEndpoint(req, res) {
-    res.json({ message: 'Access granted!' });
-}
-function validationError(err, req, res, next) {
-    if (err instanceof express_validation_1.ValidationError) {
-        res.json('Unauthorized Access');
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const MockData_1 = __importDefault(require("../utils/MockData"));
+const LimiterMiddleware_1 = __importDefault(require("../middleware/LimiterMiddleware"));
+const ErrorHandlingMiddleware_1 = __importDefault(require("../middleware/ErrorHandlingMiddleware"));
+const Dataseeding_1 = require("../utils/Dataseeding");
+const RegistrationValidationSchema_1 = __importDefault(require("../utils/RegistrationValidationSchema"));
+const AuthMiddleware_1 = __importDefault(require("../middleware/AuthMiddleware"));
+const ValidationRules_1 = __importDefault(require("../utils/ValidationRules"));
+const ValidateParamMiddleware_1 = __importDefault(require("../middleware/ValidateParamMiddleware"));
+const QueryMiddleware_1 = __importDefault(require("../middleware/QueryMiddleware"));
+const LocationMiddleware_1 = __importDefault(require("../middleware/LocationMiddleware"));
+const customheaderMiddleware_1 = __importDefault(require("../middleware/customheaderMiddleware"));
+const CustomMiddleware_1 = __importDefault(require("../middleware/CustomMiddleware"));
+const router = express_1.default.Router();
+const secretKey = 'alpha-beta-gamma';
+const rateLimiter = new LimiterMiddleware_1.default();
+const errorHandler = new ErrorHandlingMiddleware_1.default();
+const queryMiddleware = new QueryMiddleware_1.default();
+const validateParametersMiddleware = new ValidateParamMiddleware_1.default();
+const authMiddleware = new AuthMiddleware_1.default(secretKey);
+const customMiddleware = new CustomMiddleware_1.default();
+const geoLocationMiddleware = new LocationMiddleware_1.default({ allowedCountry: "IN" });
+router.use(express_1.default.json());
+router.use(rateLimiter.processRequest.bind(rateLimiter));
+router.use(errorHandler.processError.bind(errorHandler));
+// hit this route by passing email and password in body. Get email and body from mockData.ts file. 
+router.post('/login', (req, res) => {
+    const { email, password } = req.body;
+    const user = MockData_1.default.getUserByEmail(email);
+    if (user && user.password === password) {
+        const token = jsonwebtoken_1.default.sign({ email: user.email }, secretKey, { expiresIn: '1h' });
+        res.json({ token });
     }
     else {
-        next(err);
+        res.status(401).json({ message: 'Invalid email or password' });
     }
-}
-function protectedEndpoint(req, res) {
-    res.json({ message: 'This is a protected resource', user: req.user });
-}
-function asyncFunction(req, res, next) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            yield new Promise((_, reject) => reject((0, http_errors_1.default)(401, 'Unauthorized')));
-            res.send('Success');
-        }
-        catch (error) {
-            next(error);
-        }
-    });
-}
-function paramsEndpoint(req, res) {
-    res.json({ message: 'Success' });
-}
-function handleError(err, req, res, next) {
-    const statusCode = err.status || 500;
-    res.status(statusCode).json({ error: err.message });
-}
-function errorMiddleware(req, res, next) {
-    try {
-        throw new Error('Something went wrong');
-        res.send('Success');
-    }
-    catch (error) {
-        next(error);
-    }
-}
-function notFound(req, res, next) {
-    next((0, http_errors_1.default)(404, 'Not Found'));
-}
-function handleGlobalError(err, req, res, next) {
-    res.status(err.status || 500);
+});
+// hit this route by passing {Key:'Authorization' and Value:'Token' in Headers}. You will get Token on successfull login
+router.get('/chainmiddleware', authMiddleware.authenticate, (req, res) => {
+    res.send("Middleware Called");
+});
+router.post('/seeddata', (req, res) => {
+    const dataSeeder = new Dataseeding_1.DataSeeder();
+    const foodData = dataSeeder.seedData();
+    res.json(foodData);
+    console.log("Data seeding completed");
+});
+// hit this route as (http://localhost:8000/routes/signup) with body {"email":"nikhil@successive.com", "username":"aaa", "password":"nik123"}
+router.post("/signup", (0, ValidationRules_1.default)("login"), RegistrationValidationSchema_1.default, (req, res) => {
+    res.json({ success: true });
+});
+//hit this route ex-(http://localhost:8000/routes/query?value=2)
+router.get('/query', queryMiddleware.processRequest, (req, res) => {
+    res.json("Query Send");
+});
+router.get("/location", geoLocationMiddleware.middleware, (req, res) => {
+    res.send("You are authorized!");
+});
+router.get('/customheader', customheaderMiddleware_1.default, (req, res) => {
+    res.send('This route has a custom header set!');
+});
+router.get('/custommiddleware', customMiddleware.middleware, (req, res) => {
+    console.log('Route logic executed');
+});
+// hit this route as http://localhost:8000/routes/params with body { "arg1":"12","arg2":"22"}
+router.post('/params', validateParametersMiddleware.validateParameters, (req, res) => {
     res.json({
-        error: {
-            message: err.message,
-        },
+        message: 'Success',
+        status: 400,
+        location: 'body'
     });
-}
-function registerUser(req, res) {
-    try {
-        const newUser = req.body;
-        if (!newUser || !newUser.name) {
-            throw (0, http_errors_1.default)(400, 'Invalid user data');
-        }
-        mockData_1.default.push(newUser.name);
-        res.json(mockData_1.default);
-    }
-    catch (error) {
-        res.status(error.status || 500).json({ error: error.message });
-    }
-}
-const router = express_1.default.Router();
-setupRoutes(router);
-// export default router;
+});
+exports.default = router;

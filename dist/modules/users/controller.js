@@ -82,41 +82,5 @@ class RealEstateListingController {
             }
         });
     }
-    static searchListingsByTitle(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const { title } = req.params;
-            try {
-                const listings = yield realEstateService.searchListingsByTitle(title);
-                res.status(200).json(listings);
-            }
-            catch (error) {
-                res.status(500).json({ error: error.message });
-            }
-        });
-    }
-    static searchListingsByAddress(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const { address } = req.params;
-            try {
-                const listings = yield realEstateService.searchListingsByAddress(address);
-                res.status(200).json(listings);
-            }
-            catch (error) {
-                res.status(500).json({ error: error.message });
-            }
-        });
-    }
-    static searchListingsByPrice(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const { price } = req.params;
-            try {
-                const listings = yield realEstateService.searchListingsByPrice(price);
-                res.status(200).json(listings);
-            }
-            catch (error) {
-                res.status(500).json({ error: error.message });
-            }
-        });
-    }
 }
 exports.default = RealEstateListingController;

@@ -1,2 +1,2 @@
-// import userRoutes from "./userRoutes.js"
-// export default userRoutes
+import router from "./userRoutes"
+export default router

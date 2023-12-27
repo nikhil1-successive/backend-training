@@ -10,10 +10,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RealEstateListingRepository = void 0;
-const Model_1 = require("./Model");
+const model_1 = require("./model");
 class RealEstateListingRepository {
     constructor() {
-        this.model = Model_1.RealEstateListingModel;
+        this.model = model_1.RealEstateListingModel;
     }
     findAll() {
         return __awaiter(this, void 0, void 0, function* () {

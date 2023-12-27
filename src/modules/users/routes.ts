@@ -1,22 +1,12 @@
 import express from 'express';
-import RealEstateListingController from './controller';
+import RealEstateListingController from './Controller';
 
-const router = express.Router();
+const routers = express.Router();
 
-router.get('/listings', RealEstateListingController.getAllListings);
+routers.get('/listings', RealEstateListingController.getAllListings);
+routers.get('/listings/:id', RealEstateListingController.getListingById);
+routers.post('/listings', RealEstateListingController.createListing);
+routers.put('/listings/:id', RealEstateListingController.updateListing);
+routers.delete('/listings/:id', RealEstateListingController.deleteListing);
 
-router.get('/listings/:id', RealEstateListingController.getListingById);
-
-router.post('/listings', RealEstateListingController.createListing);
-
-router.put('/listings/:id', RealEstateListingController.updateListing);
-
-router.delete('/listings/:id', RealEstateListingController.deleteListing);
-
-router.get('/listings/search/title/:title', RealEstateListingController.searchListingsByTitle);
-
-router.get('/listings/search/address/:address', RealEstateListingController.searchListingsByAddress);
-
-router.get('/listings/search/price/:price', RealEstateListingController.searchListingsByPrice);
-
-export default router;
+export default routers;
