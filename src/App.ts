@@ -18,6 +18,7 @@ class MyApp {
       res.send('Welcome To Home Page.');
     });
     this.app.use('/routes', userRoutes);
+     //specific router for assignment-9 to handle property model:
     this.app.use('/user', routers);
   }
   private async connectDatabase(): Promise<void> {
