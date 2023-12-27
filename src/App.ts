@@ -1,8 +1,7 @@
 import express, { Express } from 'express';
 import userRoutes from './routes/index';
 import bodyParser from 'body-parser';
-import limiter from './middleware/limiterMiddleware';
-import SeedData from './lib/seeding';
+import SeedData from './lib/Seeding';
 
 class App {
   private app: Express;
@@ -10,16 +9,16 @@ class App {
 
   constructor() {
     this.app = express();
-    this.port = 4897
+    this.port = 7000;
     this.configureMiddleware();
     this.configureRoutes();
     this.seedData();
   }
 
   private configureMiddleware(): void {
-    this.app.use(limiter);
+    this.app.use(express.urlencoded({ extended: true }));
     this.app.use(express.json());
-    this.app.use(bodyParser.json());
+    this.app.use(bodyParser)
   }
 
   private configureRoutes(): void {
@@ -32,7 +31,7 @@ class App {
 
   private async seedData(): Promise<void> {
     const seedDatas = new SeedData();
-    console.log("Seeding started")
+    console.log("Seeding started");
     await seedDatas.seedData();
   }
 

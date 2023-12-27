@@ -19,7 +19,7 @@ const Seeding_1 = __importDefault(require("./lib/Seeding"));
 class App {
     constructor() {
         this.app = (0, express_1.default)();
-        this.port = 8000;
+        this.port = 7000;
         this.configureMiddleware();
         this.configureRoutes();
         this.seedData();

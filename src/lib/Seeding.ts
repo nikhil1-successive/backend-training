@@ -6,7 +6,6 @@ interface IPlayer {
   captain: string;
   playersName: string[];
 }
-
 class SeedData {
   public countriesData: IPlayer[] = [
     {
@@ -20,7 +19,6 @@ class SeedData {
       playersName: ['Pat Cummins (Captain)', 'Steve Smith', 'Alex Carey', 'Josh Inglis', 'Sean Abbot', 'Marnus Labuschagne', 'Cameron Green', 'Josh Hazlewood', 'Travis Head', 'Mitch Marsh', 'Glenn Maxwell', 'Marcus Stoinis', 'David Warner', 'Adam Zampa', 'Mitchell Starc'],
     },
   ];
-
   public seedData = async () => {
     try {
       await PlayingCountries.insertMany(this.countriesData as IPlayingCountries[]);
