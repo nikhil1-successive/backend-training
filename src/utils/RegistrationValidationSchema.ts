@@ -11,7 +11,7 @@ class RegistrationValidator {
     const validationResult = this.userSchema.validate(req.body, { abortEarly: false });
     if (validationResult.error) {
       const errors: string[] = validationResult.error.details.map((detail) => detail.message);
-      res.status(400).json({ errors });
+      res.status(422).json({ errors });
     }
     next();
   }

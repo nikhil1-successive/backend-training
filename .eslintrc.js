@@ -16,5 +16,6 @@ module.exports = {
     plugins: [
       '@typescript-eslint',
     ],
+    ignorePatterns: ['dist/'], // Add this line to ignore the dist directory
   };
   

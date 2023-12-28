@@ -1,10 +1,7 @@
 import fs from "fs";
 
-interface IMathOperation {
-    performOperation(num1: number, num2: number): number;
-}
 
-export class Calculator implements IMathOperation {
+export class Calculator {
     private static instance: Calculator | null = null;
     private constructor() { }
     static getInstance(): Calculator {
@@ -13,9 +10,7 @@ export class Calculator implements IMathOperation {
         }
         return Calculator.instance;
     }
-    performOperation(num1: number, num2: number): number {
-        throw new Error("Method not implemented");
-    }
+
     add(num1: number, num2: number): number {
         return num1 + num2;
     }

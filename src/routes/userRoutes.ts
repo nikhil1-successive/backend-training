@@ -28,8 +28,9 @@ router.use(rateLimiter.processRequest.bind(rateLimiter));
 router.use(errorHandler.processError.bind(errorHandler));
 
 // hit this route by passing email and password in body. Get email and body from mockData.ts file. 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 router.post('/login', (req: Request, res: Response) => {
-  const { email, password }: any = req.body;
+  const { email, password }: { email: string; password: string } = req.body;
   const user: IUser | undefined = UserData.getUserByEmail(email);
   if (user && user.password === password) {
     const token:string = jwt.sign(
@@ -44,10 +45,12 @@ router.post('/login', (req: Request, res: Response) => {
 });
 
 // hit this route by passing {Key:'Authorization' and Value:'Token' in Headers}. You will get Token on successfull login
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 router.get('/chainmiddleware', authMiddleware.authenticateUser, (req: Request, res: Response) => {
   res.send("Middleware Called");
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 router.post('/seeddata', (req: Request, res: Response) => {
   const dataSeeder: DataSeederType = new DataSeeder();
   const foodData: string[] = dataSeeder.seedData();
@@ -56,28 +59,35 @@ router.post('/seeddata', (req: Request, res: Response) => {
 });
 
 // hit this route as (http://localhost:8000/routes/signup) with body {"email":"nikhil@successive.com", "username":"aaa", "password":"nik123"}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 router.post("/signup", validateRequest("login"), validateRegistration, (req: Request, res: Response) => {
   res.json({ success: true });
 });
 
+
 //hit this route ex-(http://localhost:8000/routes/query?value=2)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 router.get('/query', queryMiddleware.processRequest, (req: Request, res: Response) => {
   res.json("Query Send");
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 router.get("/location", geoLocationMiddleware.middleware, (req: Request, res: Response) => {
   res.send("You are authorized!");
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 router.get('/customheader', myCustomHeaderMiddleware, (req: Request, res: Response) => {
   res.send('This route has a custom header set!');
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 router.get('/custommiddleware', customMiddleware.middleware, (req: Request, res: Response) => {
   console.log('Route logic executed');
 });
 
 // hit this route as http://localhost:8000/routes/params with body { "arg1":"12","arg2":"22"}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 router.post('/params', validateParametersMiddleware.validateParameters, (req: Request, res: Response) => {
   res.json({
     message: 'Success',

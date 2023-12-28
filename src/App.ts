@@ -27,4 +27,4 @@ class MyApp {
   }
 }
 
-const myApp = new MyApp();
+export const myApp = new MyApp();

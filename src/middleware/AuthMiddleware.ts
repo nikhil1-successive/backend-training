@@ -19,7 +19,7 @@ class AuthMiddleware {
     next: NextFunction
   ): void => {
     try {
-      const token = req.headers.authorization;
+      const token: string | undefined = req.headers.authorization;
       if (!token) {
         next(CreateError(403, "Token not provided"));
       } else {
@@ -27,7 +27,7 @@ class AuthMiddleware {
         req.user = decodedUser;
         next();
       }
-    } catch (err) {
+    } catch (err: any) {
       next(CreateError(401, "Invalid token"));
     }
   };

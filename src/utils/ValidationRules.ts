@@ -1,6 +1,14 @@
-import Joi, { StringSchema, ObjectSchema } from 'joi';
+import Joi, { StringSchema, ObjectSchema, ValidationResult } from 'joi';
 import { Request, Response, NextFunction } from 'express';
 
+// Define a generic type for the validation rules
+type ValidationRules<T> = {
+  [key in keyof T]: {
+    [innerKey: string]: StringSchema;
+  };
+};
+
+// Use the generic type for IValidationRules
 interface IValidationRules {
   login: {
     email: StringSchema;
@@ -9,29 +17,37 @@ interface IValidationRules {
   };
 }
 
-class RequestValidator {
-  private validationRules: IValidationRules;
-  constructor(validationRules: IValidationRules) {
+class RequestValidator<T extends ValidationRules<T>> {
+  private validationRules: T;
+
+  constructor(validationRules: T) {
     this.validationRules = validationRules;
   }
-  validate(route: keyof IValidationRules) {
+
+  validate(route: keyof T) {
     return (req: Request, res: Response, next: NextFunction): void => {
       if (!this.validationRules[route]) {
         return next();
       }
-      const schema: ObjectSchema<any> = Joi.object(this.validationRules[route]);
-      const { error } = schema.validate(req.body, { abortEarly: false });
+
+      const schema: ObjectSchema = Joi.object(this.validationRules[route] as Record<string, StringSchema>);
+      const { error }: ValidationResult = schema.validate(req.body, { abortEarly: false });
+
       if (error) {
         const errorDetails: string[] = error.details.map((detail) => detail.message);
         res.status(422).json({ error: 'Validation error', details: errorDetails });
       }
+
       next();
     };
   }
 }
-type RequestValidatorType = {
-  validate: (route: keyof IValidationRules) => (req: Request, res: Response, next: NextFunction) => void;
+
+// Use the generic type for RequestValidatorType
+type RequestValidatorType<T> = {
+  validate: (route: keyof T) => (req: Request, res: Response, next: NextFunction) => void;
 };
+
 const validationRules: IValidationRules = {
   login: {
     email: Joi.string().email().required(),
@@ -39,5 +55,8 @@ const validationRules: IValidationRules = {
     username: Joi.string().alphanum().min(3).max(30).required(),
   },
 };
-const requestValidator:RequestValidatorType= new RequestValidator(validationRules);
+
+// Provide the specific type for the validation rules when creating an instance
+const requestValidator: RequestValidatorType<IValidationRules> = new RequestValidator(validationRules);
+
 export default requestValidator.validate.bind(requestValidator);
