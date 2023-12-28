@@ -1,3 +1,6 @@
+export interface DataSeederType {
+  seedData: () => string[];
+}
 export class DataSeeder {
   private foodData: string[] = ["Paneer", "Chola", "Chicken"];
 

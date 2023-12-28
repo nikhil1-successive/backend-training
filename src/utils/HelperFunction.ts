@@ -4,7 +4,7 @@ interface IMathOperation {
     performOperation(num1: number, num2: number): number;
 }
 
-class Calculator implements IMathOperation {
+export class Calculator implements IMathOperation {
     private static instance: Calculator | null = null;
     private constructor() { }
     static getInstance(): Calculator {

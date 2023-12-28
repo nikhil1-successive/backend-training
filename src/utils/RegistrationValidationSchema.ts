@@ -16,5 +16,8 @@ class RegistrationValidator {
     next();
   }
 }
-const registrationValidator = new RegistrationValidator();
+interface RegistrationValidatorType {
+  validate: (req: Request, res: Response, next: NextFunction) => void;
+}
+const registrationValidator: RegistrationValidatorType = new RegistrationValidator();
 export default registrationValidator.validate.bind(registrationValidator);

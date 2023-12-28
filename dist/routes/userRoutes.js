@@ -42,7 +42,7 @@ router.post('/login', (req, res) => {
     }
 });
 // hit this route by passing {Key:'Authorization' and Value:'Token' in Headers}. You will get Token on successfull login
-router.get('/chainmiddleware', authMiddleware.authenticate, (req, res) => {
+router.get('/chainmiddleware', authMiddleware.authenticateUser, (req, res) => {
     res.send("Middleware Called");
 });
 router.post('/seeddata', (req, res) => {

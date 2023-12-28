@@ -29,6 +29,9 @@ class RequestValidator {
     };
   }
 }
+type RequestValidatorType = {
+  validate: (route: keyof IValidationRules) => (req: Request, res: Response, next: NextFunction) => void;
+};
 const validationRules: IValidationRules = {
   login: {
     email: Joi.string().email().required(),
@@ -36,5 +39,5 @@ const validationRules: IValidationRules = {
     username: Joi.string().alphanum().min(3).max(30).required(),
   },
 };
-const requestValidator = new RequestValidator(validationRules);
+const requestValidator:RequestValidatorType= new RequestValidator(validationRules);
 export default requestValidator.validate.bind(requestValidator);
