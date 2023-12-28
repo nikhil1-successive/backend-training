@@ -1,6 +1,5 @@
 import fs from "fs";
 
-
 export class Calculator {
     private static instance: Calculator | null = null;
     private constructor() { }
