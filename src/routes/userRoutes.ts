@@ -91,7 +91,7 @@ router.get('/custommiddleware', customMiddleware.middleware, (req: Request, res:
 router.post('/params', validateParametersMiddleware.validateParameters, (req: Request, res: Response) => {
   res.json({
     message: 'Success',
-    status: 400,
+    status: 200,
     location: 'body'
   });
 });
