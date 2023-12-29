@@ -43,11 +43,9 @@ router.post('/login', (req, res) => {
     }
 });
 // hit this route by passing {Key:'Authorization' and Value:'Token' in Headers}. You will get Token on successfull login
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 router.get('/chainmiddleware', authMiddleware.authenticateUser, (req, res) => {
     res.send("Middleware Called");
 });
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 router.post('/seeddata', (req, res) => {
     const dataSeeder = new Dataseeding_1.DataSeeder();
     const foodData = dataSeeder.seedData();
@@ -55,29 +53,23 @@ router.post('/seeddata', (req, res) => {
     console.log("Data seeding completed");
 });
 // hit this route as (http://localhost:8000/routes/signup) with body {"email":"nikhil@successive.com", "username":"aaa", "password":"nik123"}
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 router.post("/signup", (0, ValidationRules_1.default)("login"), RegistrationValidationSchema_1.default, (req, res) => {
     res.json({ success: true });
 });
 //hit this route ex-(http://localhost:8000/routes/query?value=2)
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 router.get('/query', queryMiddleware.processRequest, (req, res) => {
     res.json("Query Send");
 });
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 router.get("/location", geoLocationMiddleware.middleware, (req, res) => {
     res.send("You are authorized!");
 });
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 router.get('/customheader', customheaderMiddleware_1.default, (req, res) => {
     res.send('This route has a custom header set!');
 });
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 router.get('/custommiddleware', customMiddleware.middleware, (req, res) => {
     console.log('Route logic executed');
 });
 // hit this route as http://localhost:8000/routes/params with body { "arg1":"12","arg2":"22"}
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 router.post('/params', validateParametersMiddleware.validateParameters, (req, res) => {
     res.json({
         message: 'Success',
