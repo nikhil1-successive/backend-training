@@ -28,8 +28,7 @@ router.use(express.json());
 router.use(rateLimiter.processRequest.bind(rateLimiter));
 router.use(errorHandler.processError.bind(errorHandler));
 
-// hit this route by passing email and password in body. Get email and body from mockData.ts file.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// hit this route by passing email and password in body. Get email and body from mockData.ts file. 
 router.post('/login', (req: Request, res: Response) => {
   const { email, password }: { email: string; password: string } = req.body;
   const user: IUser | undefined = UserData.getUserByEmail(email);
@@ -46,11 +45,9 @@ router.post('/login', (req: Request, res: Response) => {
 });
 
 // hit this route by passing {Key:'Authorization' and Value:'Token' in Headers}. You will get Token on successfull login
-
 router.get('/chainmiddleware', authMiddleware.authenticateUser, (req: Request, res: Response) => {
   res.send('Middleware Called');
 });
-
 
 router.post('/seeddata', (req: Request, res: Response) => {
   const dataSeeder: DataSeederType = new DataSeeder();
@@ -59,36 +56,29 @@ router.post('/seeddata', (req: Request, res: Response) => {
   console.log('Data seeding completed');
 });
 
-// hit this route as (http://localhost:8000/routes/signup) with body {'email':'nikhil@successive.com', 'username':'aaa', 'password':'nik123'}
-
-router.post('/signup', validateRequest('login'), validateRegistration, (req: Request, res: Response) => {
+// hit this route as (http://localhost:8000/routes/signup) with body {"email":"nikhil@successive.com", "username":"aaa", "password":"nik123"}
+router.post("/signup", validateRequest("login"), validateRegistration, (req: Request, res: Response) => {
   res.json({ success: true });
 });
 
-
-// hit this route ex-(http://localhost:8000/routes/query?value=2)
-
+//hit this route ex-(http://localhost:8000/routes/query?value=2)
 router.get('/query', queryMiddleware.processRequest, (req: Request, res: Response) => {
   res.json('Query Send');
 });
 
-
-router.get('/location', geoLocationMiddleware.middleware, (req: Request, res: Response) => {
-  res.send('You are authorized!');
+router.get("/location", geoLocationMiddleware.middleware, (req: Request, res: Response) => {
+  res.send("You are authorized!");
 });
-
 
 router.get('/customheader', myCustomHeaderMiddleware, (req: Request, res: Response) => {
   res.send('This route has a custom header set!');
 });
 
-
 router.get('/custommiddleware', customMiddleware.middleware, (req: Request, res: Response) => {
   console.log('Route logic executed');
 });
 
-// hit this route as http://localhost:8000/routes/params with body { 'arg1':'12','arg2':'22'}
-
+// hit this route as http://localhost:8000/routes/params with body { "arg1":"12","arg2":"22"}
 router.post('/params', validateParametersMiddleware.validateParameters, (req: Request, res: Response) => {
   res.json({
     message: 'Success',
