@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import express, { Request, Response, Router } from 'express';
 import jwt from 'jsonwebtoken';
 import UserData, { IUser } from '../utils/MockData';
