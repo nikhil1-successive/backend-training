@@ -1,5 +1,5 @@
-import axios, { AxiosResponse } from "axios";
-import { Request, Response, NextFunction } from "express";
+import axios, { AxiosResponse } from 'axios';
+import { Request, Response, NextFunction } from 'express';
 
 interface IGeoLocationMiddlewareOptions {
   allowedCountry: string;
@@ -21,12 +21,12 @@ class GeoLocationMiddleware {
         });
       }
       next();
-    } catch (error:any) {
-      console.error({status:error.response.status,message:error.message});
+    } catch (error: any) {
+      console.error({status: error.response.status, message: error.message});
       res.status(error.response.status).json({
-        status:error.response.status,
-        code:error.code,
-        message:error.message,
+        status: error.response.status,
+        code: error.code,
+        message: error.message,
       });
     }
   };

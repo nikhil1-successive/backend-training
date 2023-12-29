@@ -1,9 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 
-interface ICustomHeaderMiddleware {
-  (req: Request, res: Response, next: NextFunction): void;
-}
-//addCustomHeader Method
+type ICustomHeaderMiddleware = (req: Request, res: Response, next: NextFunction) => void;
+// addCustomHeader Method
 const addCustomHeader = (header: string, headerVal: string): ICustomHeaderMiddleware => {
   return (req: Request, res: Response, next: NextFunction) => {
     res.setHeader(header, headerVal);

@@ -5,12 +5,12 @@ interface ICustomRequest extends Request {
 }
 
 class CustomMiddleware {
-  //middleware method
+  // middleware method
   middleware(req: ICustomRequest, res: Response, next: NextFunction): void {
     const data = [req.method, req.url, new Date()];
-    console.log("Data", data)
+    console.log('Data', data);
     res.send(data);
     next();
   }
 }
-export default CustomMiddleware
+export default CustomMiddleware;
