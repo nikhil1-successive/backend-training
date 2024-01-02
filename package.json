@@ -5,6 +5,10 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "lint": "./node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json --exclude 'node_modules/**/*.{j,t}s'",
+    "nodemon": "nodemon ./dist/App.js",
+    "start": "tsc-watch --project . --onSuccess \"npm run nodemon\"",
+    "prepare": "husky install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -27,8 +31,14 @@
   },
   "devDependencies": {
     "@types/lodash": "4.14.202",
-    "@typescript-eslint/eslint-plugin": "6.13.2",
-    "@typescript-eslint/parser": "6.13.2",
-    "eslint": "8.55.0"
+    "@types/request-ip": "0.0.41",
+    "@typescript-eslint/eslint-plugin": "^6.13.2",
+    "@typescript-eslint/parser": "^6.13.2",
+    "eslint": "^8.55.0",
+    "eslint-plugin-react": "^7.33.2",
+    "husky": "^8.0.3",
+    "tsc-watch": "^6.0.4",
+    "tslint": "^6.1.3",
+    "typescript": "^5.3.3"
   }
 }

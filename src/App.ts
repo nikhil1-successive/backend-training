@@ -18,7 +18,7 @@ class App {
   private configureMiddleware(): void {
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(express.json());
-    this.app.use(bodyParser)
+    this.app.use(bodyParser);
   }
 
   private configureRoutes(): void {
@@ -31,7 +31,7 @@ class App {
 
   private async seedData(): Promise<void> {
     const seedDatas = new SeedData();
-    console.log("Seeding started");
+    console.log('Seeding started');
     await seedDatas.seedData();
   }
 

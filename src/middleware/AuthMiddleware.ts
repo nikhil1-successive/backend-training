@@ -8,7 +8,7 @@ class AuthMiddleware {
     this.secretKey = secretKey;
     this.authenticate = this.authenticate.bind(this);
   }
-  //authneticate method
+  // authneticate method
   authenticate = (req: Request, res: Response, next: NextFunction): void => {
     const token: string | undefined = req.headers['authorization'];
     if (!token) {

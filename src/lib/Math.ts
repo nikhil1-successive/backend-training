@@ -1,4 +1,4 @@
-import lodash from "lodash";
+import lodash from 'lodash';
 
 class MathOperations {
     private lodashInstance: typeof lodash;
@@ -13,11 +13,11 @@ class MathOperations {
     sub(num1: number, num2: number): number {
         return this.lodashInstance.subtract(num1, num2);
     }
-    //multiplication method
+    // multiplication method
     mul(num1: number, num2: number): number {
         return this.lodashInstance.multiply(num1, num2);
     }
-    //divison method
+    // divison method
     div(num1: number, num2: number): number {
         return this.lodashInstance.divide(num1, num2);
     }

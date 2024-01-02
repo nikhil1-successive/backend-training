@@ -1,5 +1,5 @@
-import axios, { AxiosResponse } from "axios";
-import { Request, Response, NextFunction } from "express";
+import axios, { AxiosResponse } from 'axios';
+import { Request, Response, NextFunction } from 'express';
 
 interface IGeoLocationMiddlewareOptions {
   allowedCountry: string;
