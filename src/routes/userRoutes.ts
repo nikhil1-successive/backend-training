@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import express, { Request, Response, Router } from 'express';
 import jwt from 'jsonwebtoken';
 import UserData, { IUser } from '../utils/MockData';
 import RateLimiterMiddleware from '../middleware/LimiterMiddleware';
 import ErrorHandlerMiddleware from '../middleware/ErrorHandlingMiddleware';
-import { DataSeeder } from '../utils/Dataseeding';
+import { DataSeeder, DataSeederType } from '../utils/Dataseeding';
 import validateRegistration from '../utils/RegistrationValidationSchema';
 import AuthMiddleware from '../middleware/AuthMiddleware';
 import validateRequest from '../utils/ValidationRules';
@@ -15,13 +16,13 @@ import CustomMiddleware from '../middleware/CustomMiddleware';
 
 const router: Router = express.Router();
 const secretKey: string = 'alpha-beta-gamma';
-const rateLimiter = new RateLimiterMiddleware();
-const errorHandler = new ErrorHandlerMiddleware();
-const queryMiddleware = new QueryMiddleware();
-const validateParametersMiddleware = new ParameterValidatorMiddleware();
-const authMiddleware = new AuthMiddleware(secretKey);
-const customMiddleware = new CustomMiddleware();
-const geoLocationMiddleware = new GeoLocationMiddleware({ allowedCountry: 'IN' });
+const rateLimiter: RateLimiterMiddleware = new RateLimiterMiddleware();
+const errorHandler: ErrorHandlerMiddleware = new ErrorHandlerMiddleware();
+const queryMiddleware: QueryMiddleware = new QueryMiddleware();
+const validateParametersMiddleware: ParameterValidatorMiddleware = new ParameterValidatorMiddleware();
+const authMiddleware: AuthMiddleware = new AuthMiddleware(secretKey);
+const customMiddleware: CustomMiddleware = new CustomMiddleware();
+const geoLocationMiddleware: GeoLocationMiddleware = new GeoLocationMiddleware({ allowedCountry: 'IN' });
 
 router.use(express.json());
 router.use(rateLimiter.processRequest.bind(rateLimiter));
@@ -29,10 +30,10 @@ router.use(errorHandler.processError.bind(errorHandler));
 
 // hit this route by passing email and password in body. Get email and body from mockData.ts file.
 router.post('/login', (req: Request, res: Response) => {
-  const { email, password }: any = req.body;
+  const { email, password }: { email: string; password: string } = req.body;
   const user: IUser | undefined = UserData.getUserByEmail(email);
   if (user && user.password === password) {
-    const token = jwt.sign(
+    const token: string = jwt.sign(
       { email: user.email },
       secretKey,
       { expiresIn: '1h' }
@@ -44,12 +45,12 @@ router.post('/login', (req: Request, res: Response) => {
 });
 
 // hit this route by passing {Key:'Authorization' and Value:'Token' in Headers}. You will get Token on successfull login
-router.get('/chainmiddleware', authMiddleware.authenticate, (req: Request, res: Response) => {
+router.get('/chainmiddleware', authMiddleware.authenticateUser, (req: Request, res: Response) => {
   res.send('Middleware Called');
 });
 
 router.post('/seeddata', (req: Request, res: Response) => {
-  const dataSeeder = new DataSeeder();
+  const dataSeeder: DataSeederType = new DataSeeder();
   const foodData: string[] = dataSeeder.seedData();
   res.json(foodData);
   console.log('Data seeding completed');
@@ -81,7 +82,7 @@ router.get('/custommiddleware', customMiddleware.middleware, (req: Request, res:
 router.post('/params', validateParametersMiddleware.validateParameters, (req: Request, res: Response) => {
   res.json({
     message: 'Success',
-    status: 400,
+    status: 200,
     location: 'body'
   });
 });

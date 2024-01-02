@@ -1,27 +1,35 @@
-import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import createError from 'http-errors';
+import CreateError from 'http-errors';
+import { NextFunction, Request, Response } from 'express';
 
+declare module 'express-serve-static-core' {
+  interface Request {
+    user?: any;
+  }
+}
 class AuthMiddleware {
   private secretKey: string;
   constructor(secretKey: string) {
     this.secretKey = secretKey;
-    this.authenticate = this.authenticate.bind(this);
+    this.authenticateUser = this.authenticateUser.bind(this);
   }
-  // authneticate method
-  authenticate = (req: Request, res: Response, next: NextFunction): void => {
-    const token: string | undefined = req.headers['authorization'];
-    if (!token) {
-      next(createError(403, 'Please provide token'));
-      return;
-    }
-    jwt.verify(token as string, this.secretKey, (err, decodeUser) => {
-      if (err) {
-        next(createError(401, 'Unauthorized'));
-        return;
+  public authenticateUser = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): void => {
+    try {
+      const token: string | undefined = req.headers.authorization;
+      if (!token) {
+        next(CreateError(403, 'Token not provided'));
+      } else {
+        const decodedUser = jwt.verify(token, this.secretKey);
+        req.user = decodedUser;
+        next();
       }
-      next();
-    });
+    } catch (err: any) {
+      next(CreateError(401, 'Invalid token'));
+    }
   };
 }
 export default AuthMiddleware;

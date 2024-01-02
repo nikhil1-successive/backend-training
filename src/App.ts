@@ -1,46 +1,26 @@
-import express, { Express } from 'express';
+import express, { Application, Request, Response } from 'express';
 import userRoutes from './routes/index';
-import bodyParser from 'body-parser';
-import SeedData from './lib/Seeding';
 
-class App {
-  private app: Express;
+class MyApp {
+  private app: Application;
   private port: number;
-
   constructor() {
     this.app = express();
-    this.port = 7000;
-    this.configureMiddleware();
-    this.configureRoutes();
-    this.seedData();
+    this.port = 8000;
+    this.setupRoutes();
+    this.startServer();
   }
-
-  private configureMiddleware(): void {
-    this.app.use(express.urlencoded({ extended: true }));
-    this.app.use(express.json());
-    this.app.use(bodyParser);
-  }
-
-  private configureRoutes(): void {
-    this.app.get('/', (req, res) => {
-      res.send('Welcome.');
+  private setupRoutes(): void {
+    this.app.get('/', (req: Request, res: Response) => {
+      res.send('Welcome To Home Page.');
     });
-
-    this.app.use('/route', userRoutes);
+    this.app.use('/routes', userRoutes);
   }
-
-  private async seedData(): Promise<void> {
-    const seedDatas = new SeedData();
-    console.log('Seeding started');
-    await seedDatas.seedData();
-  }
-
-  public run(): void {
+  public startServer(): void {
     this.app.listen(this.port, () => {
-      console.log(`Server is running on port ${this.port}`);
-      console.log(`http://localhost:${this.port}`);
+      console.log(`Server is running at http://localhost:${this.port}`);
     });
   }
 }
 
-export default App;
+export const myApp = new MyApp();

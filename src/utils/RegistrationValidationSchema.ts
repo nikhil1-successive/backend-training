@@ -11,10 +11,13 @@ class RegistrationValidator {
     const validationResult = this.userSchema.validate(req.body, { abortEarly: false });
     if (validationResult.error) {
       const errors: string[] = validationResult.error.details.map((detail) => detail.message);
-      res.status(400).json({ errors });
+      res.status(422).json({ errors });
     }
     next();
   }
 }
-const registrationValidator = new RegistrationValidator();
+interface RegistrationValidatorType {
+  validate: (req: Request, res: Response, next: NextFunction) => void;
+}
+const registrationValidator: RegistrationValidatorType = new RegistrationValidator();
 export default registrationValidator.validate.bind(registrationValidator);

@@ -3,9 +3,15 @@ import { Request, Response, NextFunction } from 'express';
 class ParameterValidatorMiddleware {
   validateParameters(req: Request, res: Response, next: NextFunction): void {
     try {
-      const { arg1, arg2 }: any = req.body;
+      const { arg1, arg2 }: { arg1: string, arg2: string } = req.body;
       if (!arg1 || !arg2) {
-        res.status(400).json({ error: 'Invalid parameters' });
+        res.status(400).json({
+          message: 'Invalid Parameters',
+          status: 400,
+          location: 'body',
+          error: 'Invalid parameters'
+        });
+        return;
       }
       next();
     } catch (error) {

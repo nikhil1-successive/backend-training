@@ -1,4 +1,4 @@
-import App from './App.js';
+import { myApp } from './App.js';
 
-const server = new App();
-server.run();
+const server = myApp;
+server.startServer();
