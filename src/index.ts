@@ -1,4 +1,4 @@
-import { Calculator } from "./utils/HelperFunction";
+import { Calculator } from './utils/HelperFunction';
 
 Calculator.getInstance();
 

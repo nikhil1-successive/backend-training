@@ -1,4 +1,4 @@
-import Joi, { StringSchema, ObjectSchema, ValidationResult } from 'joi'
+import Joi, { StringSchema, ObjectSchema, ValidationResult } from 'joi';
 import { Request, Response, NextFunction } from 'express';
 
 // Define a generic type for the validation rules
