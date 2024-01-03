@@ -5,12 +5,10 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "lint": "eslint 'src/**/*.ts'",
-    "lint:fix": "eslint --fix 'src/**/*.ts'",
+    "lint": "./node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json --exclude 'node_modules/**/*.{j,t}s'",
     "test": "echo \"Error: no test specified\" && exit 1",
     "nodemon": "nodemon ./dist/App.js",
-    "start": "tsc-watch --project . --onSuccess \"npm run nodemon\"",
-    "prepare": "husky install"
+    "start": "tsc-watch --project . --onSuccess \"npm run nodemon\""
   },
   "author": "",
   "license": "ISC",
