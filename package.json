@@ -8,14 +8,14 @@
     "lint": "./node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json --exclude 'node_modules/**/*.{j,t}s'",
     "test": "echo \"Error: no test specified\" && exit 1",
     "nodemon": "nodemon ./dist/App.js",
-    "start": "tsc-watch --project . --onSuccess \"npm run nodemon\"",
-    "prepare": "husky install"
+    "start": "tsc-watch --project . --onSuccess \"npm run nodemon\""
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@types/jsonwebtoken": "9.0.5",
     "axios": "1.6.2",
+    "body-parser": "1.20.2",
     "cookie-parser": "1.4.6",
     "express": "4.18.2",
     "express-rate-limit": "7.1.5",

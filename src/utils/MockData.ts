@@ -3,7 +3,6 @@ export interface IUser {
     password: string;
     name: string;
 }
-
 class UserData {
     static users: IUser[] = [
         { email: 'nikhil@successive.com', password: 'nik123', name: 'Nikhil' },

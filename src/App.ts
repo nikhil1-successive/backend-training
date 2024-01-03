@@ -6,7 +6,7 @@ class MyApp {
   private port: number;
   constructor() {
     this.app = express();
-    this.port = 8000;
+    this.port = 5000;
     this.setupRoutes();
     this.startServer();
   }
@@ -16,7 +16,7 @@ class MyApp {
     });
     this.app.use('/routes', userRoutes);
   }
-  private startServer(): void {
+  public startServer(): void {
     this.app.listen(this.port, () => {
       console.log(`Server is running at http://localhost:${this.port}`);
     });
